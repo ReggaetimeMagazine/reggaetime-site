@@ -867,31 +867,11 @@ function clearAd(slot){
 // ── INIT ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',async()=>{
   document.getElementById('f-data').value=new Date().toISOString().slice(0,10);
-
-  // Seed de emergência embutido no código
-  const SEED=[{"id": "001", "titulo": "\"Natural Mystic\" de Bob Marley Conquista Dupla Platina na Nova Zelândia", "resumo": "A música Natural Mystic, de Bob Marley and the Wailers, foi certificada duas vezes platina na Nova Zelândia, ultrapassando a marca equivalente a 60 mil unidades em vendas e streaming no país.", "conteudo": "A música Natural Mystic, de Bob Marley and the Wailers, foi certificada duas vezes platina na Nova Zelândia, ultrapassando a marca equivalente a 60 mil unidades em vendas e streaming no país.\n\nA faixa integra o clássico álbum Exodus, lançado em 1977 e considerado um dos trabalhos mais importantes da carreira de Marley. O disco também possui certificação dupla platina na Nova Zelândia.\n\nA relação entre Bob Marley e o público neozelandês remonta a 1979, quando o artista realizou seu único concerto no país, no Western Springs Stadium, em Auckland, diante de cerca de 23 mil pessoas, durante a turnê Babylon By Bus. O encontro teve impacto cultural significativo entre comunidades maori e pasifika, que receberam Marley em cerimônias tradicionais", "categoria": "Roots", "imagem": "", "imgPosition": "51% 28%", "destaque": true, "data": "2026-03-06", "autor": "Reggaetime"}, {"id": "002", "titulo": "Ken Boothe é Imortalizado no Jamaica Music Museum Hall of Fame", "resumo": "O lendário cantor jamaicano recebe homenagem máxima da música da ilha em cerimônia emocionante.", "conteudo": "O veterano cantor jamaicano Ken Boothe foi anunciado como o homenageado de 2026 no Hall da Fama do Jamaica Music Museum, reconhecimento que celebra sua contribuição histórica para o reggae e a música jamaicana. A cerimônia de indução está marcada para 27 de fevereiro de 2026, às 19h30, na National Arena, em Kingston, como parte das celebrações do Reggae Month.\n\nConhecido por sucessos como “Everything I Own”, “Crying Over You” e “When I Fall in Love”, Boothe acumula cerca de seis décadas de carreira e apresentações em diversos continentes. Seu legado inclui ainda o recebimento da Ordem de Distinção do governo jamaicano em 2003, em reconhecimento à sua contribuição para a música nacional.\n\nA cerimônia contará com tributos musicais liderados por artistas como Etana, Richie Stephens, o grupo LUST e Chris Malachi, além de performances especiais que integram a programação oficial do Reggae Month.\n\nO evento também homenageará o baixista Frankie Campbell, membro fundador da banda Fab 5, com o prêmio Lifetime Achievement Award, reforçando a proposta de celebrar figuras que moldaram a identidade cultural e a projeção global do reggae.\n\nA inclusão de Ken Boothe no Hall da Fama reafirma seu papel como uma das vozes mais marcantes da música jamaicana e destaca a continuidade dos esforços para preservar e valorizar o patrimônio do reggae.", "categoria": "Hall da Fama", "imagem": "", "imgPosition": "35% 7%", "destaque": true, "data": "2026-03-05", "autor": "Reggaetime Staff"}, {"id": "003", "titulo": "Donkya & Arcanjo Ras Lançam Collab \"Ela Tá Com Fogo\"", "resumo": "New collab entre Donkya e Arcanjo Ras esquenta o cenário nacional com produção diferenciada.", "conteudo": "O aguardado single “Ela Tá Com Fogo” já está disponível e traz uma colaboração de peso entre Donkya ( @realdonkya ), um artista que vem do reggae roots e faz sua transição para o reggae moderno, e Arcanjo Ras ( @arcanjoras ), um renomado nome do dancehall no Brasil. Essa fusão entre dois estilos promete movimentar a cena musical.\n\nA faixa é lançada pelo selo Reggaetime Records ( @reggaetimerecords ), com produção assinada pela Reggaetime e Nova Dimensão Publicidade ( @novadimensao.plubicidade ), e traz o melhor do reggae contemporâneo mesclado à energia do Rub a Dub, criando uma sonoridade moderna sem perder as influências do ragga muffin.\n\nA mixagem e masterização ficaram a cargo de Wagner Bagão (@wagnerbagao ), e a música chega carregada de qualidade, com uma letra suave e marcante, pronta para conquistar os ouvintes.\n\n“Ela Tá Com Fogo” já está disponível em todas as plataformas digitais e promete ser um hit entre os fãs de reggae e dancehall, trazendo uma nova proposta ao cenário nacional.\n\nArte/Capa: @eucindyjones", "categoria": "Nacional", "imagem": "", "imgPosition": "50% 24%", "destaque": true, "data": "2026-03-04", "autor": "Reggaetime Staff"}, {"id": "004", "titulo": "Ernest Ranglin: \"Eu Fui o Verdadeiro Inventor do Ska e do Reggae\"", "resumo": "O lendário guitarrista jamaicano faz declaração polêmica sobre suas contribuições ao gênero musical.", "conteudo": "O lendário guitarrista jamaicano Ernest Ranglin declarou em entrevista à Guitar World que gostaria de ser reconhecido como “o verdadeiro inventor do ska e do reggae”. Ranglin, que colaborou com nomes como Bob Marley, Jimmy Cliff e até em trilhas da franquia James Bond, destacou sua influência sobre “quase todos os aspectos da música jamaicana”.\n\nAos 92 anos, Ranglin segue sendo uma das figuras mais respeitadas da história da música da ilha, tendo moldado o som que deu origem ao ska, rocksteady, reggae roots e moderno.\n\n📎 Fonte: Guitar World (publicado em 5 de novembro de 2025).", "categoria": "Entrevista", "imagem": "", "imgPosition": "50% 34%", "destaque": false, "data": "2026-03-03", "autor": "Reggaetime Staff"}];
-
-  // Auto-importa noticias.json se localStorage estiver vazio
   if(!getNews().length){
-    // Tenta buscar do servidor, usa seed como fallback
     try{
       const r=await fetch('../data/noticias.json?v='+Date.now());
-      if(r.ok){const d=await r.json();if(d.length){setNews(d);console.log('✅ Importado do JSON',d.length);loadDash();return;}}
+      if(r.ok){const d=await r.json();if(d.length)setNews(d);}
     }catch(e){}
-    // Fallback: usa seed embutido
-    setNews(SEED);
-    console.log('✅ Seed carregado:',SEED.length,'notícias');
-  if(true){
-    try{
-      const r=await fetch('../data/noticias.json?v='+Date.now());
-      if(r.ok){
-        const data=await r.json();
-        if(data.length){
-          setNews(data);
-          console.log('✅ Notícias importadas do JSON:',data.length);
-        }
-      }
-    }catch(e){console.warn('Não foi possível importar noticias.json',e);}
   }
   loadDash();
 });
