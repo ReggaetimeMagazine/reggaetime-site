@@ -367,8 +367,8 @@ tr:hover td{background:rgba(255,255,255,.02);}
               <button class="btn btn-d" onclick="clearImg()" style="padding:5px 15px;" id="btn-remove-img" disabled>✕ Remover imagem</button>
             </div>
             
-            <div class="or-sep">— ou cole uma URL —</div>
-            <input id="f-img-url" type="url" placeholder="https://..." oninput="onUrlInput(this.value)"/>
+            <div class="or-sep">— ou cole a URL da imagem hospedada —</div>
+            <input id="f-img-url" type="url" placeholder="https://i.imgur.com/... ou link direto da imagem" oninput="onUrlInput(this.value)"/>
           </div>
         </div>
       </div>
@@ -628,12 +628,15 @@ function limpar(){
 // ── IMAGEM ────────────────────────────────────────────────────
 function handleFile(file){
   if(!file)return;
-  // Convert to base64 for preview only, store as URL if possible
   const reader=new FileReader();
   reader.onload=e=>{
-    imgBase64=e.target.result;
-    document.getElementById('f-img-url').value='';
-    showPreview(imgBase64);
+    // Show preview only — base64 NOT stored in JSON (breaks site)
+    showPreview(e.target.result);
+    // Store temporarily for preview only
+    imgBase64='';  // don't save base64 to JSON
+    // Warn user to use a hosted URL
+    toast('📸 Preview OK! Cole a URL da imagem hospedada no campo abaixo para salvar.','warn');
+    document.getElementById('f-img-url').focus();
   };
   reader.readAsDataURL(file);
 }
@@ -820,10 +823,10 @@ function save(){
 function toast(msg,type=''){
   const t=document.getElementById('toast');
   t.textContent=msg;
-  t.style.borderLeftColor=type==='error'?'var(--red)':'var(--green)';
+  t.style.borderLeftColor=type==='error'?'var(--red)':type==='warn'?'var(--yellow)':'var(--green)';
   t.style.transform='translateY(0)';t.style.opacity='1';
   clearTimeout(t._t);
-  t._t=setTimeout(()=>{t.style.transform='translateY(80px)';t.style.opacity='0';},3500);
+  t._t=setTimeout(()=>{t.style.transform='translateY(80px)';t.style.opacity='0';},4000);
 }
 
 // ── UTILS ─────────────────────────────────────────────────────
