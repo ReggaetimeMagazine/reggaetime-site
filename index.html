@@ -160,6 +160,54 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .rel-card h5{font-family:'Oswald',sans-serif;font-size:13px;font-weight:500;line-height:1.3;color:#aaa;transition:color .2s;}
 .rel-card:hover h5{color:var(--yellow);}
 
+/* ── BANNER ADS ── */
+.ad-banner{width:100%;max-width:1280px;margin:0 auto 4px;padding:0 24px;}
+.ad-slot{background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(255,215,0,.03));border:1px dashed rgba(255,215,0,.2);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+.ad-slot:hover{border-color:rgba(255,215,0,.5);background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(255,215,0,.06));}
+.ad-slot-inner{text-align:center;padding:18px;}
+.ad-slot-label{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,215,0,.3);display:block;margin-bottom:5px;}
+.ad-slot-cta{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,215,0,.5);}
+.ad-slot-cta span{color:var(--yellow);}
+.ad-slot-size{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.1em;color:#333;margin-top:3px;}
+.ad-banner-top .ad-slot{height:90px;}
+.ad-banner-mid .ad-slot{height:120px;}
+
+/* ── VISITOR COUNTER ── */
+.visitor-bar{background:#0a0a0a;border-top:1px solid #141414;padding:8px 24px;}
+.visitor-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.visitor-count{display:flex;align-items:center;gap:10px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#444;}
+.visitor-count strong{color:var(--yellow);font-size:15px;font-family:'Bebas Neue',sans-serif;letter-spacing:.05em;}
+.visitor-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 2s ease-in-out infinite;}
+.anuncie-btn{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:linear-gradient(135deg,var(--yellow),var(--gold));color:var(--black);border:none;border-radius:3px;padding:6px 16px;cursor:pointer;transition:all .2s;}
+.anuncie-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,215,0,.3);}
+
+/* ── MEDIA KIT MODAL ── */
+.mk-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:20px;}
+.mk-overlay.open{opacity:1;pointer-events:all;}
+.mk-box{background:var(--deep);border:1px solid var(--border);border-radius:12px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;position:relative;}
+.mk-header{padding:28px 32px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--deep);z-index:2;}
+.mk-header h2{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:.06em;background:linear-gradient(135deg,var(--yellow),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.mk-header p{font-size:12px;color:var(--muted);letter-spacing:.04em;margin-top:4px;}
+.mk-close{position:absolute;top:20px;right:20px;background:none;border:1px solid var(--border);border-radius:50%;width:32px;height:32px;color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.mk-close:hover{border-color:var(--yellow);color:var(--yellow);}
+.mk-body{padding:24px 32px 32px;}
+.mk-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.mk-stat{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center;}
+.mk-stat-val{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--yellow);display:block;line-height:1;}
+.mk-stat-lbl{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:4px;display:block;}
+.mk-formats{margin-bottom:24px;}
+.mk-formats h3{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--white);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.mk-format-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #141414;}
+.mk-format-name{font-family:'Oswald',sans-serif;font-size:13px;color:var(--white);}
+.mk-format-size{font-size:11px;color:var(--muted);}
+.mk-format-price{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--yellow);}
+.mk-contact h3{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--white);margin-bottom:14px;}
+.mk-contact input,.mk-contact textarea,.mk-contact select{width:100%;background:#0a0a0a;border:1px solid var(--border);border-radius:4px;padding:10px 14px;color:var(--white);font-family:'Oswald',sans-serif;font-size:13px;outline:none;margin-bottom:10px;transition:border-color .2s;resize:vertical;}
+.mk-contact input:focus,.mk-contact textarea:focus,.mk-contact select:focus{border-color:var(--yellow);}
+.mk-contact textarea{min-height:80px;}
+.mk-submit{width:100%;background:linear-gradient(135deg,var(--yellow),var(--gold));color:var(--black);border:none;border-radius:4px;padding:13px;font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:4px;}
+.mk-submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,215,0,.3);}
+
 .loading{text-align:center;padding:60px;font-family:'Oswald',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
 .empty-msg{text-align:center;padding:48px;font-family:'Oswald',sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#333;font-size:13px;}
 
@@ -193,6 +241,28 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
   </div>
 </div>
 <div class="rasta-bar"></div>
+
+<!-- VISITOR BAR -->
+<div class="visitor-bar">
+  <div class="visitor-inner">
+    <div class="visitor-count">
+      <div class="visitor-dot"></div>
+      <span><strong id="visit-count">—</strong> visitantes</span>
+    </div>
+    <button class="anuncie-btn" onclick="openMK()">⚡ Anuncie aqui</button>
+  </div>
+</div>
+
+<!-- BANNER TOP -->
+<div class="ad-banner ad-banner-top" id="ad-top">
+  <div class="ad-slot" onclick="openMK()">
+    <div class="ad-slot-inner">
+      <span class="ad-slot-label">Espaço publicitário</span>
+      <div class="ad-slot-cta">Sua marca aqui para <span id="ad-reach">—</span> leitores</div>
+      <div class="ad-slot-size">Banner 970×90 · Topo da página</div>
+    </div>
+  </div>
+</div>
 
 <header>
   <div class="header-inner">
@@ -233,6 +303,17 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       <div class="sec-accent"></div>
       <h2>Mais Notícias</h2>
       <div class="sec-line"></div>
+    </div>
+
+    <!-- BANNER MEIO -->
+    <div class="ad-banner ad-banner-mid" style="padding:0;margin-bottom:16px;">
+      <div class="ad-slot" onclick="openMK()">
+        <div class="ad-slot-inner">
+          <span class="ad-slot-label">Espaço publicitário</span>
+          <div class="ad-slot-cta">Reserve seu banner — <span>fale conosco</span></div>
+          <div class="ad-slot-size">Banner 728×90 · Entre notícias</div>
+        </div>
+      </div>
     </div>
     <div class="list-articles" id="list-articles"></div>
   </main>
@@ -344,6 +425,58 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 11-.277-1.215c3.809-.87 7.076-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.72a.779.779 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.779.779 0 01-.973-.516.78.78 0 01.516-.974c3.632-1.102 8.147-.568 11.237 1.327a.78.78 0 01.257 1.072zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.935.935 0 11-.543-1.79c3.532-1.072 9.404-.865 13.115 1.338a.935.935 0 01-.955 1.611z"/></svg>
     <span id="sp-btn-txt"></span>
   </button>
+</div>
+
+<!-- MEDIA KIT MODAL -->
+<div id="mk-modal" class="mk-overlay" onclick="if(event.target===this)closeMK()">
+  <div class="mk-box">
+    <div class="mk-header">
+      <button class="mk-close" onclick="closeMK()">✕</button>
+      <h2>Anuncie na Reggaetime</h2>
+      <p>Alcance o maior público de reggae e dancehall do Brasil</p>
+    </div>
+    <div class="mk-body">
+      <div class="mk-stat-grid">
+        <div class="mk-stat"><span class="mk-stat-val" id="mk-visits">—</span><span class="mk-stat-lbl">Visitantes</span></div>
+        <div class="mk-stat"><span class="mk-stat-val" id="mk-news">—</span><span class="mk-stat-lbl">Notícias</span></div>
+        <div class="mk-stat"><span class="mk-stat-val">BR+JM</span><span class="mk-stat-lbl">Audiência</span></div>
+      </div>
+      <div class="mk-formats">
+        <h3>Formatos disponíveis</h3>
+        <div class="mk-format-row">
+          <div><div class="mk-format-name">Banner Topo</div><div class="mk-format-size">970×90px · Máxima visibilidade</div></div>
+          <div class="mk-format-price">Sob consulta</div>
+        </div>
+        <div class="mk-format-row">
+          <div><div class="mk-format-name">Banner Entre Notícias</div><div class="mk-format-size">728×90px · Alto engajamento</div></div>
+          <div class="mk-format-price">Sob consulta</div>
+        </div>
+        <div class="mk-format-row">
+          <div><div class="mk-format-name">Sidebar</div><div class="mk-format-size">300×250px · Desktop</div></div>
+          <div class="mk-format-price">Sob consulta</div>
+        </div>
+        <div class="mk-format-row">
+          <div><div class="mk-format-name">Conteúdo Patrocinado</div><div class="mk-format-size">Artigo com sua marca</div></div>
+          <div class="mk-format-price">Sob consulta</div>
+        </div>
+      </div>
+      <div class="mk-contact">
+        <h3>Fale com nossa equipe</h3>
+        <input id="mk-nome" type="text" placeholder="Seu nome / empresa"/>
+        <input id="mk-email" type="email" placeholder="Email de contato"/>
+        <select id="mk-formato">
+          <option value="">Formato de interesse...</option>
+          <option>Banner Topo (970×90)</option>
+          <option>Banner Entre Notícias (728×90)</option>
+          <option>Sidebar (300×250)</option>
+          <option>Conteúdo Patrocinado</option>
+          <option>Pacote completo</option>
+        </select>
+        <textarea id="mk-msg" placeholder="Conte sobre sua marca e campanha..."></textarea>
+        <button class="mk-submit" onclick="enviarMK()">Enviar proposta →</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- TRANSLATE STATUS -->
@@ -587,6 +720,56 @@ function exportJSON(){
 }
 
 // ── SYNC ────────────────────────────────────────────�
+// ── VISITOR COUNTER ───────────────────────────────────────────
+async function loadVisitorCount(){
+  try{
+    const r=await fetch('https://api.countapi.xyz/hit/reggaetimemagazine.com/visits');
+    if(r.ok){
+      const d=await r.json();
+      const n=d.value||0;
+      const fmt=n.toLocaleString('pt-BR');
+      const el=document.getElementById('visit-count');
+      const el2=document.getElementById('mk-visits');
+      const el3=document.getElementById('ad-reach');
+      if(el)el.textContent=fmt;
+      if(el2)el2.textContent=fmt;
+      if(el3)el3.textContent=fmt;
+    }
+  }catch(e){
+    // fallback silencioso
+    ['visit-count','mk-visits','ad-reach'].forEach(id=>{
+      const el=document.getElementById(id);if(el)el.textContent='—';
+    });
+  }
+}
+
+// ── MEDIA KIT ─────────────────────────────────────────────────
+function openMK(){
+  document.getElementById('mk-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+  // fill news count
+  const el=document.getElementById('mk-news');
+  if(el)el.textContent=allNews.length||'—';
+}
+function closeMK(){
+  document.getElementById('mk-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function enviarMK(){
+  const nome=document.getElementById('mk-nome').value.trim();
+  const email=document.getElementById('mk-email').value.trim();
+  const formato=document.getElementById('mk-formato').value;
+  const msg=document.getElementById('mk-msg').value.trim();
+  if(!nome||!email){toast('Preencha nome e email!','error');return;}
+  const cfg=getCfg();
+  const dest=cfg.email||'reggaetimebr@gmail.com';
+  const subject=encodeURIComponent(`[Anúncio] ${nome} — ${formato||'Consulta'}`);
+  const body=encodeURIComponent(`Nome/Empresa: ${nome}\nEmail: ${email}\nFormato: ${formato}\n\n${msg}`);
+  window.open(`mailto:${dest}?subject=${subject}&body=${body}`);
+  toast('📧 Abrindo seu email... Obrigado pelo interesse!');
+  closeMK();
+}
+
 // ── GOOGLE TRANSLATE ──────────────────────────────────────────
 function googleTranslateElementInit(){
   new google.translate.TranslateElement({
@@ -639,6 +822,7 @@ window.addEventListener('load',function(){
 });
 
 window.addEventListener('load', loadAll);
+window.addEventListener('load', loadVisitorCount);
 // Show export button if ?export param present
 if(new URLSearchParams(window.location.search).has('export')){
   document.getElementById('gh-helper').style.display='block';
