@@ -557,8 +557,32 @@ const ADS_KEY='rt_ads';
 
 function getCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||'{}')}catch{return{}}}
 function getAds(){try{return JSON.parse(localStorage.getItem(ADS_KEY)||'{}')}catch{return{}}}
-function getNews(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
-function setNews(d){localStorage.setItem(KEY,JSON.stringify(d))}
+
+function getNews(){
+  try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}
+}
+
+function setNews(data){
+  // Separa imagens base64 em chaves individuais pra não estourar quota
+  const slim=data.map(n=>{
+    if(n.imagem && n.imagem.startsWith('data:')){
+      try{localStorage.setItem('rt_img_'+n.id, n.imagem);}catch(e){}
+      return {...n, imagem:'__local__'};
+    }
+    return n;
+  });
+  localStorage.setItem(KEY, JSON.stringify(slim));
+}
+
+function getNewsWithImages(){
+  return getNews().map(n=>{
+    if(n.imagem==='__local__'){
+      const img=localStorage.getItem('rt_img_'+n.id)||'';
+      return {...n, imagem:img};
+    }
+    return n;
+  });
+}
 
 function toast(msg,type='ok'){
   const t=document.getElementById('toast');
@@ -625,7 +649,7 @@ function updCnt(el,id,max){
 
 // ── DASHBOARD ─────────────────────────────────────────────────
 function loadDash(){
-  const news=getNews();
+  const news=getNewsWithImages();
   document.getElementById('st-total').textContent=news.length;
   document.getElementById('st-dest').textContent=news.filter(n=>n.destaque).length;
   const ins=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');
@@ -686,7 +710,8 @@ function limpar(){
 }
 
 function editarNot(id){
-  const n=getNews().find(x=>x.id===id);
+  const news=getNewsWithImages();
+  const n=news.find(x=>x.id===id);
   if(!n)return;
   document.getElementById('f-id').value=n.id;
   document.getElementById('f-titulo').value=n.titulo;
@@ -733,7 +758,7 @@ function clearImg(){
 
 // ── GERENCIAR ─────────────────────────────────────────────────
 function loadTable(){
-  const news=getNews();
+  const news=getNewsWithImages();
   const p=document.getElementById('lista-cnt');
   if(p)p.textContent=news.length+' notícias publicadas';
   const tb=document.getElementById('tbl-body');
@@ -753,7 +778,8 @@ function loadTable(){
 }
 
 function exportJSON(){
-  const blob=new Blob([JSON.stringify(getNews(),null,2)],{type:'application/json'});
+  const news=getNewsWithImages();
+  const blob=new Blob([JSON.stringify(news,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='noticias.json';a.click();
   toast('📥 JSON baixado! Coloque em data/ e suba o git.');
 }
