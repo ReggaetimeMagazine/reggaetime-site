@@ -500,6 +500,36 @@ tr:hover td{background:rgba(255,255,255,.02);}
           <button class="btn btn-d" onclick="clearAd('mid')">✕ Remover</button>
         </div>
       </div>
+      <div class="fc">
+        <h2>🖼 Sidebar (300×250)</h2>
+        <div class="fr full"><div class="fg"><label>URL da imagem ou GIF animado</label><input id="ad-side-img" type="url" placeholder="https://... (.jpg, .png, .gif)" oninput="prevAd('side')"/></div></div>
+        <div class="fr full"><div class="fg"><label>Link de destino (ao clicar)</label><input id="ad-side-link" type="url" placeholder="https://..."/></div></div>
+        <div id="ad-side-preview" style="display:none;margin:10px 0;border:1px solid var(--border);border-radius:6px;overflow:hidden;max-height:250px;"><img id="ad-side-prev-img" src="" style="width:100%;max-height:250px;object-fit:contain;background:#0a0a0a;" alt=""/></div>
+        <div class="br">
+          <button class="btn btn-p" onclick="saveAd('side')">💾 Salvar Sidebar</button>
+          <button class="btn btn-d" onclick="clearAd('side')">✕ Remover</button>
+        </div>
+      </div>
+      <div class="fc">
+        <h2>🖼 Antes do Rodapé (728×90)</h2>
+        <div class="fr full"><div class="fg"><label>URL da imagem ou GIF animado</label><input id="ad-foot-img" type="url" placeholder="https://... (.jpg, .png, .gif)" oninput="prevAd('foot')"/></div></div>
+        <div class="fr full"><div class="fg"><label>Link de destino (ao clicar)</label><input id="ad-foot-link" type="url" placeholder="https://..."/></div></div>
+        <div id="ad-foot-preview" style="display:none;margin:10px 0;border:1px solid var(--border);border-radius:6px;overflow:hidden;max-height:120px;"><img id="ad-foot-prev-img" src="" style="width:100%;max-height:120px;object-fit:contain;background:#0a0a0a;" alt=""/></div>
+        <div class="br">
+          <button class="btn btn-p" onclick="saveAd('foot')">💾 Salvar Banner Rodapé</button>
+          <button class="btn btn-d" onclick="clearAd('foot')">✕ Remover</button>
+        </div>
+      </div>
+      <div class="fc">
+        <h2>🖼 Dentro dos Artigos (após 2º parágrafo)</h2>
+        <div class="fr full"><div class="fg"><label>URL da imagem ou GIF animado</label><input id="ad-art-img" type="url" placeholder="https://... (.jpg, .png, .gif)" oninput="prevAd('art')"/></div></div>
+        <div class="fr full"><div class="fg"><label>Link de destino (ao clicar)</label><input id="ad-art-link" type="url" placeholder="https://..."/></div></div>
+        <div id="ad-art-preview" style="display:none;margin:10px 0;border:1px solid var(--border);border-radius:6px;overflow:hidden;max-height:120px;"><img id="ad-art-prev-img" src="" style="width:100%;max-height:120px;object-fit:contain;background:#0a0a0a;" alt=""/></div>
+        <div class="br">
+          <button class="btn btn-p" onclick="saveAd('art')">💾 Salvar Banner Artigo</button>
+          <button class="btn btn-d" onclick="clearAd('art')">✕ Remover</button>
+        </div>
+      </div>
       <div class="fc" style="background:rgba(255,215,0,.04);border-color:rgba(255,215,0,.2);">
         <h2>💡 Como funciona</h2>
         <p style="font-size:13px;color:var(--muted);line-height:1.8;letter-spacing:.02em;text-transform:none;">
@@ -787,8 +817,15 @@ function saveConfig(){
 // ── ADS ───────────────────────────────────────────────────────
 function loadAds(){
   const ads=getAds();
-  if(ads.top_img){document.getElementById('ad-top-img').value=ads.top_img;document.getElementById('ad-top-link').value=ads.top_link||'';prevAd('top');}
-  if(ads.mid_img){document.getElementById('ad-mid-img').value=ads.mid_img;document.getElementById('ad-mid-link').value=ads.mid_link||'';prevAd('mid');}
+  ['top','mid','side','foot','art'].forEach(slot=>{
+    const imgEl=document.getElementById(`ad-${slot}-img`);
+    const linkEl=document.getElementById(`ad-${slot}-link`);
+    if(imgEl&&ads[`${slot}_img`]){
+      imgEl.value=ads[`${slot}_img`];
+      if(linkEl)linkEl.value=ads[`${slot}_link`]||'';
+      prevAd(slot);
+    }
+  });
 }
 function prevAd(slot){
   const url=document.getElementById(`ad-${slot}-img`).value.trim();

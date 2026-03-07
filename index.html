@@ -171,6 +171,15 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .ad-slot-size{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.1em;color:#333;margin-top:3px;}
 .ad-banner-top .ad-slot{height:90px;}
 .ad-banner-mid .ad-slot{height:120px;}
+.ad-banner-foot .ad-slot{height:90px;}
+/* Sidebar ad */
+.ad-sidebar{width:100%;margin:0 0 20px;}
+.ad-sidebar .ad-slot{height:250px;border-radius:8px;}
+/* Article inline ad */
+.ad-article{margin:24px 0;}
+.ad-article .ad-slot{height:100px;border-radius:6px;}
+/* When empty - hide completely */
+.ad-empty{display:none!important;}
 
 /* ── VISITOR COUNTER ── */
 .visitor-bar{background:#0a0a0a;border-top:1px solid #141414;padding:8px 24px;}
@@ -254,8 +263,8 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 </div>
 
 <!-- BANNER TOP -->
-<div class="ad-banner ad-banner-top" id="ad-top">
-  <div class="ad-slot" onclick="openMK()">
+<div class="ad-banner ad-banner-top ad-empty" id="ad-top">
+  <div class="ad-slot">
     <div class="ad-slot-inner">
       <span class="ad-slot-label">Espaço publicitário</span>
       <div class="ad-slot-cta">Sua marca aqui para <span id="ad-reach">—</span> leitores</div>
@@ -306,8 +315,8 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
     </div>
 
     <!-- BANNER MEIO -->
-    <div class="ad-banner ad-banner-mid" style="padding:0;margin-bottom:16px;">
-      <div class="ad-slot" onclick="openMK()">
+    <div class="ad-banner ad-banner-mid ad-empty" id="ad-mid" style="padding:0;margin-bottom:0;">
+      <div class="ad-slot">
         <div class="ad-slot-inner">
           <span class="ad-slot-label">Espaço publicitário</span>
           <div class="ad-slot-cta">Reserve seu banner — <span>fale conosco</span></div>
@@ -342,7 +351,28 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       </div>
       <div class="tag-cloud" id="tag-cloud"></div>
     </div>
+    <!-- SIDEBAR AD 300x250 -->
+    <div class="ad-sidebar ad-empty" id="ad-side">
+      <div class="ad-slot">
+        <div class="ad-slot-inner">
+          <span class="ad-slot-label">Publicidade</span>
+          <div class="ad-slot-cta"><span>Anuncie aqui</span></div>
+          <div class="ad-slot-size">300×250</div>
+        </div>
+      </div>
+    </div>
   </aside>
+</div>
+
+<!-- BANNER ANTES DO RODAPÉ -->
+<div class="ad-banner ad-banner-foot ad-empty" id="ad-foot" style="max-width:100%;padding:0;margin:0;">
+  <div class="ad-slot" style="border-radius:0;">
+    <div class="ad-slot-inner">
+      <span class="ad-slot-label">Publicidade</span>
+      <div class="ad-slot-cta"><span>Anuncie aqui</span></div>
+      <div class="ad-slot-size">728×90 · Antes do rodapé</div>
+    </div>
+  </div>
 </div>
 
 <footer>
@@ -667,7 +697,18 @@ function openArt(id){
   document.getElementById('m-cat').textContent=art.categoria;
   document.getElementById('m-title').textContent=art.titulo;
   document.getElementById('m-meta').textContent=`Por ${art.autor} · ${fmtd(art.data)}`;
-  document.getElementById('m-body').innerHTML=(art.conteudo||art.resumo).split('\n').filter(p=>p.trim()).map(p=>`<p>${p}</p>`).join('');
+
+  // Build article body with optional inline ad after 2nd paragraph
+  const paras=(art.conteudo||art.resumo).split('\n').filter(p=>p.trim()).map(p=>`<p>${p}</p>`);
+  try{
+    const ads=JSON.parse(localStorage.getItem('rt_ads')||'{}');
+    if(ads.art_img&&paras.length>2){
+      const adHtml=`<div class="ad-article" id="ad-art"><div class="ad-slot" style="border:none;background:none;cursor:default;"><a href="${ads.art_link||'#'}" target="_blank" rel="noopener" style="display:block;width:100%;height:100%;"><img src="${ads.art_img}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:6px;" alt="Publicidade"/></a></div></div>`;
+      paras.splice(2,0,adHtml);
+    }
+  }catch(e){}
+  document.getElementById('m-body').innerHTML=paras.join('');
+
   const rel=allNews.filter(n=>n.id!==id&&n.categoria===art.categoria).slice(0,3);
   document.getElementById('m-related').innerHTML=rel.length?`
     <p class="modal-related-title">Leia também</p>
@@ -776,17 +817,23 @@ async function loadVisitorCount(){
 function loadAds(){
   try{
     const ads=JSON.parse(localStorage.getItem('rt_ads')||'{}');
-    ['top','mid'].forEach(slot=>{
+    const slots=['top','mid','side','foot','art'];
+    slots.forEach(slot=>{
       const imgUrl=ads[`${slot}_img`];
       const linkUrl=ads[`${slot}_link`];
       const container=document.getElementById(`ad-${slot}`);
       if(!container)return;
       if(imgUrl){
+        // Show with image
+        container.classList.remove('ad-empty');
         const inner=container.querySelector('.ad-slot');
         if(inner){
           inner.innerHTML=`<a href="${linkUrl||'#'}" target="_blank" rel="noopener" style="display:block;width:100%;height:100%;"><img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Publicidade"/></a>`;
           inner.style.border='none';inner.style.background='none';inner.style.cursor='default';
         }
+      } else {
+        // Hide completely when empty
+        container.classList.add('ad-empty');
       }
     });
   }catch(e){}
