@@ -49,16 +49,74 @@ body{background:var(--black);color:var(--white);font-family:'Oswald',sans-serif;
 .fg select option{background:var(--deep);}
 .cnt{text-align:right;font-size:10px;color:#444;letter-spacing:.08em;margin-top:3px;}
 .cnt.warn{color:var(--yellow);}
-/* IMAGE UPLOAD */
+
+/* ===== PREVIEW DA IMAGEM CORRIGIDO ===== */
 .img-upload-area{border:2px dashed var(--border);border-radius:6px;padding:24px;text-align:center;cursor:pointer;transition:border-color .3s;position:relative;margin-top:4px;}
 .img-upload-area:hover,.img-upload-area.drag{border-color:var(--yellow);}
 .img-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 .img-upload-txt{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
 .img-upload-txt span{display:block;font-size:20px;margin-bottom:8px;}
-.img-preview-box{display:none;position:relative;margin-top:10px;border-radius:4px;overflow:hidden;}
-.img-preview-box.show{display:block;}
-.img-preview-box img{width:100%;max-height:200px;object-fit:cover;display:block;filter:brightness(.85);}
-.img-preview-box .img-del{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.75);border:none;border-radius:3px;color:#fff;padding:5px 10px;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;cursor:pointer;}
+
+/* Preview da imagem - CONTAIN com fundo escuro */
+.image-preview {
+  width: 100%;
+  min-height: 320px;
+  background: #111;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 320px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  background: #111;
+}
+
+/* Mantendo compatibilidade com classes existentes */
+.img-preview-box {
+  display: none;
+  position: relative;
+  margin-top: 10px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.img-preview-box.show {
+  display: block;
+}
+
+.img-preview-box img {
+  width: 100%;
+  height: 320px;
+  object-fit: contain;
+  object-position: center;
+  background: #111;
+  display: block;
+}
+
+.img-preview-box .img-del {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,.75);
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  padding: 5px 10px;
+  font-family:'Oswald',sans-serif;
+  font-size: 10px;
+  letter-spacing: .1em;
+  cursor: pointer;
+}
+
 /* URL fallback */
 .or-sep{text-align:center;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#333;margin:10px 0;}
 /* TOGGLE */
@@ -124,6 +182,14 @@ tr:hover td{background:rgba(255,255,255,.02);}
   .stats{grid-template-columns:1fr 1fr;}
   .fr{grid-template-columns:1fr;}
 }
+/* IMAGE POSITION CONTROL */
+.pos-ctrl{background:var(--deep);border:1px solid var(--border);border-radius:6px;padding:16px;margin-top:10px;}
+.pos-ctrl-title{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--yellow);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.pos-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.pos-row label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);width:60px;flex-shrink:0;}
+.pos-row input[type=range]{flex:1;accent-color:var(--yellow);cursor:pointer;}
+.pos-row span{font-size:11px;color:var(--yellow);width:36px;text-align:right;font-family:monospace;}
+.pos-hint{font-size:10px;color:#444;letter-spacing:.04em;line-height:1.5;}
 </style>
 </head>
 <body>
@@ -274,10 +340,33 @@ tr:hover td{background:rgba(255,255,255,.02);}
                 Toque para escolher foto ou arraste aqui
               </div>
             </div>
-            <div class="img-preview-box" id="img-prev-box">
-              <img id="img-prev" src="" alt=""/>
-              <button class="img-del" onclick="clearImg()">✕ Remover</button>
+            
+            <!-- Preview da imagem corrigido - contain com fundo escuro -->
+            <div class="image-preview" id="img-prev-box" style="display: none;">
+              <img id="img-prev" src="" alt="Preview da imagem" style="object-fit:cover;object-position:50% 50%;"/>
             </div>
+
+            <!-- CONTROLE DE POSIÇÃO / CROP -->
+            <div class="pos-ctrl" id="img-position-ctrl" style="display:none;">
+              <div class="pos-ctrl-title">🎯 Ajustar foco da imagem <span style="color:var(--muted);font-size:9px;">(onde cortar)</span></div>
+              <div class="pos-row">
+                <label>Horizontal</label>
+                <input type="range" min="0" max="100" value="50" id="pos-x" oninput="setPosX(this.value)"/>
+                <span id="pos-x-val">50%</span>
+              </div>
+              <div class="pos-row">
+                <label>Vertical</label>
+                <input type="range" min="0" max="100" value="50" id="pos-y" oninput="setPosY(this.value)"/>
+                <span id="pos-y-val">50%</span>
+              </div>
+              <div class="pos-hint">⬆ Arraste para escolher qual parte da foto fica visível no site. O preview acima mostra em tempo real.</div>
+            </div>
+            
+            <!-- Botão remover dentro do preview -->
+            <div style="margin-top: 5px; text-align: right;">
+              <button class="btn btn-d" onclick="clearImg()" style="padding:5px 15px;" id="btn-remove-img" disabled>✕ Remover imagem</button>
+            </div>
+            
             <div class="or-sep">— ou cole uma URL —</div>
             <input id="f-img-url" type="url" placeholder="https://..." oninput="onUrlInput(this.value)"/>
           </div>
@@ -395,42 +484,27 @@ tr:hover td{background:rgba(255,255,255,.02);}
         <div class="br">
           <button class="btn btn-p" onclick="saveConfig()">💾 Salvar Configurações</button>
         </div>
+        <div class="br">
+          <button class="btn btn-p" onclick="saveConfig()">💾 Salvar Configurações</button>
+        </div>
       </div>
     </div>
 
   </main>
 </div>
 
-<div id="toast" class="toast"></div>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <script>
 'use strict';
-const NK='reggaetime_noticias', IK='rt_inscritos', CK='rt_config', TK='rt_ticker';
-const DEFAULT_IMAGE='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200&q=80&auto=format&fit=crop';
-const IMAGE_UPLOAD_PROVIDER='imgbb';
-// Cole sua chave aqui para o upload automático gerar URL pública.
-// Ex.: const IMAGE_UPLOAD_API_KEY='SUA_CHAVE';
-const IMAGE_UPLOAD_API_KEY='';
-let imgUploadedUrl='';
-let imgUploading=false;
+let news=[], editId=null, imgBase64='', imgPosition={x:50,y:50};
 
-// ── STORAGE ───────────────────────────────────────────────────
-function isHttpUrl(v){return /^https?:\/\//i.test((v||'').trim());}
-function isDataImage(v){return /^data:image\//i.test((v||'').trim());}
-function normalizeImage(v){v=(v||'').trim();return isHttpUrl(v)?v:DEFAULT_IMAGE;}
-function sanitizeNews(arr){
-  return (Array.isArray(arr)?arr:[]).map(n=>({
-    ...n,
-    imagem: normalizeImage(n.imagem),
-    conteudo: (n.conteudo||n.resumo||'').trim() || (n.resumo||''),
-    autor: (n.autor||'Reggaetime Staff').trim() || 'Reggaetime Staff'
-  }));
+// ── LOAD ──────────────────────────────────────────────────────
+function loadNews(){
+  try{const s=localStorage.getItem('reggaetime_noticias');if(s){const p=JSON.parse(s);if(Array.isArray(p))news=p;}}catch(e){}
+  updDash();renderTable();renderInscritos();
 }
-function getNews(){try{return sanitizeNews(JSON.parse(localStorage.getItem(NK))||[]);}catch(e){return[];}}
-function saveNews(a){localStorage.setItem(NK,JSON.stringify(sanitizeNews(a)));localStorage.setItem('reggaetime_updated',Date.now().toString());}
-function getCfg(){try{return JSON.parse(localStorage.getItem(CK))||{};}catch(e){return{};}}
-function saveCfg(c){localStorage.setItem(CK,JSON.stringify(c));localStorage.setItem('reggaetime_updated',Date.now().toString());}
-function getInsc(){try{return JSON.parse(localStorage.getItem(IK))||[];}catch(e){return[];}}
 
 // ── NAV ───────────────────────────────────────────────────────
 function goPage(id,el){
@@ -438,295 +512,284 @@ function goPage(id,el){
   document.querySelectorAll('.mi').forEach(m=>m.classList.remove('active'));
   document.getElementById('pg-'+id).classList.add('active');
   if(el)el.classList.add('active');
-  if(id==='dash')loadDash();
-  if(id==='lista')loadTable();
+  if(id==='nova')initDate();
   if(id==='ticker')loadTicker();
-  if(id==='inscritos')loadInscritos();
+  if(id==='inscritos')renderInscritos();
   if(id==='config')loadConfig();
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────────
-function loadDash(){
-  const news=getNews(), ins=getInsc();
+function updDash(){
   document.getElementById('st-total').textContent=news.length;
   document.getElementById('st-dest').textContent=news.filter(n=>n.destaque).length;
-  document.getElementById('st-inscritos').textContent=ins.length;
-  const last=news[0];
-  document.getElementById('st-ultima').textContent=last?fmtd(last.data):'—';
-  document.getElementById('dash-recentes').innerHTML=news.slice(0,5).map(n=>`
-    <div style="display:flex;gap:14px;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer;" onclick="editar('${n.id}')">
-      <img src="${n.imagem}" style="width:56px;height:38px;object-fit:cover;border-radius:3px;filter:brightness(.8);" onerror="this.style.display='none'"/>
-      <div style="flex:1;">
-        <div style="font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--white);line-height:1.3;">${n.titulo}</div>
-        <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#444;margin-top:3px;">${n.categoria} · ${fmtd(n.data)}</div>
-      </div>
-      <span class="bsm bsm-e" style="flex-shrink:0;">Editar</span>
-    </div>`).join('')||'<div class="empty">Nenhuma notícia ainda.</div>';
+  try{const i=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');document.getElementById('st-inscritos').textContent=i.length;}catch(e){}
+  const u=news[0];document.getElementById('st-ultima').textContent=u?fmtd(u.data):'—';
+  const el=document.getElementById('dash-recentes');
+  if(!news.length){el.innerHTML='<div class="empty">Nenhuma notícia publicada ainda.</div>';return;}
+  el.innerHTML=`<table><thead><tr><th>Título</th><th>Categoria</th><th>Data</th><th>Destaque</th></tr></thead><tbody>${
+    news.slice(0,5).map(n=>`<tr><td class="tbl-title">${n.titulo}</td><td><span class="cat-tag">${n.categoria}</span></td><td>${fmtd(n.data)}</td><td>${n.destaque?'<span class="dest-tag">★ Destaque</span>':''}</td></tr>`).join('')
+  }</tbody></table>`;
 }
 
-// ── FORM UTILS ────────────────────────────────────────────────
-function todayStr(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-function updCnt(el,cid,max){const n=el.value.length;const c=document.getElementById(cid);if(!c)return;c.textContent=`${n}/${max}`;c.className='cnt'+(n>max?' warn':'');}
+// ── FORM / SALVAR ─────────────────────────────────────────────
+function initDate(){
+  const d=document.getElementById('f-data');
+  if(!d.value)d.value=new Date().toISOString().split('T')[0];
+}
 
-async function uploadImageFile(file){
-  if(!IMAGE_UPLOAD_API_KEY){
-    toast('Configure a chave IMAGE_UPLOAD_API_KEY no admin ou cole uma URL da imagem.','e');
-    return '';
-  }
-  imgUploading=true;
-  toast('Enviando imagem...');
+function updCnt(el,cid,warn){
+  const c=document.getElementById(cid);
+  c.textContent=el.value.length+'/'+warn;
+  c.classList.toggle('warn',el.value.length>warn);
+}
 
-  const fd=new FormData();
-  fd.append('image', file);
-
-  let endpoint='';
-  if(IMAGE_UPLOAD_PROVIDER==='imgbb'){
-    endpoint=`https://api.imgbb.com/1/upload?key=${encodeURIComponent(IMAGE_UPLOAD_API_KEY)}`;
+function salvar(){
+  const titulo=document.getElementById('f-titulo').value.trim();
+  const cat=document.getElementById('f-cat').value;
+  const resumo=document.getElementById('f-resumo').value.trim();
+  if(!titulo||!cat||!resumo){toast('Preencha título, categoria e resumo!','error');return;}
+  const url=document.getElementById('f-img-url').value.trim();
+  const img=imgBase64||url||'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80';
+  const posX=imgPosition.x, posY=imgPosition.y;
+  const art={
+    id: editId||('n'+Date.now()),
+    titulo,
+    resumo,
+    conteudo: document.getElementById('f-conteudo').value.trim()||resumo,
+    categoria: cat,
+    imagem: img,
+    imgPosition: posX!==50||posY!==50?`${posX}% ${posY}%`:undefined,
+    destaque: document.getElementById('f-dest').checked,
+    data: document.getElementById('f-data').value||new Date().toISOString().split('T')[0],
+    autor: document.getElementById('f-autor').value.trim()||'Reggaetime Staff'
+  };
+  if(!art.imgPosition)delete art.imgPosition;
+  if(editId){
+    const i=news.findIndex(n=>n.id===editId);
+    if(i>=0)news[i]=art;
   } else {
-    imgUploading=false;
-    toast('Provedor de upload inválido.','e');
-    return '';
+    news.unshift(art);
   }
-
-  try{
-    const r=await fetch(endpoint,{method:'POST',body:fd});
-    const j=await r.json();
-    const url=j?.data?.url || j?.data?.display_url || '';
-    if(!r.ok || !url) throw new Error(j?.error?.message || 'Falha ao enviar imagem.');
-    imgUploadedUrl=url;
-    document.getElementById('f-img-url').value=url;
-    document.getElementById('img-prev').src=url;
-    document.getElementById('img-prev-box').classList.add('show');
-    toast('Imagem enviada e convertida para link.');
-    return url;
-  }catch(err){
-    console.error(err);
-    toast('Falha no upload da imagem. Cole uma URL direta no campo abaixo.','e');
-    return '';
-  }finally{
-    imgUploading=false;
-  }
+  save();
+  toast(editId?'✅ Notícia atualizada!':'✅ Notícia publicada!');
+  limpar();
+  goPage('lista',document.querySelectorAll('.mi')[2]);
 }
 
-async function handleFile(file){
-  if(!file)return;
-  if(!file.type.startsWith('image/')){
-    toast('Selecione um arquivo de imagem válido.','e');
-    return;
+function editar(id){
+  const n=news.find(x=>x.id===id);if(!n)return;
+  editId=id;
+  document.getElementById('form-title').textContent='Editar Notícia';
+  document.getElementById('f-id').value=id;
+  document.getElementById('f-titulo').value=n.titulo;
+  document.getElementById('f-cat').value=n.categoria;
+  document.getElementById('f-autor').value=n.autor||'Reggaetime Staff';
+  document.getElementById('f-resumo').value=n.resumo;
+  document.getElementById('f-conteudo').value=n.conteudo||'';
+  document.getElementById('f-data').value=n.data;
+  document.getElementById('f-dest').checked=!!n.destaque;
+  imgBase64='';
+  if(n.imagem&&!n.imagem.startsWith('data:')){
+    document.getElementById('f-img-url').value=n.imagem;
+    showPreview(n.imagem);
+  } else if(n.imagem){
+    imgBase64=n.imagem;
+    showPreview(n.imagem);
   }
-  const localPreview=URL.createObjectURL(file);
-  document.getElementById('img-prev').src=localPreview;
-  document.getElementById('img-prev-box').classList.add('show');
-  imgUploadedUrl='';
-  document.getElementById('f-img-url').value='';
-  await uploadImageFile(file);
+  if(n.imgPosition){
+    const parts=n.imgPosition.split(' ');
+    imgPosition={x:parseInt(parts[0]),y:parseInt(parts[1])};
+    updPositionUI();
+  } else {
+    imgPosition={x:50,y:50};updPositionUI();
+  }
+  goPage('nova',document.querySelectorAll('.mi')[1]);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function deletar(id){
+  if(!confirm('Deletar esta notícia?'))return;
+  news=news.filter(n=>n.id!==id);
+  save();renderTable();updDash();
+  toast('🗑 Notícia removida.');
+}
+
+function limpar(){
+  editId=null;imgBase64='';imgPosition={x:50,y:50};
+  document.getElementById('form-title').textContent='Nova Notícia';
+  ['f-id','f-titulo','f-resumo','f-conteudo','f-img-url'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-cat').value='';
+  document.getElementById('f-autor').value='Reggaetime Staff';
+  document.getElementById('f-dest').checked=false;
+  document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
+  clearImg();
+}
+
+// ── IMAGEM ────────────────────────────────────────────────────
+function handleFile(file){
+  if(!file)return;
+  // Convert to base64 for preview only, store as URL if possible
+  const reader=new FileReader();
+  reader.onload=e=>{
+    imgBase64=e.target.result;
+    document.getElementById('f-img-url').value='';
+    showPreview(imgBase64);
+  };
+  reader.readAsDataURL(file);
 }
 
 function handleDrop(e){
   e.preventDefault();
   document.getElementById('drop-area').classList.remove('drag');
-  const f=e.dataTransfer.files[0];
-  if(f) handleFile(f);
+  const file=e.dataTransfer.files[0];
+  if(file&&file.type.startsWith('image/'))handleFile(file);
 }
 
-function onUrlInput(url){
-  const clean=(url||'').trim();
-  imgUploadedUrl='';
-  if(isHttpUrl(clean)){
-    document.getElementById('img-prev').src=clean;
-    document.getElementById('img-prev-box').classList.add('show');
-  } else if(!clean){
-    document.getElementById('img-prev').src='';
-    document.getElementById('img-prev-box').classList.remove('show');
-  }
+function onUrlInput(val){
+  if(val.startsWith('http')){imgBase64='';showPreview(val);}
+  else if(!val){clearImg();}
+}
+
+function showPreview(src){
+  const box=document.getElementById('img-prev-box');
+  const img=document.getElementById('img-prev');
+  const posEl=document.getElementById('img-position-ctrl');
+  box.style.display='flex';
+  img.src=src;
+  document.getElementById('btn-remove-img').disabled=false;
+  if(posEl)posEl.style.display='block';
+  updPositionUI();
 }
 
 function clearImg(){
-  imgUploadedUrl='';
-  document.getElementById('img-prev').src='';
-  document.getElementById('img-prev-box').classList.remove('show');
+  imgBase64='';imgPosition={x:50,y:50};
+  const box=document.getElementById('img-prev-box');
+  const img=document.getElementById('img-prev');
+  const posEl=document.getElementById('img-position-ctrl');
+  box.style.display='none';
+  img.src='';
+  document.getElementById('btn-remove-img').disabled=true;
   document.getElementById('f-img-url').value='';
+  if(posEl)posEl.style.display='none';
 }
 
-// ── SALVAR ────────────────────────────────────────────────────
-async function salvar(){
-  const titulo=document.getElementById('f-titulo').value.trim();
-  const resumo=document.getElementById('f-resumo').value.trim();
-  const categoria=document.getElementById('f-cat').value;
-  const urlImg=document.getElementById('f-img-url').value.trim();
-  const imagem=(urlImg||imgUploadedUrl).trim();
-
-  if(imgUploading){toast('Aguarde o upload da imagem terminar.','e');return;}
-  if(!titulo){toast('Título é obrigatório!','e');return;}
-  if(!resumo){toast('Resumo é obrigatório!','e');return;}
-  if(!categoria){toast('Selecione uma categoria!','e');return;}
-  if(!imagem){toast('Adicione uma imagem!','e');return;}
-  if(isDataImage(imagem)){toast('Imagem em base64 não é permitida. Use link direto.','e');return;}
-  if(!isHttpUrl(imagem)){toast('A imagem precisa ser uma URL pública válida.','e');return;}
-
-  const news=getNews();
-  const editId=document.getElementById('f-id').value;
-  const noticia={
-    id:editId||String(Date.now()),
-    titulo,resumo,
-    conteudo:document.getElementById('f-conteudo').value.trim()||resumo,
-    categoria,imagem,
-    destaque:document.getElementById('f-dest').checked,
-    data:document.getElementById('f-data').value||todayStr(),
-    autor:document.getElementById('f-autor').value.trim()||'Reggaetime Staff'
-  };
-
-  if(editId){
-    const i=news.findIndex(n=>n.id===editId);
-    if(i!==-1)news[i]=noticia;
-    toast('✅ Notícia atualizada!');
-  } else {
-    news.unshift(noticia);
-    toast('🎉 Notícia publicada!');
-  }
-  saveNews(news);
-  limpar();
-  setTimeout(()=>goPage('lista',document.querySelectorAll('.mi')[2]),1000);
+// ── AJUSTE DE POSIÇÃO DA IMAGEM ────────────────────────────────
+function updPositionUI(){
+  const rx=document.getElementById('pos-x');
+  const ry=document.getElementById('pos-y');
+  const lx=document.getElementById('pos-x-val');
+  const ly=document.getElementById('pos-y-val');
+  const img=document.getElementById('img-prev');
+  if(rx){rx.value=imgPosition.x;lx.textContent=imgPosition.x+'%';}
+  if(ry){ry.value=imgPosition.y;ly.textContent=imgPosition.y+'%';}
+  if(img){img.style.objectFit='cover';img.style.objectPosition=imgPosition.x+'% '+imgPosition.y+'%';}
 }
 
-function limpar(){
-  document.getElementById('f-id').value='';
-  document.getElementById('form-title').textContent='Nova Notícia';
-  ['f-titulo','f-resumo','f-conteudo','f-img-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('f-cat').value='';
-  document.getElementById('f-autor').value='Reggaetime Staff';
-  document.getElementById('f-data').value=todayStr();
-  document.getElementById('f-dest').checked=false;
-  clearImg();
-  document.getElementById('cnt-t').textContent='0/80';
-  document.getElementById('cnt-r').textContent='0/160';
-}
+function setPosX(v){imgPosition.x=parseInt(v);updPositionUI();}
+function setPosY(v){imgPosition.y=parseInt(v);updPositionUI();}
 
 // ── TABLE ─────────────────────────────────────────────────────
-function loadTable(){
-  const news=getNews();
-  document.getElementById('lista-cnt').textContent=`${news.length} notícia(s)`;
-  document.getElementById('tbl-body').innerHTML=news.length?news.map(n=>`
+function renderTable(){
+  const b=document.getElementById('tbl-body');
+  const cnt=document.getElementById('lista-cnt');
+  if(cnt)cnt.textContent=news.length+' notícia(s)';
+  if(!news.length){b.innerHTML='<tr><td colspan="6"><div class="empty">Nenhuma notícia. Crie a primeira!</div></td></tr>';return;}
+  b.innerHTML=news.map(n=>`
     <tr>
-      <td><img class="tbl-img" src="${n.imagem}" onerror="this.style.display='none'" alt=""/></td>
+      <td><img class="tbl-img" src="${n.imagem}" onerror="this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=200&q=60'" alt=""/></td>
       <td><div class="tbl-title">${n.titulo}</div></td>
       <td><span class="cat-tag">${n.categoria}</span></td>
       <td style="font-size:12px;color:var(--muted);">${fmtd(n.data)}</td>
-      <td>${n.destaque?'<span class="dest-tag">● Destaque</span>':'<span style="color:#333;font-size:10px;letter-spacing:.1em;">Normal</span>'}</td>
+      <td>${n.destaque?'<span class="dest-tag">★ Destaque</span>':''}</td>
       <td><div class="acts">
-        <button class="bsm bsm-e" onclick="editar('${n.id}')">✏ Editar</button>
-        <button class="bsm bsm-d" onclick="excluir('${n.id}')">✕</button>
+        <button class="bsm bsm-e" onclick="editar('${n.id}')">✏️ Editar</button>
+        <button class="bsm bsm-d" onclick="deletar('${n.id}')">🗑</button>
       </div></td>
-    </tr>`).join(''):'<tr><td colspan="6" class="empty">Nenhuma notícia. Clique em Nova Notícia.</td></tr>';
-}
-
-function editar(id){
-  const n=getNews().find(x=>x.id===id);if(!n)return;
-  document.getElementById('f-id').value=n.id;
-  document.getElementById('form-title').textContent='Editar Notícia';
-  document.getElementById('f-titulo').value=n.titulo;
-  document.getElementById('f-resumo').value=n.resumo;
-  document.getElementById('f-conteudo').value=n.conteudo||'';
-  document.getElementById('f-cat').value=n.categoria;
-  document.getElementById('f-autor').value=n.autor;
-  document.getElementById('f-data').value=n.data;
-  document.getElementById('f-dest').checked=n.destaque;
-  document.getElementById('f-img-url').value=isHttpUrl(n.imagem)?n.imagem:'';
-  imgUploadedUrl='';
-  document.getElementById('img-prev').src=n.imagem;
-  document.getElementById('img-prev-box').classList.add('show');
-  updCnt(document.getElementById('f-titulo'),'cnt-t',80);
-  updCnt(document.getElementById('f-resumo'),'cnt-r',160);
-  goPage('nova',document.querySelectorAll('.mi')[1]);
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function excluir(id){
-  if(!confirm('Excluir esta notícia?'))return;
-  saveNews(getNews().filter(n=>n.id!==id));
-  loadTable();toast('🗑 Notícia excluída.');
+    </tr>`).join('');
 }
 
 // ── TICKER ────────────────────────────────────────────────────
 function loadTicker(){
-  const cfg=getCfg();
-  const msgs=cfg.ticker||[];
-  renderTickItems(msgs);
-  updateTickPreview(msgs);
+  try{const c=JSON.parse(localStorage.getItem('rt_config')||'{}');
+    const msgs=c.ticker&&c.ticker.length?c.ticker:[];
+    const el=document.getElementById('tick-items');
+    el.innerHTML='';
+    msgs.forEach(m=>addTick(m));
+    updTickerPreview();
+  }catch(e){}
 }
-function renderTickItems(msgs){
-  document.getElementById('tick-items').innerHTML=msgs.map((t,i)=>`
-    <div class="tick-row">
-      <input type="text" value="${t}" placeholder="Mensagem ${i+1}..." oninput="updateTickPreview()"/>
-      <button class="tick-del" onclick="this.parentElement.remove();updateTickPreview()">✕</button>
-    </div>`).join('');
+
+function addTick(val=''){
+  const el=document.getElementById('tick-items');
+  const d=document.createElement('div');d.className='tick-row';
+  d.innerHTML=`<input type="text" placeholder="Texto da manchete..." value="${val}" oninput="updTickerPreview()"/><button class="tick-del" onclick="this.parentNode.remove();updTickerPreview()">×</button>`;
+  el.appendChild(d);
 }
-function addTick(){
-  const d=document.getElementById('tick-items');
-  const div=document.createElement('div');div.className='tick-row';
-  div.innerHTML=`<input type="text" placeholder="Nova mensagem..." oninput="updateTickPreview()"/><button class="tick-del" onclick="this.parentElement.remove();updateTickPreview()">✕</button>`;
-  d.appendChild(div);
+
+function updTickerPreview(){
+  const msgs=[...document.querySelectorAll('#tick-items input')].map(i=>i.value).filter(v=>v.trim());
+  const show=msgs.length?msgs:news.slice(0,4).map(n=>n.titulo);
+  const t=document.getElementById('tick-prev-track');
+  if(t)t.innerHTML=[...show,...show].map(m=>`<span>${m}</span>`).join('');
 }
-function getTickMsgs(){return [...document.querySelectorAll('#tick-items input')].map(i=>i.value.trim()).filter(Boolean);}
-function updateTickPreview(msgs){
-  const m=msgs||getTickMsgs();
-  if(!m.length){document.getElementById('tick-prev-track').innerHTML='<span>Usando títulos das notícias automaticamente</span><span>Usando títulos das notícias automaticamente</span>';return;}
-  const d=[...m,...m];
-  document.getElementById('tick-prev-track').innerHTML=d.map(t=>`<span>${t}</span>`).join('');
-}
+
 function saveTicker(){
-  const msgs=getTickMsgs();
-  const cfg=getCfg();cfg.ticker=msgs;saveCfg(cfg);
-  toast('📡 Ticker salvo!');updateTickPreview(msgs);
+  const msgs=[...document.querySelectorAll('#tick-items input')].map(i=>i.value.trim()).filter(Boolean);
+  const c=getCfg();c.ticker=msgs;
+  localStorage.setItem('rt_config',JSON.stringify(c));
+  toast('📡 Ticker salvo!');
 }
+
 function resetTicker(){
-  const cfg=getCfg();delete cfg.ticker;saveCfg(cfg);
-  renderTickItems([]);updateTickPreview([]);
-  toast('↺ Ticker automático ativado.');
+  document.getElementById('tick-items').innerHTML='';
+  updTickerPreview();
+  const c=getCfg();delete c.ticker;
+  localStorage.setItem('rt_config',JSON.stringify(c));
+  toast('↺ Ticker usando títulos automáticos.');
 }
 
 // ── INSCRITOS ─────────────────────────────────────────────────
-function loadInscritos(){
-  const list=getInsc();
-  const agora=new Date();
-  const mesAtual=agora.toISOString().slice(0,7);
-  const doMes=list.filter(i=>i.data&&i.data.startsWith(mesAtual)).length;
+function renderInscritos(){
+  let list=[];
+  try{list=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');}catch(e){}
   document.getElementById('ins-total').textContent=list.length;
-  document.getElementById('ins-mes').textContent=doMes;
-  document.getElementById('ins-ultimo').textContent=list[0]?list[0].email.split('@')[0]+'...':'—';
-  document.getElementById('ins-body').innerHTML=list.length?list.map((ins,i)=>`
-    <tr>
-      <td style="color:var(--muted);font-size:13px;">${i+1}</td>
-      <td><span class="email-badge">${ins.email}</span></td>
-      <td style="font-size:12px;color:var(--muted);">${fmtd(ins.data)||ins.data||'—'}</td>
-      <td><button class="bsm bsm-d" onclick="removerInscrito('${ins.email}')">✕</button></td>
-    </tr>`).join(''):'<tr><td colspan="4" class="empty">Nenhum inscrito ainda.</td></tr>';
+  const mes=new Date().toISOString().slice(0,7);
+  document.getElementById('ins-mes').textContent=list.filter(i=>i.data&&i.data.startsWith(mes)).length;
+  document.getElementById('ins-ultimo').textContent=list[0]?list[0].email:'—';
+  const b=document.getElementById('ins-body');
+  if(!list.length){b.innerHTML='<tr><td colspan="4"><div class="empty">Nenhum inscrito ainda.</div></td></tr>';return;}
+  b.innerHTML=list.map((i,idx)=>`<tr><td style="color:var(--muted);font-size:12px;">${idx+1}</td><td><span class="email-badge">${i.email}</span></td><td style="font-size:11px;color:var(--muted);">${i.data||'—'}</td><td><button class="bsm bsm-d" onclick="delInscrito('${i.email}')">🗑</button></td></tr>`).join('');
 }
-function removerInscrito(email){
-  if(!confirm(`Remover ${email}?`))return;
-  localStorage.setItem(IK,JSON.stringify(getInsc().filter(i=>i.email!==email)));
-  loadInscritos();toast('Inscrito removido.');
+
+function delInscrito(email){
+  let list=[];try{list=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');}catch(e){}
+  list=list.filter(i=>i.email!==email);
+  localStorage.setItem('rt_inscritos',JSON.stringify(list));
+  renderInscritos();toast('Inscrito removido.');
 }
-function copiarEmails(){
-  const emails=getInsc().map(i=>i.email).join('\n');
-  if(!emails){toast('Nenhum inscrito.','e');return;}
-  navigator.clipboard.writeText(emails).then(()=>toast(`📋 ${getInsc().length} emails copiados!`)).catch(()=>toast('Erro ao copiar.','e'));
-}
+
 function limparInscritos(){
-  if(!confirm('Limpar TODOS os inscritos?'))return;
-  localStorage.removeItem(IK);loadInscritos();toast('Lista limpa.');
+  if(!confirm('Apagar TODOS os inscritos?'))return;
+  localStorage.removeItem('rt_inscritos');renderInscritos();toast('Lista apagada.','error');
+}
+
+function copiarEmails(){
+  let list=[];try{list=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');}catch(e){}
+  if(!list.length){toast('Nenhum inscrito.','error');return;}
+  navigator.clipboard.writeText(list.map(i=>i.email).join('\n')).then(()=>toast('📋 Emails copiados!'));
 }
 
 // ── CONFIG ────────────────────────────────────────────────────
+function getCfg(){try{return JSON.parse(localStorage.getItem('rt_config'))||{};}catch(e){return {};}}
+
 function loadConfig(){
   const c=getCfg();
-  document.getElementById('cfg-ig').value=c.instagram||'';
-  document.getElementById('cfg-yt').value=c.youtube||'';
-  document.getElementById('cfg-sp').value=c.spotify||'';
-  document.getElementById('cfg-email').value=c.email||'';
-  document.getElementById('cfg-qt').value=c.quote_text||'';
-  document.getElementById('cfg-qa').value=c.quote_author||'';
+  ['ig','yt','sp','email'].forEach(k=>{const el=document.getElementById('cfg-'+k);if(el)el.value=c[{ig:'instagram',yt:'youtube',sp:'spotify',email:'email'}[k]]||'';});
+  const qt=document.getElementById('cfg-qt');const qa=document.getElementById('cfg-qa');
+  if(qt)qt.value=c.quote_text||'';
+  if(qa)qa.value=c.quote_author||'';
 }
+
 function saveConfig(){
   const c=getCfg();
   c.instagram=document.getElementById('cfg-ig').value.trim();
@@ -735,47 +798,39 @@ function saveConfig(){
   c.email=document.getElementById('cfg-email').value.trim();
   c.quote_text=document.getElementById('cfg-qt').value.trim();
   c.quote_author=document.getElementById('cfg-qa').value.trim();
-  saveCfg(c);toast('✅ Configurações salvas! Atualize o site para ver.');
+  localStorage.setItem('rt_config',JSON.stringify(c));
+  toast('✅ Configurações salvas!');
 }
 
 // ── EXPORT ────────────────────────────────────────────────────
 function exportJSON(){
-  const news=getNews();
-  if(!news.length){toast('Nenhuma notícia para exportar.','e');return;}
   const blob=new Blob([JSON.stringify(news,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='noticias.json';a.click();
-  toast('📥 noticias.json baixado!');
+  toast('📥 JSON baixado! Suba via: git add data/noticias.json && git commit -m "update" && git push');
+}
+
+// ── SAVE ──────────────────────────────────────────────────────
+function save(){
+  localStorage.setItem('reggaetime_noticias',JSON.stringify(news));
+  localStorage.setItem('reggaetime_updated',Date.now().toString());
+  renderTable();updDash();
 }
 
 // ── TOAST ─────────────────────────────────────────────────────
 function toast(msg,type=''){
   const t=document.getElementById('toast');
   t.textContent=msg;
-  t.style.borderLeftColor=type==='e'?'var(--red)':'var(--green)';
+  t.style.borderLeftColor=type==='error'?'var(--red)':'var(--green)';
   t.style.transform='translateY(0)';t.style.opacity='1';
-  clearTimeout(t._t);t._t=setTimeout(()=>{t.style.transform='translateY(80px)';t.style.opacity='0';},3000);
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>{t.style.transform='translateY(80px)';t.style.opacity='0';},3500);
 }
 
 // ── UTILS ─────────────────────────────────────────────────────
-function fmtd(s){if(!s)return '—';const[y,m,d]=s.split('-');return `${d}/${m}/${y}`;}
+function fmtd(s){if(!s)return '';const[y,m,d]=s.split('-');return `${d}/${m}/${y}`;}
 
-// ── INIT ──────────────────────────────────────────────────────
-document.getElementById('f-data').value=todayStr();
-async function init(){
-  if(!getNews().length){
-    try{
-      const r=await fetch('../data/noticias.json');
-      if(r.ok){
-        const imported=sanitizeNews(await r.json());
-        saveNews(imported);
-      }
-    }catch(e){}
-  } else {
-    saveNews(getNews());
-  }
-  loadDash();
-}
-init();
+loadNews();
+initDate();
 </script>
 </body>
 </html>
