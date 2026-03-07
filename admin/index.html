@@ -474,15 +474,25 @@ tr:hover td{background:rgba(255,255,255,.02);}
         </div>
       </div>
       <div class="fc">
+        <h2>🎵 Player de Rádio (Spotify)</h2>
+        <div class="fr full">
+          <div class="fg">
+            <label>Link da Playlist do Spotify</label>
+            <input id="cfg-sp-playlist" type="url" placeholder="https://open.spotify.com/playlist/..."/>
+            <div style="font-size:10px;color:var(--muted);letter-spacing:.03em;line-height:1.6;margin-top:2px;">Cole o link de qualquer playlist pública do Spotify. O botão 🎵 <strong style="color:var(--white);">Ouvir Rádio</strong> vai aparecer no site automaticamente.</div>
+          </div>
+        </div>
+        <div class="br">
+          <button class="btn btn-p" onclick="saveConfig()">💾 Salvar Configurações</button>
+        </div>
+      </div>
+      <div class="fc">
         <h2>💬 Quote da Home</h2>
         <div class="fr full">
           <div class="fg"><label>Frase</label><textarea id="cfg-qt" style="min-height:70px;" placeholder="Gostaria que as pessoas soubessem..."></textarea></div>
         </div>
         <div class="fr full">
           <div class="fg"><label>Autor</label><input id="cfg-qa" type="text" placeholder="— Ernest Ranglin, guitarrista jamaicano"/></div>
-        </div>
-        <div class="br">
-          <button class="btn btn-p" onclick="saveConfig()">💾 Salvar Configurações</button>
         </div>
         <div class="br">
           <button class="btn btn-p" onclick="saveConfig()">💾 Salvar Configurações</button>
@@ -791,6 +801,8 @@ function loadConfig(){
   const qt=document.getElementById('cfg-qt');const qa=document.getElementById('cfg-qa');
   if(qt)qt.value=c.quote_text||'';
   if(qa)qa.value=c.quote_author||'';
+  const sp=document.getElementById('cfg-sp-playlist');
+  if(sp)sp.value=c.spotify_playlist||'';
 }
 
 function saveConfig(){
@@ -801,6 +813,8 @@ function saveConfig(){
   c.email=document.getElementById('cfg-email').value.trim();
   c.quote_text=document.getElementById('cfg-qt').value.trim();
   c.quote_author=document.getElementById('cfg-qa').value.trim();
+  const sp=document.getElementById('cfg-sp-playlist');
+  c.spotify_playlist=sp?sp.value.trim():'';
   localStorage.setItem('rt_config',JSON.stringify(c));
   toast('✅ Configurações salvas!');
 }
