@@ -324,7 +324,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
           <div class="fg">
             <label>Upload direto (celular ou computador)</label>
             <div style="font-size:11px;color:var(--muted);letter-spacing:.03em;margin-top:-2px;">
-              O admin não salva mais imagem em base64 no JSON. Use URL direta ou configure a chave do upload automático no código.
+              Escolha uma foto — ela será salva automaticamente no JSON. Após salvar a notícia, baixe o JSON e suba para o GitHub.
             </div>
             <div class="img-upload-area" id="drop-area"
               ondragover="event.preventDefault();this.classList.add('drag')"
@@ -736,9 +736,30 @@ function deletarNot(id){
 // ── IMAGEM ────────────────────────────────────────────────────
 function handleFile(file){
   if(!file)return;
-  const url=URL.createObjectURL(file);
-  showPrev(url);
-  toast('⚠️ Use URL hospedada para salvar no JSON','warn');
+  // Redimensiona a imagem antes de converter pra base64 (máx 900px, qualidade 80%)
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const img=new Image();
+    img.onload=function(){
+      const maxW=900,maxH=900;
+      let w=img.width,h=img.height;
+      if(w>maxW||h>maxH){
+        if(w/h>maxW/maxH){h=Math.round(h*maxW/w);w=maxW;}
+        else{w=Math.round(w*maxH/h);h=maxH;}
+      }
+      const canvas=document.createElement('canvas');
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      const base64=canvas.toDataURL('image/jpeg',0.80);
+      // Preenche o campo URL com o base64 para ser salvo no JSON
+      const urlInput=document.getElementById('f-img-url');
+      if(urlInput)urlInput.value=base64;
+      showPrev(base64);
+      toast('✅ Imagem carregada! Salve a notícia para incluir no JSON.','ok');
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 function handleDrop(e){e.preventDefault();document.getElementById('drop-area').classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))handleFile(f);}
 function onUrlInput(v){if(v.startsWith('http'))showPrev(v);else clearImg();}
