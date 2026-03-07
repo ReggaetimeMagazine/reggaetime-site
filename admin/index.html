@@ -264,6 +264,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
           <button class="btn btn-p" onclick="goPage('nova',document.querySelectorAll('.mi')[1])">✏️ Nova Notícia</button>
           <button class="btn btn-s" onclick="exportJSON()">📥 Baixar JSON</button>
           <button class="btn btn-g" onclick="goPage('inscritos',document.querySelectorAll('.mi')[4])">👥 Ver Inscritos</button>
+          <button class="btn btn-s" onclick="sincronizar()" title="Reimporta as notícias do arquivo noticias.json do site">🔄 Sincronizar</button>
         </div>
       </div>
       <div class="fc">
@@ -580,6 +581,19 @@ function goPage(id,el){
   if(id==='publi')loadAds();
 }
 
+async function sincronizar(){
+  try{
+    toast('🔄 Sincronizando...','warn');
+    const r=await fetch('../data/noticias.json?v='+Date.now());
+    if(r.ok){
+      const data=await r.json();
+      setNews(data);
+      loadDash();
+      toast(`✅ ${data.length} notícias sincronizadas do site!`);
+    }else{toast('Erro ao buscar noticias.json','error');}
+  }catch(e){toast('Erro de conexão: '+e.message,'error');}
+}
+
 // ── COUNTER ───────────────────────────────────────────────────
 function updCnt(el,id,max){
   const n=el.value.length;
@@ -851,8 +865,22 @@ function clearAd(slot){
 }
 
 // ── INIT ──────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',async()=>{
   document.getElementById('f-data').value=new Date().toISOString().slice(0,10);
+
+  // Auto-importa noticias.json se localStorage estiver vazio
+  if(!getNews().length){
+    try{
+      const r=await fetch('../data/noticias.json?v='+Date.now());
+      if(r.ok){
+        const data=await r.json();
+        if(data.length){
+          setNews(data);
+          console.log('✅ Notícias importadas do JSON:',data.length);
+        }
+      }
+    }catch(e){console.warn('Não foi possível importar noticias.json',e);}
+  }
   loadDash();
 });
 </script>
