@@ -1,0 +1,46 @@
+[
+  {
+    "id": "001",
+    "titulo": "\"Natural Mystic\" de Bob Marley Conquista Dupla Platina na Nova Zelândia",
+    "resumo": "O álbum clássico de 1977 continua quebrando recordes internacionais décadas após seu lançamento, consolidando a obra de Marley como patrimônio global da música.",
+    "conteudo": "O álbum Natural Mystic de Bob Marley continua sua trajetória histórica e acaba de receber a certificação dupla platina na Nova Zelândia. O disco, lançado originalmente em 1977, reúne algumas das músicas mais icônicas do reggae mundial e prova que a mensagem de Marley transcende gerações e fronteiras geográficas.",
+    "categoria": "Roots",
+    "imagem": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80",
+    "destaque": true,
+    "data": "2026-03-06",
+    "autor": "Reggaetime Staff"
+  },
+  {
+    "id": "002",
+    "titulo": "Ken Boothe é Imortalizado no Jamaica Music Museum Hall of Fame",
+    "resumo": "O lendário cantor jamaicano recebe homenagem máxima da música da ilha em cerimônia emocionante.",
+    "conteudo": "Ken Boothe, uma das vozes mais marcantes do rocksteady e do reggae jamaicano, foi oficialmente incluído no Hall of Fame do Jamaica Music Museum. A cerimônia contou com a presença de artistas e fãs que celebraram décadas de contribuição musical do artista.",
+    "categoria": "Hall da Fama",
+    "imagem": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80",
+    "destaque": true,
+    "data": "2026-03-05",
+    "autor": "Reggaetime Staff"
+  },
+  {
+    "id": "003",
+    "titulo": "Donkya & Arcanjo Ras Lançam Collab \"Ela Tá Com Fogo\"",
+    "resumo": "New collab entre Donkya e Arcanjo Ras esquenta o cenário nacional com produção diferenciada.",
+    "conteudo": "A parceria entre Donkya e Arcanjo Ras promete agitar a cena reggae nacional. A faixa Ela Tá Com Fogo combina produção moderna com raízes roots e já está circulando nas plataformas digitais e rádios especializadas.",
+    "categoria": "Nacional",
+    "imagem": "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80",
+    "destaque": false,
+    "data": "2026-03-04",
+    "autor": "Reggaetime Staff"
+  },
+  {
+    "id": "004",
+    "titulo": "Ernest Ranglin: \"Eu Fui o Verdadeiro Inventor do Ska e do Reggae\"",
+    "resumo": "O lendário guitarrista jamaicano faz declaração polêmica sobre suas contribuições ao gênero musical.",
+    "conteudo": "Em entrevista recente, Ernest Ranglin afirmou que gostaria que as pessoas soubessem que ele foi o verdadeiro inventor do ska e do reggae. A declaração gerou debate na comunidade musical jamaicana e internacional sobre a história e as origens desses gêneros.",
+    "categoria": "Entrevista",
+    "imagem": "https://images.unsplash.com/photo-1559386484-97dfc0e15539?w=800&q=80",
+    "destaque": false,
+    "data": "2026-03-03",
+    "autor": "Reggaetime Staff"
+  }
+]
