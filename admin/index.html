@@ -182,14 +182,6 @@ tr:hover td{background:rgba(255,255,255,.02);}
   .stats{grid-template-columns:1fr 1fr;}
   .fr{grid-template-columns:1fr;}
 }
-/* IMAGE POSITION CONTROL */
-.pos-ctrl{background:var(--deep);border:1px solid var(--border);border-radius:6px;padding:16px;margin-top:10px;}
-.pos-ctrl-title{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--yellow);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.pos-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-.pos-row label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);width:60px;flex-shrink:0;}
-.pos-row input[type=range]{flex:1;accent-color:var(--yellow);cursor:pointer;}
-.pos-row span{font-size:11px;color:var(--yellow);width:36px;text-align:right;font-family:monospace;}
-.pos-hint{font-size:10px;color:#444;letter-spacing:.04em;line-height:1.5;}
 </style>
 </head>
 <body>
@@ -249,6 +241,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
       <div class="mi" onclick="goPage('ticker',this)"><span class="mi-ico">📡</span>Ticker</div>
       <div class="mi" onclick="goPage('inscritos',this)"><span class="mi-ico">👥</span>Inscritos</div>
       <div class="mi" onclick="goPage('config',this)"><span class="mi-ico">⚙️</span>Configurações</div>
+      <div class="mi" onclick="goPage('publi',this)"><span class="mi-ico">📢</span>Publicidade</div>
     </nav>
     <div class="sidebar-foot"><a href="../index.html" target="_blank">← Ver Site</a></div>
   </aside>
@@ -343,23 +336,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
             
             <!-- Preview da imagem corrigido - contain com fundo escuro -->
             <div class="image-preview" id="img-prev-box" style="display: none;">
-              <img id="img-prev" src="" alt="Preview da imagem" style="object-fit:cover;object-position:50% 50%;"/>
-            </div>
-
-            <!-- CONTROLE DE POSIÇÃO / CROP -->
-            <div class="pos-ctrl" id="img-position-ctrl" style="display:none;">
-              <div class="pos-ctrl-title">🎯 Ajustar foco da imagem <span style="color:var(--muted);font-size:9px;">(onde cortar)</span></div>
-              <div class="pos-row">
-                <label>Horizontal</label>
-                <input type="range" min="0" max="100" value="50" id="pos-x" oninput="setPosX(this.value)"/>
-                <span id="pos-x-val">50%</span>
-              </div>
-              <div class="pos-row">
-                <label>Vertical</label>
-                <input type="range" min="0" max="100" value="50" id="pos-y" oninput="setPosY(this.value)"/>
-                <span id="pos-y-val">50%</span>
-              </div>
-              <div class="pos-hint">⬆ Arraste para escolher qual parte da foto fica visível no site. O preview acima mostra em tempo real.</div>
+              <img id="img-prev" src="" alt="Preview da imagem"/>
             </div>
             
             <!-- Botão remover dentro do preview -->
@@ -367,8 +344,8 @@ tr:hover td{background:rgba(255,255,255,.02);}
               <button class="btn btn-d" onclick="clearImg()" style="padding:5px 15px;" id="btn-remove-img" disabled>✕ Remover imagem</button>
             </div>
             
-            <div class="or-sep">— ou cole a URL da imagem hospedada —</div>
-            <input id="f-img-url" type="url" placeholder="https://i.imgur.com/... ou link direto da imagem" oninput="onUrlInput(this.value)"/>
+            <div class="or-sep">— ou cole uma URL —</div>
+            <input id="f-img-url" type="url" placeholder="https://..." oninput="onUrlInput(this.value)"/>
           </div>
         </div>
       </div>
@@ -474,19 +451,6 @@ tr:hover td{background:rgba(255,255,255,.02);}
         </div>
       </div>
       <div class="fc">
-        <h2>🎵 Player de Rádio (Spotify)</h2>
-        <div class="fr full">
-          <div class="fg">
-            <label>Link da Playlist do Spotify</label>
-            <input id="cfg-sp-playlist" type="url" placeholder="https://open.spotify.com/playlist/..."/>
-            <div style="font-size:10px;color:var(--muted);letter-spacing:.03em;line-height:1.6;margin-top:2px;">Cole o link de qualquer playlist pública do Spotify. O botão 🎵 <strong style="color:var(--white);">Ouvir Rádio</strong> vai aparecer no site automaticamente.</div>
-          </div>
-        </div>
-        <div class="br">
-          <button class="btn btn-p" onclick="saveConfig()">💾 Salvar Configurações</button>
-        </div>
-      </div>
-      <div class="fc">
         <h2>💬 Quote da Home</h2>
         <div class="fr full">
           <div class="fg"><label>Frase</label><textarea id="cfg-qt" style="min-height:70px;" placeholder="Gostaria que as pessoas soubessem..."></textarea></div>
@@ -495,25 +459,81 @@ tr:hover td{background:rgba(255,255,255,.02);}
           <div class="fg"><label>Autor</label><input id="cfg-qa" type="text" placeholder="— Ernest Ranglin, guitarrista jamaicano"/></div>
         </div>
         <div class="br">
+        </div>
+      </div>
+
+      <div class="fc">
+        <h2>🎵 Player de Rádio (Spotify)</h2>
+        <div class="fr full">
+          <div class="fg">
+            <label>Link da Playlist do Spotify</label>
+            <input id="cfg-sp-playlist" type="url" placeholder="https://open.spotify.com/playlist/..."/>
+            <div style="font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.03em;">Cole o link de qualquer playlist pública. O botão verde aparecerá no site automaticamente.</div>
+          </div>
+        </div>
+        <div class="br">
           <button class="btn btn-p" onclick="saveConfig()">💾 Salvar Configurações</button>
         </div>
+      </div>
+    </div>
+
+    <!-- PUBLICIDADE -->
+    <div id="pg-publi" class="page">
+      <div class="ph"><h1>Publicidade</h1><p>Gerencie os banners do site</p></div>
+      <div class="fc">
+        <h2>🖼 Banner Topo</h2>
+        <div class="fr full"><div class="fg"><label>URL da imagem ou GIF animado</label><input id="ad-top-img" type="url" placeholder="https://... (.jpg, .png, .gif)" oninput="prevAd('top')"/></div></div>
+        <div class="fr full"><div class="fg"><label>Link de destino (ao clicar)</label><input id="ad-top-link" type="url" placeholder="https://..."/></div></div>
+        <div id="ad-top-preview" style="display:none;margin:10px 0;border:1px solid var(--border);border-radius:6px;overflow:hidden;max-height:120px;"><img id="ad-top-prev-img" src="" style="width:100%;max-height:120px;object-fit:contain;background:#0a0a0a;" alt=""/></div>
+        <div class="br">
+          <button class="btn btn-p" onclick="saveAd('top')">💾 Salvar Banner Topo</button>
+          <button class="btn btn-d" onclick="clearAd('top')">✕ Remover</button>
+        </div>
+      </div>
+      <div class="fc">
+        <h2>🖼 Banner Entre Notícias</h2>
+        <div class="fr full"><div class="fg"><label>URL da imagem ou GIF animado</label><input id="ad-mid-img" type="url" placeholder="https://... (.jpg, .png, .gif)" oninput="prevAd('mid')"/></div></div>
+        <div class="fr full"><div class="fg"><label>Link de destino (ao clicar)</label><input id="ad-mid-link" type="url" placeholder="https://..."/></div></div>
+        <div id="ad-mid-preview" style="display:none;margin:10px 0;border:1px solid var(--border);border-radius:6px;overflow:hidden;max-height:120px;"><img id="ad-mid-prev-img" src="" style="width:100%;max-height:120px;object-fit:contain;background:#0a0a0a;" alt=""/></div>
+        <div class="br">
+          <button class="btn btn-p" onclick="saveAd('mid')">💾 Salvar Banner Meio</button>
+          <button class="btn btn-d" onclick="clearAd('mid')">✕ Remover</button>
+        </div>
+      </div>
+      <div class="fc" style="background:rgba(255,215,0,.04);border-color:rgba(255,215,0,.2);">
+        <h2>💡 Como funciona</h2>
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;letter-spacing:.02em;text-transform:none;">
+          1. Cole a URL da imagem (pode ser GIF animado — hospede no Imgur ou similar)<br>
+          2. Cole o link de destino do anunciante<br>
+          3. Clique Salvar — o banner aparece no site imediatamente<br>
+          4. Para remover, clique em Remover Banner
+        </p>
       </div>
     </div>
 
   </main>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-'use strict';
-let news=[], editId=null, imgBase64='', imgPosition={x:50,y:50};
+// ── HELPERS ───────────────────────────────────────────────────
+const KEY='rt_noticias';
+const CFG_KEY='rt_config';
+const ADS_KEY='rt_ads';
 
-// ── LOAD ──────────────────────────────────────────────────────
-function loadNews(){
-  try{const s=localStorage.getItem('reggaetime_noticias');if(s){const p=JSON.parse(s);if(Array.isArray(p))news=p;}}catch(e){}
-  updDash();renderTable();renderInscritos();
+function getCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||'{}')}catch{return{}}}
+function getAds(){try{return JSON.parse(localStorage.getItem(ADS_KEY)||'{}')}catch{return{}}}
+function getNews(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}}
+function setNews(d){localStorage.setItem(KEY,JSON.stringify(d))}
+
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.borderLeftColor=type==='error'?'#E63946':type==='warn'?'#FFD700':'#1DB954';
+  t.style.opacity='1';t.style.transform='translateY(0)';
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(80px)';},3200);
 }
 
 // ── NAV ───────────────────────────────────────────────────────
@@ -522,332 +542,282 @@ function goPage(id,el){
   document.querySelectorAll('.mi').forEach(m=>m.classList.remove('active'));
   document.getElementById('pg-'+id).classList.add('active');
   if(el)el.classList.add('active');
-  if(id==='nova')initDate();
-  if(id==='ticker')loadTicker();
-  if(id==='inscritos')renderInscritos();
+  if(id==='dash')loadDash();
+  if(id==='lista')loadTable();
+  if(id==='inscritos')loadInscritos();
   if(id==='config')loadConfig();
+  if(id==='ticker')loadTicker();
+  if(id==='publi')loadAds();
+}
+
+// ── COUNTER ───────────────────────────────────────────────────
+function updCnt(el,id,max){
+  const n=el.value.length;
+  const c=document.getElementById(id);
+  c.textContent=n+'/'+max;
+  c.classList.toggle('warn',n>max);
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────────
-function updDash(){
+function loadDash(){
+  const news=getNews();
   document.getElementById('st-total').textContent=news.length;
   document.getElementById('st-dest').textContent=news.filter(n=>n.destaque).length;
-  try{const i=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');document.getElementById('st-inscritos').textContent=i.length;}catch(e){}
-  const u=news[0];document.getElementById('st-ultima').textContent=u?fmtd(u.data):'—';
-  const el=document.getElementById('dash-recentes');
-  if(!news.length){el.innerHTML='<div class="empty">Nenhuma notícia publicada ainda.</div>';return;}
-  el.innerHTML=`<table><thead><tr><th>Título</th><th>Categoria</th><th>Data</th><th>Destaque</th></tr></thead><tbody>${
-    news.slice(0,5).map(n=>`<tr><td class="tbl-title">${n.titulo}</td><td><span class="cat-tag">${n.categoria}</span></td><td>${fmtd(n.data)}</td><td>${n.destaque?'<span class="dest-tag">★ Destaque</span>':''}</td></tr>`).join('')
-  }</tbody></table>`;
+  const ins=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');
+  document.getElementById('st-inscritos').textContent=ins.length;
+  document.getElementById('st-ultima').textContent=news.length?news[0].data||'—':'—';
+  const rec=document.getElementById('dash-recentes');
+  if(!news.length){rec.innerHTML='<div class="empty">Nenhuma notícia publicada</div>';return;}
+  rec.innerHTML=news.slice(0,5).map(n=>`
+    <div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+      <img src="${n.imagem||''}" onerror="this.style.display='none'" style="width:56px;height:38px;object-fit:cover;border-radius:3px;filter:brightness(.8);flex-shrink:0;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:500;color:var(--white);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.titulo}</div>
+        <div style="font-size:10px;color:var(--muted);letter-spacing:.08em;margin-top:3px;">${n.categoria||''} · ${n.data||''}</div>
+      </div>
+    </div>`).join('');
 }
 
-// ── FORM / SALVAR ─────────────────────────────────────────────
-function initDate(){
-  const d=document.getElementById('f-data');
-  if(!d.value)d.value=new Date().toISOString().split('T')[0];
-}
-
-function updCnt(el,cid,warn){
-  const c=document.getElementById(cid);
-  c.textContent=el.value.length+'/'+warn;
-  c.classList.toggle('warn',el.value.length>warn);
-}
+// ── NOVA NOTÍCIA ──────────────────────────────────────────────
+function gerarId(){return Date.now().toString(36).toUpperCase();}
 
 function salvar(){
   const titulo=document.getElementById('f-titulo').value.trim();
   const cat=document.getElementById('f-cat').value;
   const resumo=document.getElementById('f-resumo').value.trim();
-  if(!titulo||!cat||!resumo){toast('Preencha título, categoria e resumo!','error');return;}
-  const url=document.getElementById('f-img-url').value.trim();
-  const img=imgBase64||url||'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80';
-  const posX=imgPosition.x, posY=imgPosition.y;
-  const art={
-    id: editId||('n'+Date.now()),
-    titulo,
-    resumo,
-    conteudo: document.getElementById('f-conteudo').value.trim()||resumo,
-    categoria: cat,
-    imagem: img,
-    imgPosition: posX!==50||posY!==50?`${posX}% ${posY}%`:undefined,
-    destaque: document.getElementById('f-dest').checked,
-    data: document.getElementById('f-data').value||new Date().toISOString().split('T')[0],
-    autor: document.getElementById('f-autor').value.trim()||'Reggaetime Staff'
+  if(!titulo||!cat||!resumo){toast('Preencha Título, Categoria e Resumo!','error');return;}
+  const news=getNews();
+  const id=document.getElementById('f-id').value||gerarId();
+  const img=document.getElementById('f-img-url').value.trim();
+  const xVal=document.getElementById('pos-x')?document.getElementById('pos-x').value:'50';
+  const yVal=document.getElementById('pos-y')?document.getElementById('pos-y').value:'50';
+  const obj={
+    id,titulo,resumo,
+    conteudo:document.getElementById('f-conteudo').value.trim(),
+    categoria:cat,
+    imagem:img,
+    imgPosition:(xVal!=='50'||yVal!=='50')?`${xVal}% ${yVal}%`:undefined,
+    destaque:document.getElementById('f-dest').checked,
+    data:document.getElementById('f-data').value||new Date().toISOString().slice(0,10),
+    autor:document.getElementById('f-autor').value.trim()||'Reggaetime Staff'
   };
-  if(!art.imgPosition)delete art.imgPosition;
-  if(editId){
-    const i=news.findIndex(n=>n.id===editId);
-    if(i>=0)news[i]=art;
-  } else {
-    news.unshift(art);
-  }
-  save();
-  toast(editId?'✅ Notícia atualizada!':'✅ Notícia publicada!');
+  if(!obj.imgPosition)delete obj.imgPosition;
+  const idx=news.findIndex(n=>n.id===id);
+  if(idx>=0)news[idx]=obj;else news.unshift(obj);
+  setNews(news);
+  toast(idx>=0?'✅ Notícia atualizada!':'✅ Notícia publicada!');
   limpar();
   goPage('lista',document.querySelectorAll('.mi')[2]);
 }
 
-function editar(id){
-  const n=news.find(x=>x.id===id);if(!n)return;
-  editId=id;
-  document.getElementById('form-title').textContent='Editar Notícia';
-  document.getElementById('f-id').value=id;
-  document.getElementById('f-titulo').value=n.titulo;
-  document.getElementById('f-cat').value=n.categoria;
-  document.getElementById('f-autor').value=n.autor||'Reggaetime Staff';
-  document.getElementById('f-resumo').value=n.resumo;
-  document.getElementById('f-conteudo').value=n.conteudo||'';
-  document.getElementById('f-data').value=n.data;
-  document.getElementById('f-dest').checked=!!n.destaque;
-  imgBase64='';
-  if(n.imagem&&!n.imagem.startsWith('data:')){
-    document.getElementById('f-img-url').value=n.imagem;
-    showPreview(n.imagem);
-  } else if(n.imagem){
-    imgBase64=n.imagem;
-    showPreview(n.imagem);
-  }
-  if(n.imgPosition){
-    const parts=n.imgPosition.split(' ');
-    imgPosition={x:parseInt(parts[0]),y:parseInt(parts[1])};
-    updPositionUI();
-  } else {
-    imgPosition={x:50,y:50};updPositionUI();
-  }
-  goPage('nova',document.querySelectorAll('.mi')[1]);
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function deletar(id){
-  if(!confirm('Deletar esta notícia?'))return;
-  news=news.filter(n=>n.id!==id);
-  save();renderTable();updDash();
-  toast('🗑 Notícia removida.');
-}
-
 function limpar(){
-  editId=null;imgBase64='';imgPosition={x:50,y:50};
-  document.getElementById('form-title').textContent='Nova Notícia';
-  ['f-id','f-titulo','f-resumo','f-conteudo','f-img-url'].forEach(id=>document.getElementById(id).value='');
+  ['f-id','f-titulo','f-resumo','f-conteudo','f-img-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('f-cat').value='';
   document.getElementById('f-autor').value='Reggaetime Staff';
   document.getElementById('f-dest').checked=false;
-  document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
+  document.getElementById('f-data').value=new Date().toISOString().slice(0,10);
+  document.getElementById('form-title').textContent='Nova Notícia';
   clearImg();
+}
+
+function editarNot(id){
+  const n=getNews().find(x=>x.id===id);
+  if(!n)return;
+  document.getElementById('f-id').value=n.id;
+  document.getElementById('f-titulo').value=n.titulo;
+  document.getElementById('f-cat').value=n.categoria;
+  document.getElementById('f-resumo').value=n.resumo;
+  document.getElementById('f-conteudo').value=n.conteudo||'';
+  document.getElementById('f-img-url').value=n.imagem||'';
+  document.getElementById('f-dest').checked=!!n.destaque;
+  document.getElementById('f-data').value=n.data||'';
+  document.getElementById('f-autor').value=n.autor||'Reggaetime Staff';
+  document.getElementById('form-title').textContent='Editar Notícia';
+  if(n.imagem)onUrlInput(n.imagem);
+  goPage('nova',document.querySelectorAll('.mi')[1]);
+}
+
+function deletarNot(id){
+  if(!confirm('Excluir esta notícia?'))return;
+  setNews(getNews().filter(n=>n.id!==id));
+  loadTable();toast('🗑 Notícia excluída.','warn');
 }
 
 // ── IMAGEM ────────────────────────────────────────────────────
 function handleFile(file){
   if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    // Show preview only — base64 NOT stored in JSON (breaks site)
-    showPreview(e.target.result);
-    // Store temporarily for preview only
-    imgBase64='';  // don't save base64 to JSON
-    // Warn user to use a hosted URL
-    toast('📸 Preview OK! Cole a URL da imagem hospedada no campo abaixo para salvar.','warn');
-    document.getElementById('f-img-url').focus();
-  };
-  reader.readAsDataURL(file);
+  const url=URL.createObjectURL(file);
+  showPrev(url);
+  toast('⚠️ Use URL hospedada para salvar no JSON','warn');
 }
-
-function handleDrop(e){
-  e.preventDefault();
-  document.getElementById('drop-area').classList.remove('drag');
-  const file=e.dataTransfer.files[0];
-  if(file&&file.type.startsWith('image/'))handleFile(file);
-}
-
-function onUrlInput(val){
-  if(val.startsWith('http')){imgBase64='';showPreview(val);}
-  else if(!val){clearImg();}
-}
-
-function showPreview(src){
+function handleDrop(e){e.preventDefault();document.getElementById('drop-area').classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))handleFile(f);}
+function onUrlInput(v){if(v.startsWith('http'))showPrev(v);else clearImg();}
+function showPrev(src){
   const box=document.getElementById('img-prev-box');
   const img=document.getElementById('img-prev');
-  const posEl=document.getElementById('img-position-ctrl');
-  box.style.display='flex';
-  img.src=src;
-  document.getElementById('btn-remove-img').disabled=false;
-  if(posEl)posEl.style.display='block';
-  updPositionUI();
+  const btn=document.getElementById('btn-remove-img');
+  img.src=src;box.style.display='flex';if(btn)btn.disabled=false;
 }
-
 function clearImg(){
-  imgBase64='';imgPosition={x:50,y:50};
   const box=document.getElementById('img-prev-box');
   const img=document.getElementById('img-prev');
-  const posEl=document.getElementById('img-position-ctrl');
-  box.style.display='none';
-  img.src='';
-  document.getElementById('btn-remove-img').disabled=true;
-  document.getElementById('f-img-url').value='';
-  if(posEl)posEl.style.display='none';
+  const btn=document.getElementById('btn-remove-img');
+  if(img)img.src='';if(box)box.style.display='none';if(btn)btn.disabled=true;
+  const urlIn=document.getElementById('f-img-url');if(urlIn)urlIn.value='';
 }
 
-// ── AJUSTE DE POSIÇÃO DA IMAGEM ────────────────────────────────
-function updPositionUI(){
-  const rx=document.getElementById('pos-x');
-  const ry=document.getElementById('pos-y');
-  const lx=document.getElementById('pos-x-val');
-  const ly=document.getElementById('pos-y-val');
-  const img=document.getElementById('img-prev');
-  if(rx){rx.value=imgPosition.x;lx.textContent=imgPosition.x+'%';}
-  if(ry){ry.value=imgPosition.y;ly.textContent=imgPosition.y+'%';}
-  if(img){img.style.objectFit='cover';img.style.objectPosition=imgPosition.x+'% '+imgPosition.y+'%';}
-}
-
-function setPosX(v){imgPosition.x=parseInt(v);updPositionUI();}
-function setPosY(v){imgPosition.y=parseInt(v);updPositionUI();}
-
-// ── TABLE ─────────────────────────────────────────────────────
-function renderTable(){
-  const b=document.getElementById('tbl-body');
-  const cnt=document.getElementById('lista-cnt');
-  if(cnt)cnt.textContent=news.length+' notícia(s)';
-  if(!news.length){b.innerHTML='<tr><td colspan="6"><div class="empty">Nenhuma notícia. Crie a primeira!</div></td></tr>';return;}
-  b.innerHTML=news.map(n=>`
+// ── GERENCIAR ─────────────────────────────────────────────────
+function loadTable(){
+  const news=getNews();
+  const p=document.getElementById('lista-cnt');
+  if(p)p.textContent=news.length+' notícias publicadas';
+  const tb=document.getElementById('tbl-body');
+  if(!news.length){tb.innerHTML='<tr><td colspan="6"><div class="empty">Nenhuma notícia</div></td></tr>';return;}
+  tb.innerHTML=news.map(n=>`
     <tr>
-      <td><img class="tbl-img" src="${n.imagem}" onerror="this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=200&q=60'" alt=""/></td>
+      <td><img class="tbl-img" src="${n.imagem||''}" onerror="this.style.display='none'"></td>
       <td><div class="tbl-title">${n.titulo}</div></td>
-      <td><span class="cat-tag">${n.categoria}</span></td>
-      <td style="font-size:12px;color:var(--muted);">${fmtd(n.data)}</td>
-      <td>${n.destaque?'<span class="dest-tag">★ Destaque</span>':''}</td>
+      <td><span class="cat-tag">${n.categoria||''}</span></td>
+      <td style="font-size:12px;color:var(--muted);white-space:nowrap;">${n.data||''}</td>
+      <td>${n.destaque?'<span class="dest-tag">Destaque</span>':''}</td>
       <td><div class="acts">
-        <button class="bsm bsm-e" onclick="editar('${n.id}')">✏️ Editar</button>
-        <button class="bsm bsm-d" onclick="deletar('${n.id}')">🗑</button>
+        <button class="bsm bsm-e" onclick="editarNot('${n.id}')">Editar</button>
+        <button class="bsm bsm-d" onclick="deletarNot('${n.id}')">Excluir</button>
       </div></td>
     </tr>`).join('');
 }
 
+function exportJSON(){
+  const blob=new Blob([JSON.stringify(getNews(),null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='noticias.json';a.click();
+  toast('📥 JSON baixado! Coloque em data/ e suba o git.');
+}
+
 // ── TICKER ────────────────────────────────────────────────────
 function loadTicker(){
-  try{const c=JSON.parse(localStorage.getItem('rt_config')||'{}');
-    const msgs=c.ticker&&c.ticker.length?c.ticker:[];
-    const el=document.getElementById('tick-items');
-    el.innerHTML='';
-    msgs.forEach(m=>addTick(m));
-    updTickerPreview();
-  }catch(e){}
+  const items=JSON.parse(localStorage.getItem('rt_ticker')||'[]');
+  renderTicks(items);updateTickPrev(items);
 }
-
-function addTick(val=''){
-  const el=document.getElementById('tick-items');
-  const d=document.createElement('div');d.className='tick-row';
-  d.innerHTML=`<input type="text" placeholder="Texto da manchete..." value="${val}" oninput="updTickerPreview()"/><button class="tick-del" onclick="this.parentNode.remove();updTickerPreview()">×</button>`;
-  el.appendChild(d);
+function renderTicks(items){
+  const c=document.getElementById('tick-items');
+  c.innerHTML=items.map((t,i)=>`
+    <div class="tick-row">
+      <input value="${t.replace(/"/g,'&quot;')}" oninput="onTickInput()" placeholder="Texto ${i+1}..."/>
+      <button class="tick-del" onclick="this.parentNode.remove();onTickInput()">✕</button>
+    </div>`).join('');
 }
-
-function updTickerPreview(){
-  const msgs=[...document.querySelectorAll('#tick-items input')].map(i=>i.value).filter(v=>v.trim());
-  const show=msgs.length?msgs:news.slice(0,4).map(n=>n.titulo);
+function addTick(){
+  const c=document.getElementById('tick-items');
+  const row=document.createElement('div');row.className='tick-row';
+  row.innerHTML=`<input placeholder="Nova mensagem..." oninput="onTickInput()"/><button class="tick-del" onclick="this.parentNode.remove();onTickInput()">✕</button>`;
+  c.appendChild(row);
+}
+function getTickVals(){return [...document.querySelectorAll('.tick-row input')].map(i=>i.value.trim()).filter(Boolean);}
+function onTickInput(){updateTickPrev(getTickVals());}
+function updateTickPrev(items){
   const t=document.getElementById('tick-prev-track');
-  if(t)t.innerHTML=[...show,...show].map(m=>`<span>${m}</span>`).join('');
+  const all=[...items,...items];
+  t.innerHTML=all.map(x=>`<span>${x}</span>`).join('');
 }
-
 function saveTicker(){
-  const msgs=[...document.querySelectorAll('#tick-items input')].map(i=>i.value.trim()).filter(Boolean);
-  const c=getCfg();c.ticker=msgs;
-  localStorage.setItem('rt_config',JSON.stringify(c));
-  toast('📡 Ticker salvo!');
+  localStorage.setItem('rt_ticker',JSON.stringify(getTickVals()));
+  toast('✅ Ticker salvo!');
 }
-
 function resetTicker(){
-  document.getElementById('tick-items').innerHTML='';
-  updTickerPreview();
-  const c=getCfg();delete c.ticker;
-  localStorage.setItem('rt_config',JSON.stringify(c));
-  toast('↺ Ticker usando títulos automáticos.');
+  localStorage.removeItem('rt_ticker');renderTicks([]);updateTickPrev([]);
+  toast('↺ Ticker resetado para títulos automáticos.','warn');
 }
 
 // ── INSCRITOS ─────────────────────────────────────────────────
-function renderInscritos(){
-  let list=[];
-  try{list=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');}catch(e){}
-  document.getElementById('ins-total').textContent=list.length;
-  const mes=new Date().toISOString().slice(0,7);
-  document.getElementById('ins-mes').textContent=list.filter(i=>i.data&&i.data.startsWith(mes)).length;
-  document.getElementById('ins-ultimo').textContent=list[0]?list[0].email:'—';
-  const b=document.getElementById('ins-body');
-  if(!list.length){b.innerHTML='<tr><td colspan="4"><div class="empty">Nenhum inscrito ainda.</div></td></tr>';return;}
-  b.innerHTML=list.map((i,idx)=>`<tr><td style="color:var(--muted);font-size:12px;">${idx+1}</td><td><span class="email-badge">${i.email}</span></td><td style="font-size:11px;color:var(--muted);">${i.data||'—'}</td><td><button class="bsm bsm-d" onclick="delInscrito('${i.email}')">🗑</button></td></tr>`).join('');
+function loadInscritos(){
+  const ins=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');
+  document.getElementById('ins-total').textContent=ins.length;
+  const mes=ins.filter(i=>{const d=new Date(i.data||0);const n=new Date();return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();}).length;
+  document.getElementById('ins-mes').textContent=mes;
+  document.getElementById('ins-ultimo').textContent=ins.length?ins[ins.length-1].email:'—';
+  const tb=document.getElementById('ins-body');
+  if(!ins.length){tb.innerHTML='<tr><td colspan="4"><div class="empty">Nenhum inscrito ainda</div></td></tr>';return;}
+  tb.innerHTML=[...ins].reverse().map((i,idx)=>`
+    <tr>
+      <td style="color:var(--muted);font-size:12px;">${ins.length-idx}</td>
+      <td><span class="email-badge">${i.email}</span></td>
+      <td style="font-size:12px;color:var(--muted);">${i.data||'—'}</td>
+      <td><button class="bsm bsm-d" onclick="delIns('${i.email}')">✕</button></td>
+    </tr>`).join('');
 }
-
-function delInscrito(email){
-  let list=[];try{list=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');}catch(e){}
-  list=list.filter(i=>i.email!==email);
-  localStorage.setItem('rt_inscritos',JSON.stringify(list));
-  renderInscritos();toast('Inscrito removido.');
+function delIns(email){
+  const ins=JSON.parse(localStorage.getItem('rt_inscritos')||'[]').filter(i=>i.email!==email);
+  localStorage.setItem('rt_inscritos',JSON.stringify(ins));loadInscritos();
 }
-
-function limparInscritos(){
-  if(!confirm('Apagar TODOS os inscritos?'))return;
-  localStorage.removeItem('rt_inscritos');renderInscritos();toast('Lista apagada.','error');
-}
-
 function copiarEmails(){
-  let list=[];try{list=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');}catch(e){}
-  if(!list.length){toast('Nenhum inscrito.','error');return;}
-  navigator.clipboard.writeText(list.map(i=>i.email).join('\n')).then(()=>toast('📋 Emails copiados!'));
+  const ins=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');
+  navigator.clipboard.writeText(ins.map(i=>i.email).join('\n'));
+  toast('📋 Emails copiados!');
+}
+function limparInscritos(){
+  if(!confirm('Limpar todos os inscritos?'))return;
+  localStorage.removeItem('rt_inscritos');loadInscritos();toast('🗑 Lista limpa.','warn');
 }
 
 // ── CONFIG ────────────────────────────────────────────────────
-function getCfg(){try{return JSON.parse(localStorage.getItem('rt_config'))||{};}catch(e){return {};}}
-
 function loadConfig(){
   const c=getCfg();
-  ['ig','yt','sp','email'].forEach(k=>{const el=document.getElementById('cfg-'+k);if(el)el.value=c[{ig:'instagram',yt:'youtube',sp:'spotify',email:'email'}[k]]||'';});
-  const qt=document.getElementById('cfg-qt');const qa=document.getElementById('cfg-qa');
-  if(qt)qt.value=c.quote_text||'';
-  if(qa)qa.value=c.quote_author||'';
-  const sp=document.getElementById('cfg-sp-playlist');
-  if(sp)sp.value=c.spotify_playlist||'';
+  document.getElementById('cfg-ig').value=c.instagram||'';
+  document.getElementById('cfg-yt').value=c.youtube||'';
+  document.getElementById('cfg-sp').value=c.spotify||'';
+  document.getElementById('cfg-email').value=c.email||'';
+  document.getElementById('cfg-qt').value=c.quote||'';
+  document.getElementById('cfg-qa').value=c.quote_autor||'';
+  document.getElementById('cfg-sp-playlist').value=c.spotify_playlist||'';
 }
-
 function saveConfig(){
-  const c=getCfg();
-  c.instagram=document.getElementById('cfg-ig').value.trim();
-  c.youtube=document.getElementById('cfg-yt').value.trim();
-  c.spotify=document.getElementById('cfg-sp').value.trim();
-  c.email=document.getElementById('cfg-email').value.trim();
-  c.quote_text=document.getElementById('cfg-qt').value.trim();
-  c.quote_author=document.getElementById('cfg-qa').value.trim();
-  const sp=document.getElementById('cfg-sp-playlist');
-  c.spotify_playlist=sp?sp.value.trim():'';
-  localStorage.setItem('rt_config',JSON.stringify(c));
+  const c={
+    instagram:document.getElementById('cfg-ig').value.trim(),
+    youtube:document.getElementById('cfg-yt').value.trim(),
+    spotify:document.getElementById('cfg-sp').value.trim(),
+    email:document.getElementById('cfg-email').value.trim(),
+    quote:document.getElementById('cfg-qt').value.trim(),
+    quote_autor:document.getElementById('cfg-qa').value.trim(),
+    spotify_playlist:document.getElementById('cfg-sp-playlist').value.trim()
+  };
+  localStorage.setItem(CFG_KEY,JSON.stringify(c));
   toast('✅ Configurações salvas!');
 }
 
-// ── EXPORT ────────────────────────────────────────────────────
-function exportJSON(){
-  const blob=new Blob([JSON.stringify(news,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='noticias.json';a.click();
-  toast('📥 JSON baixado! Suba via: git add data/noticias.json && git commit -m "update" && git push');
+// ── ADS ───────────────────────────────────────────────────────
+function loadAds(){
+  const ads=getAds();
+  if(ads.top_img){document.getElementById('ad-top-img').value=ads.top_img;document.getElementById('ad-top-link').value=ads.top_link||'';prevAd('top');}
+  if(ads.mid_img){document.getElementById('ad-mid-img').value=ads.mid_img;document.getElementById('ad-mid-link').value=ads.mid_link||'';prevAd('mid');}
+}
+function prevAd(slot){
+  const url=document.getElementById(`ad-${slot}-img`).value.trim();
+  const prev=document.getElementById(`ad-${slot}-preview`);
+  const img=document.getElementById(`ad-${slot}-prev-img`);
+  if(url){img.src=url;prev.style.display='block';}else{prev.style.display='none';}
+}
+function saveAd(slot){
+  const ads=getAds();
+  ads[`${slot}_img`]=document.getElementById(`ad-${slot}-img`).value.trim();
+  ads[`${slot}_link`]=document.getElementById(`ad-${slot}-link`).value.trim();
+  localStorage.setItem(ADS_KEY,JSON.stringify(ads));
+  toast(`✅ Banner ${slot==='top'?'topo':'meio'} salvo!`);
+}
+function clearAd(slot){
+  const ads=getAds();
+  delete ads[`${slot}_img`];delete ads[`${slot}_link`];
+  localStorage.setItem(ADS_KEY,JSON.stringify(ads));
+  document.getElementById(`ad-${slot}-img`).value='';
+  document.getElementById(`ad-${slot}-link`).value='';
+  document.getElementById(`ad-${slot}-preview`).style.display='none';
+  toast(`🗑 Banner removido.`,'warn');
 }
 
-// ── SAVE ──────────────────────────────────────────────────────
-function save(){
-  localStorage.setItem('reggaetime_noticias',JSON.stringify(news));
-  localStorage.setItem('reggaetime_updated',Date.now().toString());
-  renderTable();updDash();
-}
-
-// ── TOAST ─────────────────────────────────────────────────────
-function toast(msg,type=''){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.style.borderLeftColor=type==='error'?'var(--red)':type==='warn'?'var(--yellow)':'var(--green)';
-  t.style.transform='translateY(0)';t.style.opacity='1';
-  clearTimeout(t._t);
-  t._t=setTimeout(()=>{t.style.transform='translateY(80px)';t.style.opacity='0';},4000);
-}
-
-// ── UTILS ─────────────────────────────────────────────────────
-function fmtd(s){if(!s)return '';const[y,m,d]=s.split('-');return `${d}/${m}/${y}`;}
-
-loadNews();
-initDate();
+// ── INIT ──────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('f-data').value=new Date().toISOString().slice(0,10);
+  loadDash();
+});
 </script>
 </body>
 </html>
