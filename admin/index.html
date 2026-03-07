@@ -1,696 +1,594 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — Reggaetime Magazine</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
-<style>
-:root{--black:#0a0a0a;--deep:#111;--card:#181818;--border:#2a2a2a;--green:#1DB954;--yellow:#FFD700;--red:#E63946;--white:#F5F0E8;--muted:#888;--rasta:linear-gradient(90deg,#E63946 33.3%,#FFD700 33.3% 66.6%,#1DB954 66.6%);}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--black);color:var(--white);font-family:'Oswald',sans-serif;min-height:100vh;}
-.admin-wrap{display:grid;grid-template-columns:240px 1fr;min-height:100vh;}
-.sidebar{background:var(--deep);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
-.logo-wrap{padding:22px 20px 18px;border-bottom:1px solid var(--border);}
-.logo-main{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.06em;background:linear-gradient(135deg,#FFD700,#C9A84C,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;}
-.logo-sub{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-top:2px;display:block;}
-.rasta-bar{height:3px;background:var(--rasta);}
-.sidebar-menu{padding:14px 0;flex:1;}
-.mi{display:flex;align-items:center;gap:10px;padding:11px 20px;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s;border-left:3px solid transparent;}
-.mi:hover{color:var(--white);background:rgba(255,255,255,.03);}
-.mi.active{color:var(--yellow);border-left-color:var(--yellow);background:rgba(255,215,0,.05);}
-.mi-ico{font-size:15px;width:20px;text-align:center;}
-.sidebar-foot{padding:16px 20px;border-top:1px solid var(--border);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#333;}
-.sidebar-foot a{color:var(--yellow);text-decoration:none;}
-.admin-main{padding:28px 36px;overflow-y:auto;}
-.page{display:none;}.page.active{display:block;}
-.ph{margin-bottom:26px;}
-.ph h1{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:.08em;color:var(--white);}
-.ph p{font-size:12px;color:var(--muted);letter-spacing:.05em;margin-top:3px;}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
-.sc{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:18px 20px;position:relative;overflow:hidden;}
-.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-.sc:nth-child(1)::before{background:var(--yellow);}
-.sc:nth-child(2)::before{background:var(--green);}
-.sc:nth-child(3)::before{background:var(--red);}
-.sc:nth-child(4)::before{background:#8b5cf6;}
-.sl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-.sv{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:.05em;color:var(--white);line-height:1;}
-.fc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:26px;margin-bottom:20px;}
-.fc h2{font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--white);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
-.fr{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
-.fr.full{grid-template-columns:1fr;}
-.fg{display:flex;flex-direction:column;gap:7px;}
-.fg label{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
-.fg input,.fg select,.fg textarea{background:var(--deep);border:1px solid var(--border);border-radius:4px;padding:10px 13px;color:var(--white);font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.03em;outline:none;transition:border-color .2s;resize:vertical;}
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--yellow);}
-.fg input::placeholder,.fg textarea::placeholder{color:#444;font-style:italic;}
-.fg textarea{min-height:120px;}
-.fg select option{background:var(--deep);}
-.cnt{text-align:right;font-size:10px;color:#444;letter-spacing:.08em;margin-top:3px;}
-.cnt.warn{color:var(--yellow);}
-/* IMAGE UPLOAD */
-.img-upload-area{border:2px dashed var(--border);border-radius:6px;padding:24px;text-align:center;cursor:pointer;transition:border-color .3s;position:relative;margin-top:4px;}
-.img-upload-area:hover,.img-upload-area.drag{border-color:var(--yellow);}
-.img-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.img-upload-txt{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
-.img-upload-txt span{display:block;font-size:20px;margin-bottom:8px;}
-.img-preview-box{display:none;position:relative;margin-top:10px;border-radius:4px;overflow:hidden;}
-.img-preview-box.show{display:block;}
-.img-preview-box img{width:100%;max-height:200px;object-fit:cover;display:block;filter:brightness(.85);}
-.img-preview-box .img-del{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.75);border:none;border-radius:3px;color:#fff;padding:5px 10px;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;cursor:pointer;}
-/* URL fallback */
-.or-sep{text-align:center;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#333;margin:10px 0;}
-/* TOGGLE */
-.tog-wrap{display:flex;align-items:center;gap:10px;padding:10px 0;}
-.tog{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0;}
-.tog input{opacity:0;width:0;height:0;}
-.tog-s{position:absolute;inset:0;background:var(--border);border-radius:26px;transition:background .3s;}
-.tog-s::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .3s;}
-.tog input:checked+.tog-s{background:var(--yellow);}
-.tog input:checked+.tog-s::before{transform:translateX(20px);}
-.tog-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
-/* BUTTONS */
-.br{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;}
-.btn{font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:11px 24px;border-radius:4px;border:none;cursor:pointer;transition:all .2s;}
-.btn-p{background:var(--yellow);color:var(--black);}
-.btn-p:hover{background:#e6c200;transform:translateY(-1px);}
-.btn-s{background:transparent;color:var(--muted);border:1px solid var(--border);}
-.btn-s:hover{border-color:var(--muted);color:var(--white);}
-.btn-d{background:transparent;color:var(--red);border:1px solid rgba(230,57,70,.4);}
-.btn-d:hover{background:var(--red);color:#fff;}
-.btn-g{background:rgba(29,185,84,.12);color:var(--green);border:1px solid rgba(29,185,84,.3);}
-.btn-g:hover{background:var(--green);color:#fff;}
-/* TABLE */
-.tbl-wrap{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;}
-th{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);padding:10px 13px;text-align:left;border-bottom:1px solid var(--border);}
-td{padding:13px;border-bottom:1px solid var(--border);vertical-align:middle;}
-tr:hover td{background:rgba(255,255,255,.02);}
-.tbl-img{width:60px;height:40px;object-fit:cover;border-radius:3px;filter:brightness(.8);}
-.tbl-title{font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--white);max-width:300px;line-height:1.3;}
-.cat-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;border-radius:2px;background:rgba(255,215,0,.1);color:var(--yellow);}
-.dest-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:2px 8px;border-radius:2px;background:rgba(230,57,70,.15);color:var(--red);}
-.acts{display:flex;gap:7px;}
-.bsm{font-family:'Oswald',sans-serif;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:3px;border:none;cursor:pointer;transition:all .2s;}
-.bsm-e{background:rgba(255,215,0,.1);color:var(--yellow);border:1px solid rgba(255,215,0,.2);}
-.bsm-e:hover{background:var(--yellow);color:var(--black);}
-.bsm-d{background:rgba(230,57,70,.1);color:var(--red);border:1px solid rgba(230,57,70,.2);}
-.bsm-d:hover{background:var(--red);color:#fff;}
-/* TICKER EDITOR */
-.tick-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
-.tick-row input{flex:1;background:var(--deep);border:1px solid var(--border);border-radius:4px;padding:10px 13px;color:var(--white);font-family:'Oswald',sans-serif;font-size:13px;outline:none;transition:border-color .2s;}
-.tick-row input:focus{border-color:var(--yellow);}
-.tick-del{background:rgba(230,57,70,.1);border:1px solid rgba(230,57,70,.2);color:var(--red);border-radius:4px;padding:10px 13px;cursor:pointer;font-size:14px;transition:all .2s;}
-.tick-del:hover{background:var(--red);color:#fff;}
-/* PREVIEW TICKER */
-.tick-prev{background:#FFD700;overflow:hidden;position:relative;padding:8px 0;border-radius:4px;margin-top:12px;}
-.tick-prev-label{position:absolute;left:0;top:0;bottom:0;background:var(--red);padding:0 12px;display:flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#fff;z-index:2;}
-.tick-prev-track{display:flex;animation:ticker 18s linear infinite;padding-left:90px;}
-.tick-prev-track span{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;padding:0 24px;color:#0a0a0a;}
-.tick-prev-track span::before{content:'★';margin-right:8px;}
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-/* INSCRITOS */
-.email-badge{display:inline-block;background:rgba(29,185,84,.1);color:var(--green);border:1px solid rgba(29,185,84,.2);border-radius:3px;padding:3px 10px;font-size:11px;letter-spacing:.05em;}
-/* EMPTY */
-.empty{text-align:center;padding:48px;color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase;}
-/* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:14px 22px;font-size:13px;letter-spacing:.04em;color:var(--white);transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;min-width:230px;}
-/* MOBILE */
-@media(max-width:900px){
-  .admin-wrap{grid-template-columns:1fr;}
-  .sidebar{position:static;height:auto;}
-  .admin-main{padding:18px;}
-  .stats{grid-template-columns:1fr 1fr;}
-  .fr{grid-template-columns:1fr;}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reggaetime Admin — Gerenciar Notícias</title>
+  <style>
+    :root {
+      --bg: #070707;
+      --panel: #111111;
+      --panel-2: #171717;
+      --line: #2a2a2a;
+      --text: #f5f5f5;
+      --muted: #b6b6b6;
+      --yellow: #ffd100;
+      --green: #1db954;
+      --red: #ff4d4f;
+      --accent: #f5b400;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .wrap {
+      width: min(1200px, calc(100% - 32px));
+      margin: 24px auto 60px;
+    }
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #141414, #0f0f0f);
+      padding: 18px 20px;
+      border-radius: 16px;
+    }
+    .brand { font-size: 34px; font-weight: 900; color: var(--yellow); letter-spacing: 1px; }
+    .sub { color: var(--muted); font-size: 13px; margin-top: 6px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.25);
+    }
+    h1,h2,h3 { margin: 0 0 14px; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 20px; }
+    .muted { color: var(--muted); }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field { margin-bottom: 14px; }
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: #d9d9d9;
+      text-transform: uppercase;
+    }
+    input[type="text"],
+    input[type="date"],
+    input[type="url"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #333;
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 15px;
+      outline: none;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    button {
+      border: 1px solid var(--line);
+      background: #1a1a1a;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    button.primary { background: var(--yellow); color: #111; border-color: #a98a00; }
+    button.green { background: var(--green); color: #071707; border-color: #0d8b3e; }
+    button.red { background: #2a1111; color: #ffb3b3; border-color: #622; }
+    button:hover { filter: brightness(1.06); }
+    .status {
+      margin-top: 12px;
+      min-height: 22px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .status.ok { color: #93ffb5; }
+    .status.err { color: #ff9595; }
+    .preview {
+      margin-top: 12px;
+      width: 100%;
+      max-height: 260px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #0b0b0b;
+      display: none;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .news-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 950px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .news-item {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 14px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #121212;
+    }
+    .news-item img {
+      width: 96px;
+      height: 72px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #0a0a0a;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #2a2400;
+      color: #ffdf57;
+      margin-right: 8px;
+      border: 1px solid #524500;
+    }
+    .small { font-size: 13px; color: var(--muted); }
+    .item-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .item-actions button { padding: 8px 12px; border-radius: 10px; font-size: 12px; }
+    .inline-upload {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+    code.box {
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid var(--line);
+      background: #101010;
+      border-radius: 12px;
+      padding: 12px;
+      color: #d9f7be;
+      font-size: 12px;
+    }
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: 1fr; }
+      .row, .inline-upload { grid-template-columns: 1fr; }
+      .hero { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
-
-<!-- TOKEN GATE -->
-<div id="gate" style="position:fixed;inset:0;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;">
-  <div style="font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:.08em;background:linear-gradient(135deg,#FFD700,#C9A84C,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Reggaetime</div>
-  <div style="font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#444;margin-bottom:40px;">Acesso Restrito</div>
-  <div style="background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:36px 44px;text-align:center;max-width:360px;width:92%;">
-    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#666;margin-bottom:20px;">Token de Acesso</div>
-    <input id="tok-inp" type="password" placeholder="Digite o token..."
-      style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:4px;padding:13px 16px;color:#F5F0E8;font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.08em;outline:none;margin-bottom:10px;transition:border-color .2s;"
-      onfocus="this.style.borderColor='#FFD700'" onblur="this.style.borderColor='#2a2a2a'"
-      onkeydown="if(event.key==='Enter')chkTok()"/>
-    <div id="tok-err" style="color:#E63946;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;min-height:14px;"></div>
-    <button onclick="chkTok()" style="width:100%;background:#FFD700;color:#0a0a0a;border:none;border-radius:4px;padding:13px;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">Entrar</button>
-  </div>
-  <div style="margin-top:20px;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#222;">Acesso via URL: /admin/?token=seu_token</div>
-</div>
-
-<script>
-(function(){
-  const TOKEN='reggaetime2026';
-  const SK='rt_admin_auth';
-  const gate=document.getElementById('gate');
-  function unlock(){gate.style.transition='opacity .4s';gate.style.opacity='0';setTimeout(()=>gate.remove(),400);}
-  if(sessionStorage.getItem(SK)===TOKEN){unlock();return;}
-  const p=new URLSearchParams(location.search);
-  const ut=p.get('token');
-  if(ut===TOKEN){sessionStorage.setItem(SK,TOKEN);history.replaceState(null,'',location.pathname);unlock();return;}
-  window.chkTok=function(){
-    const v=document.getElementById('tok-inp').value.trim();
-    if(v===TOKEN){sessionStorage.setItem(SK,TOKEN);unlock();}
-    else{
-      const e=document.getElementById('tok-err');
-      e.textContent='Token incorreto.';
-      document.getElementById('tok-inp').value='';
-      document.getElementById('tok-inp').style.borderColor='#E63946';
-      setTimeout(()=>{e.textContent='';document.getElementById('tok-inp').style.borderColor='#2a2a2a';},2500);
-    }
-  };
-})();
-</script>
-
-<div class="admin-wrap">
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="logo-wrap">
-      <span class="logo-main">Reggaetime</span>
-      <span class="logo-sub">Painel Admin</span>
-    </div>
-    <div class="rasta-bar"></div>
-    <nav class="sidebar-menu">
-      <div class="mi active" onclick="goPage('dash',this)"><span class="mi-ico">📊</span>Dashboard</div>
-      <div class="mi" onclick="goPage('nova',this)"><span class="mi-ico">⚡</span>Nova Notícia</div>
-      <div class="mi" onclick="goPage('lista',this)"><span class="mi-ico">📰</span>Gerenciar</div>
-      <div class="mi" onclick="goPage('ticker',this)"><span class="mi-ico">📡</span>Ticker</div>
-      <div class="mi" onclick="goPage('inscritos',this)"><span class="mi-ico">👥</span>Inscritos</div>
-      <div class="mi" onclick="goPage('config',this)"><span class="mi-ico">⚙️</span>Configurações</div>
-    </nav>
-    <div class="sidebar-foot"><a href="../index.html" target="_blank">← Ver Site</a></div>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="admin-main">
-
-    <!-- DASHBOARD -->
-    <div id="pg-dash" class="page active">
-      <div class="ph"><h1>Dashboard</h1><p>Resumo da Reggaetime Magazine</p></div>
-      <div class="stats">
-        <div class="sc"><div class="sl">Notícias</div><div class="sv" id="st-total">0</div></div>
-        <div class="sc"><div class="sl">Em Destaque</div><div class="sv" id="st-dest">0</div></div>
-        <div class="sc"><div class="sl">Inscritos</div><div class="sv" id="st-inscritos">0</div></div>
-        <div class="sc"><div class="sl">Última Publicação</div><div class="sv" id="st-ultima" style="font-size:18px;padding-top:8px;">—</div></div>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <div class="brand">REGGAETIME</div>
+        <div class="sub">Painel admin corrigido: imagens por URL pública, sem base64 no JSON.</div>
       </div>
-      <div class="fc">
-        <h2>⚡ Ações Rápidas</h2>
-        <div class="br">
-          <button class="btn btn-p" onclick="goPage('nova',document.querySelectorAll('.mi')[1])">✏️ Nova Notícia</button>
-          <button class="btn btn-s" onclick="exportJSON()">📥 Baixar JSON</button>
-          <button class="btn btn-g" onclick="goPage('inscritos',document.querySelectorAll('.mi')[4])">👥 Ver Inscritos</button>
-        </div>
-      </div>
-      <div class="fc">
-        <h2>📋 Publicações Recentes</h2>
-        <div id="dash-recentes"></div>
-      </div>
+      <div class="small">Arquivo pensado para usar no mesmo domínio do site com endpoints <b>/api/upload-image</b> e <b>/api/news</b>.</div>
     </div>
 
-    <!-- NOVA NOTÍCIA -->
-    <div id="pg-nova" class="page">
-      <div class="ph"><h1 id="form-title">Nova Notícia</h1><p>Preencha e publique — aparece no site instantaneamente</p></div>
-      <div class="fc">
-        <h2>📝 Conteúdo</h2>
-        <input type="hidden" id="f-id"/>
-        <div class="fr full">
-          <div class="fg">
-            <label>Título *</label>
-            <input id="f-titulo" type="text" placeholder="Título da notícia..." oninput="updCnt(this,'cnt-t',80)" maxlength="150"/>
-            <div class="cnt" id="cnt-t">0/80</div>
-          </div>
-        </div>
-        <div class="fr">
-          <div class="fg">
-            <label>Categoria *</label>
-            <select id="f-cat">
-              <option value="">Selecione...</option>
-              <option>Nacional</option><option>Roots</option><option>Dancehall</option>
-              <option>Jamaica</option><option>Entrevista</option><option>Hall da Fama</option>
-              <option>Lançamento</option><option>Cultura</option><option>Records</option><option>Collab</option>
-            </select>
-          </div>
-          <div class="fg">
-            <label>Autor</label>
-            <input id="f-autor" type="text" value="Reggaetime Staff"/>
-          </div>
-        </div>
-        <div class="fr full">
-          <div class="fg">
-            <label>Resumo * (aparece nas listagens)</label>
-            <textarea id="f-resumo" placeholder="2-3 linhas resumindo a notícia..." style="min-height:80px;" oninput="updCnt(this,'cnt-r',160)" maxlength="300"></textarea>
-            <div class="cnt" id="cnt-r">0/160</div>
-          </div>
-        </div>
-        <div class="fr full">
-          <div class="fg">
-            <label>Conteúdo completo (opcional)</label>
-            <textarea id="f-conteudo" placeholder="Texto completo. Use Enter para separar parágrafos." style="min-height:180px;"></textarea>
-          </div>
-        </div>
-      </div>
+    <div class="grid">
+      <section class="card">
+        <h1>Nova notícia / editar notícia</h1>
+        <div class="muted" style="margin-bottom:16px;">Este painel envia a imagem para a hospedagem e salva no JSON apenas o link público.</div>
 
-      <div class="fc">
-        <h2>🖼 Imagem</h2>
-        <div class="fr full">
-          <div class="fg">
-            <label>Upload direto (celular ou computador)</label>
-            <div class="img-upload-area" id="drop-area"
-              ondragover="event.preventDefault();this.classList.add('drag')"
-              ondragleave="this.classList.remove('drag')"
-              ondrop="handleDrop(event)">
-              <input type="file" accept="image/*" onchange="handleFile(this.files[0])"/>
-              <div class="img-upload-txt">
-                <span>📸</span>
-                Toque para escolher foto ou arraste aqui
+        <form id="newsForm">
+          <input type="hidden" id="editingId" />
+
+          <div class="field">
+            <label for="titulo">Título</label>
+            <input id="titulo" type="text" required maxlength="220" />
+          </div>
+
+          <div class="field">
+            <label for="resumo">Resumo</label>
+            <textarea id="resumo" required maxlength="500"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="conteudo">Conteúdo</label>
+            <textarea id="conteudo" required style="min-height:220px;"></textarea>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="categoria">Categoria</label>
+              <select id="categoria" required>
+                <option value="Todas">Todas</option>
+                <option value="Nacional">Nacional</option>
+                <option value="Roots">Roots</option>
+                <option value="Dancehall">Dancehall</option>
+                <option value="Jamaica">Jamaica</option>
+                <option value="Entrevistas">Entrevistas</option>
+                <option value="Hall da Fama">Hall da Fama</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="data">Data</label>
+              <input id="data" type="date" required />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="autor">Autor</label>
+              <input id="autor" type="text" maxlength="120" value="Reggaetime Staff" />
+            </div>
+            <div class="field">
+              <label>Destaque</label>
+              <div class="check">
+                <input id="destaque" type="checkbox" />
+                <span class="muted">Marcar como destaque</span>
               </div>
             </div>
-            <div class="img-preview-box" id="img-prev-box">
-              <img id="img-prev" src="" alt=""/>
-              <button class="img-del" onclick="clearImg()">✕ Remover</button>
-            </div>
-            <div class="or-sep">— ou cole uma URL —</div>
-            <input id="f-img-url" type="url" placeholder="https://..." oninput="onUrlInput(this.value)"/>
           </div>
-        </div>
-      </div>
 
-      <div class="fc">
-        <h2>⚙️ Opções</h2>
-        <div class="fr">
-          <div class="fg">
-            <label>Data de publicação</label>
-            <input id="f-data" type="date"/>
-          </div>
-          <div class="fg" style="justify-content:center;">
-            <label>Destaque (aparece no hero)</label>
-            <div class="tog-wrap">
-              <label class="tog"><input type="checkbox" id="f-dest"/><span class="tog-s"></span></label>
-              <span class="tog-label">Marcar como destaque</span>
+          <div class="field">
+            <label>Imagem da notícia</label>
+            <div class="inline-upload">
+              <div>
+                <input id="imagemArquivo" type="file" accept="image/*" />
+              </div>
+              <button type="button" id="btnUpload" class="green">Enviar imagem</button>
             </div>
           </div>
-        </div>
-        <div class="br">
-          <button class="btn btn-p" onclick="salvar()">✅ Publicar Notícia</button>
-          <button class="btn btn-s" onclick="limpar()">🗑 Limpar</button>
-        </div>
-      </div>
-    </div>
 
-    <!-- GERENCIAR -->
-    <div id="pg-lista" class="page">
-      <div class="ph"><h1>Gerenciar Notícias</h1><p id="lista-cnt"></p></div>
-      <div class="fc" style="padding:0;overflow:hidden;">
-        <div style="padding:16px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-          <h2 style="margin:0;border:none;padding:0;">Todas as Notícias</h2>
-          <button class="btn btn-s" style="padding:7px 16px;" onclick="exportJSON()">📥 Baixar JSON</button>
-        </div>
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Img</th><th>Título</th><th>Categoria</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead>
-            <tbody id="tbl-body"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+          <div class="field">
+            <label for="imagem">URL pública da imagem</label>
+            <input id="imagem" type="url" placeholder="https://cdn.seudominio.com/noticias/capa.webp" required />
+          </div>
 
-    <!-- TICKER -->
-    <div id="pg-ticker" class="page">
-      <div class="ph"><h1>Ticker / Breaking News</h1><p>Textos que deslizam no topo do site</p></div>
-      <div class="fc">
-        <h2>📡 Mensagens do Ticker</h2>
-        <p style="font-size:12px;color:var(--muted);margin-bottom:18px;letter-spacing:.02em;text-transform:none;">Cada campo = uma mensagem. Deixe vazio para usar os títulos das notícias automaticamente.</p>
-        <div id="tick-items"></div>
-        <button class="btn btn-s" onclick="addTick()" style="width:100%;margin-bottom:18px;">＋ Adicionar mensagem</button>
-        <div class="br">
-          <button class="btn btn-p" onclick="saveTicker()">💾 Salvar</button>
-          <button class="btn btn-s" onclick="resetTicker()">↺ Usar títulos automáticos</button>
-        </div>
-        <div style="margin-top:20px;">
-          <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Preview:</div>
-          <div class="tick-prev">
-            <div class="tick-prev-label">Ao vivo</div>
-            <div class="tick-prev-track" id="tick-prev-track"></div>
+          <img id="previewImagem" class="preview" alt="Prévia da imagem" />
+          <div id="uploadStatus" class="status"></div>
+
+          <div class="btns">
+            <button type="submit" class="primary">Salvar notícia</button>
+            <button type="button" id="btnLimpar">Limpar formulário</button>
+            <button type="button" id="btnRecarregar">Recarregar lista</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="toolbar">
+          <div>
+            <h2>Todas as notícias</h2>
+            <div class="small"><span id="countNews">0</span> notícia(s) carregada(s)</div>
+          </div>
+          <div class="btns" style="margin:0;">
+            <button type="button" id="btnExportar">Baixar JSON</button>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- INSCRITOS -->
-    <div id="pg-inscritos" class="page">
-      <div class="ph"><h1>Inscritos</h1><p>Emails cadastrados pelo formulário da home</p></div>
-      <div class="stats" style="grid-template-columns:repeat(3,1fr);">
-        <div class="sc"><div class="sl">Total</div><div class="sv" id="ins-total">0</div></div>
-        <div class="sc"><div class="sl">Este Mês</div><div class="sv" id="ins-mes">0</div></div>
-        <div class="sc"><div class="sl">Último</div><div class="sv" id="ins-ultimo" style="font-size:14px;padding-top:10px;letter-spacing:0;">—</div></div>
-      </div>
-      <div class="fc" style="padding:0;overflow:hidden;">
-        <div style="padding:16px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-          <h2 style="margin:0;border:none;padding:0;">Lista de Emails</h2>
-          <div style="display:flex;gap:8px;">
-            <button class="btn btn-g" style="padding:7px 14px;" onclick="copiarEmails()">📋 Copiar todos</button>
-            <button class="btn btn-d" style="padding:7px 14px;" onclick="limparInscritos()">🗑 Limpar</button>
+        <div class="news-list" id="newsList"></div>
+
+        <h3 style="margin-top:18px;">Formato salvo</h3>
+        <code class="box">{
+  "id": "20260307150000",
+  "titulo": "...",
+  "resumo": "...",
+  "conteudo": "...",
+  "categoria": "Roots",
+  "imagem": "https://SEU-LINK-PUBLICO.webp",
+  "destaque": true,
+  "data": "2026-03-07",
+  "autor": "Reggaetime Staff"
+}</code>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const API = {
+      news: '/api/news',
+      upload: '/api/upload-image'
+    };
+
+    const form = document.getElementById('newsForm');
+    const editingId = document.getElementById('editingId');
+    const titulo = document.getElementById('titulo');
+    const resumo = document.getElementById('resumo');
+    const conteudo = document.getElementById('conteudo');
+    const categoria = document.getElementById('categoria');
+    const imagem = document.getElementById('imagem');
+    const imagemArquivo = document.getElementById('imagemArquivo');
+    const data = document.getElementById('data');
+    const autor = document.getElementById('autor');
+    const destaque = document.getElementById('destaque');
+    const previewImagem = document.getElementById('previewImagem');
+    const uploadStatus = document.getElementById('uploadStatus');
+    const newsList = document.getElementById('newsList');
+    const countNews = document.getElementById('countNews');
+
+    let noticias = [];
+
+    function setStatus(msg, ok = true) {
+      uploadStatus.textContent = msg || '';
+      uploadStatus.className = 'status ' + (msg ? (ok ? 'ok' : 'err') : '');
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function normalizeNewsArray(data) {
+      if (!Array.isArray(data)) return [];
+      return data.map((n, idx) => ({
+        id: String(n.id ?? Date.now() + idx),
+        titulo: String(n.titulo ?? '').trim(),
+        resumo: String(n.resumo ?? '').trim(),
+        conteudo: String(n.conteudo ?? '').trim(),
+        categoria: String(n.categoria ?? 'Todas').trim(),
+        imagem: String(n.imagem ?? '').trim(),
+        destaque: Boolean(n.destaque),
+        data: String(n.data ?? '').trim(),
+        autor: String(n.autor ?? 'Reggaetime Staff').trim() || 'Reggaetime Staff'
+      }));
+    }
+
+    function formatDateToInput(value) {
+      if (!value) return '';
+      return value.slice(0, 10);
+    }
+
+    function genId() {
+      const d = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+    }
+
+    function refreshPreview() {
+      const src = imagem.value.trim();
+      if (!src) {
+        previewImagem.style.display = 'none';
+        previewImagem.removeAttribute('src');
+        return;
+      }
+      previewImagem.src = src;
+      previewImagem.style.display = 'block';
+    }
+
+    imagem.addEventListener('input', refreshPreview);
+
+    async function carregarNoticias() {
+      setStatus('Carregando notícias...');
+      try {
+        const res = await fetch(API.news + '?v=' + Date.now(), { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) throw new Error(`Falha ao carregar notícias (${res.status})`);
+        const data = await res.json();
+        noticias = normalizeNewsArray(data);
+        renderNoticias();
+        setStatus('Lista carregada.');
+      } catch (err) {
+        console.error(err);
+        noticias = [];
+        renderNoticias();
+        setStatus(err.message || 'Erro ao carregar notícias.', false);
+      }
+    }
+
+    function renderNoticias() {
+      countNews.textContent = String(noticias.length);
+      if (!noticias.length) {
+        newsList.innerHTML = '<div class="small">Nenhuma notícia encontrada.</div>';
+        return;
+      }
+      const ordered = [...noticias].sort((a, b) => String(b.data).localeCompare(String(a.data)) || String(b.id).localeCompare(String(a.id)));
+      newsList.innerHTML = ordered.map(n => `
+        <article class="news-item">
+          <img src="${escapeHtml(n.imagem || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500&q=80')}" alt="" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500&q=80'">
+          <div>
+            <div style="font-weight:800; font-size:16px; line-height:1.3;">${escapeHtml(n.titulo)}</div>
+            <div class="small" style="margin-top:6px;">${escapeHtml(n.resumo)}</div>
+            <div style="margin-top:8px;">
+              <span class="tag">${escapeHtml(n.categoria)}</span>
+              <span class="small">${escapeHtml(n.data)} · ${escapeHtml(n.autor)}</span>
+              ${n.destaque ? '<span class="tag" style="background:#2b1515;color:#ff9b9b;border-color:#5f2323;">Destaque</span>' : ''}
+            </div>
+            <div class="item-actions">
+              <button type="button" onclick="editarNoticia('${encodeURIComponent(n.id)}')">Editar</button>
+              <button type="button" class="red" onclick="removerNoticia('${encodeURIComponent(n.id)}')">Excluir</button>
+            </div>
           </div>
-        </div>
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>#</th><th>Email</th><th>Data</th><th>Ação</th></tr></thead>
-            <tbody id="ins-body"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+        </article>
+      `).join('');
+    }
 
-    <!-- CONFIGURAÇÕES -->
-    <div id="pg-config" class="page">
-      <div class="ph"><h1>Configurações</h1><p>Redes sociais, email e quote da home</p></div>
-      <div class="fc">
-        <h2>📱 Redes Sociais & Contato</h2>
-        <div class="fr">
-          <div class="fg"><label>Instagram (URL completa)</label><input id="cfg-ig" type="url" placeholder="https://www.instagram.com/reggaetimemagazine/"/></div>
-          <div class="fg"><label>YouTube (URL do canal)</label><input id="cfg-yt" type="url" placeholder="https://www.youtube.com/@..."/></div>
-        </div>
-        <div class="fr">
-          <div class="fg"><label>Spotify (URL do perfil)</label><input id="cfg-sp" type="url" placeholder="https://open.spotify.com/..."/></div>
-          <div class="fg"><label>Email de publicidade</label><input id="cfg-email" type="email" placeholder="reggaetimebr@gmail.com"/></div>
-        </div>
-      </div>
-      <div class="fc">
-        <h2>💬 Quote da Home</h2>
-        <div class="fr full">
-          <div class="fg"><label>Frase</label><textarea id="cfg-qt" style="min-height:70px;" placeholder="Gostaria que as pessoas soubessem..."></textarea></div>
-        </div>
-        <div class="fr full">
-          <div class="fg"><label>Autor</label><input id="cfg-qa" type="text" placeholder="— Ernest Ranglin, guitarrista jamaicano"/></div>
-        </div>
-        <div class="br">
-          <button class="btn btn-p" onclick="saveConfig()">💾 Salvar Configurações</button>
-        </div>
-      </div>
-    </div>
+    function fillForm(n) {
+      editingId.value = n.id;
+      titulo.value = n.titulo;
+      resumo.value = n.resumo;
+      conteudo.value = n.conteudo;
+      categoria.value = n.categoria;
+      imagem.value = n.imagem;
+      data.value = formatDateToInput(n.data);
+      autor.value = n.autor || 'Reggaetime Staff';
+      destaque.checked = Boolean(n.destaque);
+      refreshPreview();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setStatus('Modo de edição ativado.');
+    }
 
-  </main>
-</div>
+    window.editarNoticia = function(idEncoded) {
+      const id = decodeURIComponent(idEncoded);
+      const item = noticias.find(n => n.id === id);
+      if (!item) return;
+      fillForm(item);
+    }
 
-<div id="toast" class="toast"></div>
+    window.removerNoticia = async function(idEncoded) {
+      const id = decodeURIComponent(idEncoded);
+      const item = noticias.find(n => n.id === id);
+      if (!item) return;
+      if (!confirm(`Excluir a notícia:\n\n${item.titulo}`)) return;
+      try {
+        const res = await fetch(`${API.news}?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(txt || `Falha ao excluir (${res.status})`);
+        }
+        noticias = noticias.filter(n => n.id !== id);
+        renderNoticias();
+        if (editingId.value === id) resetForm();
+        setStatus('Notícia removida com sucesso.');
+      } catch (err) {
+        console.error(err);
+        setStatus(err.message || 'Erro ao excluir notícia.', false);
+      }
+    }
 
-<script>
-'use strict';
-const NK='reggaetime_noticias', IK='rt_inscritos', CK='rt_config', TK='rt_ticker';
+    function resetForm() {
+      form.reset();
+      editingId.value = '';
+      autor.value = 'Reggaetime Staff';
+      data.value = new Date().toISOString().slice(0, 10);
+      previewImagem.style.display = 'none';
+      previewImagem.removeAttribute('src');
+      setStatus('Formulário limpo.');
+    }
 
-// ── STORAGE ───────────────────────────────────────────────────
-function getNews(){try{return JSON.parse(localStorage.getItem(NK))||[];}catch(e){return[];}}
-function saveNews(a){localStorage.setItem(NK,JSON.stringify(a));localStorage.setItem('reggaetime_updated',Date.now().toString());}
-function getCfg(){try{return JSON.parse(localStorage.getItem(CK))||{};}catch(e){return{};}}
-function saveCfg(c){localStorage.setItem(CK,JSON.stringify(c));localStorage.setItem('reggaetime_updated',Date.now().toString());}
-function getInsc(){try{return JSON.parse(localStorage.getItem(IK))||[];}catch(e){return[];}}
+    async function uploadImage() {
+      const file = imagemArquivo.files[0];
+      if (!file) {
+        setStatus('Escolha uma imagem antes de enviar.', false);
+        return;
+      }
+      setStatus('Enviando imagem para a hospedagem...');
+      try {
+        const fd = new FormData();
+        fd.append('file', file, file.name);
 
-// ── NAV ───────────────────────────────────────────────────────
-function goPage(id,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.mi').forEach(m=>m.classList.remove('active'));
-  document.getElementById('pg-'+id).classList.add('active');
-  if(el)el.classList.add('active');
-  if(id==='dash')loadDash();
-  if(id==='lista')loadTable();
-  if(id==='ticker')loadTicker();
-  if(id==='inscritos')loadInscritos();
-  if(id==='config')loadConfig();
-}
+        const res = await fetch(API.upload, {
+          method: 'POST',
+          body: fd
+        });
 
-// ── DASHBOARD ─────────────────────────────────────────────────
-function loadDash(){
-  const news=getNews(), ins=getInsc();
-  document.getElementById('st-total').textContent=news.length;
-  document.getElementById('st-dest').textContent=news.filter(n=>n.destaque).length;
-  document.getElementById('st-inscritos').textContent=ins.length;
-  const last=news[0];
-  document.getElementById('st-ultima').textContent=last?fmtd(last.data):'—';
-  document.getElementById('dash-recentes').innerHTML=news.slice(0,5).map(n=>`
-    <div style="display:flex;gap:14px;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer;" onclick="editar('${n.id}')">
-      <img src="${n.imagem}" style="width:56px;height:38px;object-fit:cover;border-radius:3px;filter:brightness(.8);" onerror="this.style.display='none'"/>
-      <div style="flex:1;">
-        <div style="font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--white);line-height:1.3;">${n.titulo}</div>
-        <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#444;margin-top:3px;">${n.categoria} · ${fmtd(n.data)}</div>
-      </div>
-      <span class="bsm bsm-e" style="flex-shrink:0;">Editar</span>
-    </div>`).join('')||'<div class="empty">Nenhuma notícia ainda.</div>';
-}
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(txt || `Falha no upload (${res.status})`);
+        }
 
-// ── FORM UTILS ────────────────────────────────────────────────
-function todayStr(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-function updCnt(el,cid,max){const n=el.value.length;const c=document.getElementById(cid);if(!c)return;c.textContent=`${n}/${max}`;c.className='cnt'+(n>max?' warn':'');}
+        const payload = await res.json();
+        if (!payload || !payload.url) {
+          throw new Error('A API não devolveu a URL pública da imagem.');
+        }
 
-let imgBase64='';
-function handleFile(file){
-  if(!file)return;
-  const r=new FileReader();
-  r.onload=e=>{
-    imgBase64=e.target.result;
-    document.getElementById('img-prev').src=imgBase64;
-    document.getElementById('img-prev-box').classList.add('show');
-    document.getElementById('f-img-url').value='';
-  };
-  r.readAsDataURL(file);
-}
-function handleDrop(e){e.preventDefault();document.getElementById('drop-area').classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))handleFile(f);}
-function onUrlInput(url){
-  if(url.startsWith('http')){
-    imgBase64='';
-    document.getElementById('img-prev').src=url;
-    document.getElementById('img-prev-box').classList.add('show');
-  }
-}
-function clearImg(){
-  imgBase64='';
-  document.getElementById('img-prev').src='';
-  document.getElementById('img-prev-box').classList.remove('show');
-  document.getElementById('f-img-url').value='';
-}
+        imagem.value = payload.url;
+        refreshPreview();
+        setStatus('Imagem enviada com sucesso. Link gerado e inserido no formulário.');
+      } catch (err) {
+        console.error(err);
+        setStatus(err.message || 'Erro ao enviar imagem.', false);
+      }
+    }
 
-// ── SALVAR ────────────────────────────────────────────────────
-function salvar(){
-  const titulo=document.getElementById('f-titulo').value.trim();
-  const resumo=document.getElementById('f-resumo').value.trim();
-  const categoria=document.getElementById('f-cat').value;
-  const urlImg=document.getElementById('f-img-url').value.trim();
-  const imagem=imgBase64||urlImg;
+    async function salvarNoticia(event) {
+      event.preventDefault();
 
-  if(!titulo){toast('Título é obrigatório!','e');return;}
-  if(!resumo){toast('Resumo é obrigatório!','e');return;}
-  if(!categoria){toast('Selecione uma categoria!','e');return;}
-  if(!imagem){toast('Adicione uma imagem!','e');return;}
+      const item = {
+        id: editingId.value.trim() || genId(),
+        titulo: titulo.value.trim(),
+        resumo: resumo.value.trim(),
+        conteudo: conteudo.value.trim(),
+        categoria: categoria.value.trim(),
+        imagem: imagem.value.trim(),
+        destaque: destaque.checked,
+        data: data.value,
+        autor: autor.value.trim() || 'Reggaetime Staff'
+      };
 
-  const news=getNews();
-  const editId=document.getElementById('f-id').value;
-  const noticia={
-    id:editId||String(Date.now()),
-    titulo,resumo,
-    conteudo:document.getElementById('f-conteudo').value.trim()||resumo,
-    categoria,imagem,
-    destaque:document.getElementById('f-dest').checked,
-    data:document.getElementById('f-data').value||todayStr(),
-    autor:document.getElementById('f-autor').value.trim()||'Reggaetime Staff'
-  };
+      if (!item.titulo || !item.resumo || !item.conteudo || !item.data || !item.imagem) {
+        setStatus('Preencha título, resumo, conteúdo, data e imagem.', false);
+        return;
+      }
 
-  if(editId){
-    const i=news.findIndex(n=>n.id===editId);
-    if(i!==-1)news[i]=noticia;
-    toast('✅ Notícia atualizada!');
-  } else {
-    news.unshift(noticia);
-    toast('🎉 Notícia publicada!');
-  }
-  saveNews(news);
-  limpar();
-  setTimeout(()=>goPage('lista',document.querySelectorAll('.mi')[2]),1000);
-}
+      if (/^data:image\//i.test(item.imagem)) {
+        setStatus('Não use base64 no campo imagem. Envie o arquivo para gerar uma URL pública.', false);
+        return;
+      }
 
-function limpar(){
-  document.getElementById('f-id').value='';
-  document.getElementById('form-title').textContent='Nova Notícia';
-  ['f-titulo','f-resumo','f-conteudo','f-img-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('f-cat').value='';
-  document.getElementById('f-autor').value='Reggaetime Staff';
-  document.getElementById('f-data').value=todayStr();
-  document.getElementById('f-dest').checked=false;
-  clearImg();
-  document.getElementById('cnt-t').textContent='0/80';
-  document.getElementById('cnt-r').textContent='0/160';
-}
+      setStatus('Salvando notícia...');
+      try {
+        const res = await fetch(API.news, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+          body: JSON.stringify(item)
+        });
 
-// ── TABLE ─────────────────────────────────────────────────────
-function loadTable(){
-  const news=getNews();
-  document.getElementById('lista-cnt').textContent=`${news.length} notícia(s)`;
-  document.getElementById('tbl-body').innerHTML=news.length?news.map(n=>`
-    <tr>
-      <td><img class="tbl-img" src="${n.imagem}" onerror="this.style.display='none'" alt=""/></td>
-      <td><div class="tbl-title">${n.titulo}</div></td>
-      <td><span class="cat-tag">${n.categoria}</span></td>
-      <td style="font-size:12px;color:var(--muted);">${fmtd(n.data)}</td>
-      <td>${n.destaque?'<span class="dest-tag">● Destaque</span>':'<span style="color:#333;font-size:10px;letter-spacing:.1em;">Normal</span>'}</td>
-      <td><div class="acts">
-        <button class="bsm bsm-e" onclick="editar('${n.id}')">✏ Editar</button>
-        <button class="bsm bsm-d" onclick="excluir('${n.id}')">✕</button>
-      </div></td>
-    </tr>`).join(''):'<tr><td colspan="6" class="empty">Nenhuma notícia. Clique em Nova Notícia.</td></tr>';
-}
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(txt || `Falha ao salvar (${res.status})`);
+        }
 
-function editar(id){
-  const n=getNews().find(x=>x.id===id);if(!n)return;
-  document.getElementById('f-id').value=n.id;
-  document.getElementById('form-title').textContent='Editar Notícia';
-  document.getElementById('f-titulo').value=n.titulo;
-  document.getElementById('f-resumo').value=n.resumo;
-  document.getElementById('f-conteudo').value=n.conteudo||'';
-  document.getElementById('f-cat').value=n.categoria;
-  document.getElementById('f-autor').value=n.autor;
-  document.getElementById('f-data').value=n.data;
-  document.getElementById('f-dest').checked=n.destaque;
-  document.getElementById('f-img-url').value=n.imagem.startsWith('http')?n.imagem:'';
-  imgBase64=n.imagem.startsWith('data:')?n.imagem:'';
-  document.getElementById('img-prev').src=n.imagem;
-  document.getElementById('img-prev-box').classList.add('show');
-  updCnt(document.getElementById('f-titulo'),'cnt-t',80);
-  updCnt(document.getElementById('f-resumo'),'cnt-r',160);
-  goPage('nova',document.querySelectorAll('.mi')[1]);
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+        const payload = await res.json();
+        noticias = normalizeNewsArray(payload.items || []);
+        renderNoticias();
+        editingId.value = item.id;
+        setStatus('Notícia salva com sucesso.');
+      } catch (err) {
+        console.error(err);
+        setStatus(err.message || 'Erro ao salvar notícia.', false);
+      }
+    }
 
-function excluir(id){
-  if(!confirm('Excluir esta notícia?'))return;
-  saveNews(getNews().filter(n=>n.id!==id));
-  loadTable();toast('🗑 Notícia excluída.');
-}
+    function baixarJSON() {
+      const blob = new Blob([JSON.stringify(noticias, null, 2)], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'noticias.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
 
-// ── TICKER ────────────────────────────────────────────────────
-function loadTicker(){
-  const cfg=getCfg();
-  const msgs=cfg.ticker||[];
-  renderTickItems(msgs);
-  updateTickPreview(msgs);
-}
-function renderTickItems(msgs){
-  document.getElementById('tick-items').innerHTML=msgs.map((t,i)=>`
-    <div class="tick-row">
-      <input type="text" value="${t}" placeholder="Mensagem ${i+1}..." oninput="updateTickPreview()"/>
-      <button class="tick-del" onclick="this.parentElement.remove();updateTickPreview()">✕</button>
-    </div>`).join('');
-}
-function addTick(){
-  const d=document.getElementById('tick-items');
-  const div=document.createElement('div');div.className='tick-row';
-  div.innerHTML=`<input type="text" placeholder="Nova mensagem..." oninput="updateTickPreview()"/><button class="tick-del" onclick="this.parentElement.remove();updateTickPreview()">✕</button>`;
-  d.appendChild(div);
-}
-function getTickMsgs(){return [...document.querySelectorAll('#tick-items input')].map(i=>i.value.trim()).filter(Boolean);}
-function updateTickPreview(msgs){
-  const m=msgs||getTickMsgs();
-  if(!m.length){document.getElementById('tick-prev-track').innerHTML='<span>Usando títulos das notícias automaticamente</span><span>Usando títulos das notícias automaticamente</span>';return;}
-  const d=[...m,...m];
-  document.getElementById('tick-prev-track').innerHTML=d.map(t=>`<span>${t}</span>`).join('');
-}
-function saveTicker(){
-  const msgs=getTickMsgs();
-  const cfg=getCfg();cfg.ticker=msgs;saveCfg(cfg);
-  toast('📡 Ticker salvo!');updateTickPreview(msgs);
-}
-function resetTicker(){
-  const cfg=getCfg();delete cfg.ticker;saveCfg(cfg);
-  renderTickItems([]);updateTickPreview([]);
-  toast('↺ Ticker automático ativado.');
-}
+    document.getElementById('btnUpload').addEventListener('click', uploadImage);
+    document.getElementById('btnLimpar').addEventListener('click', resetForm);
+    document.getElementById('btnExportar').addEventListener('click', baixarJSON);
+    document.getElementById('btnRecarregar').addEventListener('click', carregarNoticias);
+    form.addEventListener('submit', salvarNoticia);
 
-// ── INSCRITOS ─────────────────────────────────────────────────
-function loadInscritos(){
-  const list=getInsc();
-  const agora=new Date();
-  const mesAtual=agora.toISOString().slice(0,7);
-  const doMes=list.filter(i=>i.data&&i.data.startsWith(mesAtual)).length;
-  document.getElementById('ins-total').textContent=list.length;
-  document.getElementById('ins-mes').textContent=doMes;
-  document.getElementById('ins-ultimo').textContent=list[0]?list[0].email.split('@')[0]+'...':'—';
-  document.getElementById('ins-body').innerHTML=list.length?list.map((ins,i)=>`
-    <tr>
-      <td style="color:var(--muted);font-size:13px;">${i+1}</td>
-      <td><span class="email-badge">${ins.email}</span></td>
-      <td style="font-size:12px;color:var(--muted);">${fmtd(ins.data)||ins.data||'—'}</td>
-      <td><button class="bsm bsm-d" onclick="removerInscrito('${ins.email}')">✕</button></td>
-    </tr>`).join(''):'<tr><td colspan="4" class="empty">Nenhum inscrito ainda.</td></tr>';
-}
-function removerInscrito(email){
-  if(!confirm(`Remover ${email}?`))return;
-  localStorage.setItem(IK,JSON.stringify(getInsc().filter(i=>i.email!==email)));
-  loadInscritos();toast('Inscrito removido.');
-}
-function copiarEmails(){
-  const emails=getInsc().map(i=>i.email).join('\n');
-  if(!emails){toast('Nenhum inscrito.','e');return;}
-  navigator.clipboard.writeText(emails).then(()=>toast(`📋 ${getInsc().length} emails copiados!`)).catch(()=>toast('Erro ao copiar.','e'));
-}
-function limparInscritos(){
-  if(!confirm('Limpar TODOS os inscritos?'))return;
-  localStorage.removeItem(IK);loadInscritos();toast('Lista limpa.');
-}
-
-// ── CONFIG ────────────────────────────────────────────────────
-function loadConfig(){
-  const c=getCfg();
-  document.getElementById('cfg-ig').value=c.instagram||'';
-  document.getElementById('cfg-yt').value=c.youtube||'';
-  document.getElementById('cfg-sp').value=c.spotify||'';
-  document.getElementById('cfg-email').value=c.email||'';
-  document.getElementById('cfg-qt').value=c.quote_text||'';
-  document.getElementById('cfg-qa').value=c.quote_author||'';
-}
-function saveConfig(){
-  const c=getCfg();
-  c.instagram=document.getElementById('cfg-ig').value.trim();
-  c.youtube=document.getElementById('cfg-yt').value.trim();
-  c.spotify=document.getElementById('cfg-sp').value.trim();
-  c.email=document.getElementById('cfg-email').value.trim();
-  c.quote_text=document.getElementById('cfg-qt').value.trim();
-  c.quote_author=document.getElementById('cfg-qa').value.trim();
-  saveCfg(c);toast('✅ Configurações salvas! Atualize o site para ver.');
-}
-
-// ── EXPORT ────────────────────────────────────────────────────
-function exportJSON(){
-  const news=getNews();
-  if(!news.length){toast('Nenhuma notícia para exportar.','e');return;}
-  const blob=new Blob([JSON.stringify(news,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='noticias.json';a.click();
-  toast('📥 noticias.json baixado!');
-}
-
-// ── TOAST ─────────────────────────────────────────────────────
-function toast(msg,type=''){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.style.borderLeftColor=type==='e'?'var(--red)':'var(--green)';
-  t.style.transform='translateY(0)';t.style.opacity='1';
-  clearTimeout(t._t);t._t=setTimeout(()=>{t.style.transform='translateY(80px)';t.style.opacity='0';},3000);
-}
-
-// ── UTILS ─────────────────────────────────────────────────────
-function fmtd(s){if(!s)return '—';const[y,m,d]=s.split('-');return `${d}/${m}/${y}`;}
-
-// ── INIT ──────────────────────────────────────────────────────
-document.getElementById('f-data').value=todayStr();
-async function init(){
-  if(!getNews().length){
-    try{const r=await fetch('../data/noticias.json');if(r.ok){saveNews(await r.json());}}catch(e){}
-  }
-  loadDash();
-}
-init();
-</script>
+    data.value = new Date().toISOString().slice(0, 10);
+    carregarNoticias();
+  </script>
 </body>
 </html>
