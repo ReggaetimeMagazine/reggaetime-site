@@ -489,4 +489,27 @@ function sampleData(){return [{id:'s1',titulo:'Bem-vindo à Reggaetime Magazine!
 // ── SYNC ──────────────────────────────────────────────────────
 window.addEventListener('storage',e=>{
   if(e.key==='reggaetime_noticias'||e.key==='reggaetime_updated'){
-    try{const s=lo
+    try{
+      const s=localStorage.getItem('reggaetime_noticias');
+      if(s){
+        const p=JSON.parse(s);
+        if(Array.isArray(p)){
+          allNews=p;
+          const filtered=currentCat?allNews.filter(n=>n.categoria===currentCat):allNews;
+          render(filtered);
+          buildTicker(allNews);
+          buildTrending(allNews);
+          buildTags(allNews);
+        }
+      }
+      applyCfg();
+    }catch(err){
+      console.error('Falha ao sincronizar notícias:', err);
+    }
+  }
+});
+
+loadAll();
+</script>
+</body>
+</html>
