@@ -324,7 +324,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
           <div class="fg">
             <label>Upload direto (celular ou computador)</label>
             <div style="font-size:11px;color:var(--muted);letter-spacing:.03em;margin-top:-2px;">
-              Escolha uma foto — ela será salva automaticamente no JSON. Após salvar a notícia, baixe o JSON e suba para o GitHub.
+              Escolha uma foto — ela será salva automaticamente no JSON. Após publicar, clique em "Baixar JSON" e suba pro GitHub.
             </div>
             <div class="img-upload-area" id="drop-area"
               ondragover="event.preventDefault();this.classList.add('drag')"
@@ -613,9 +613,16 @@ async function sincronizar(){
     const r=await fetch('../data/noticias.json?v='+Date.now());
     if(r.ok){
       const data=await r.json();
-      setNews(data);
+      // Preserva imagens base64 locais ao sincronizar
+      const local=getNewsWithImages();
+      const merged=data.map(n=>{
+        const localN=local.find(l=>l.id===n.id);
+        if(localN&&localN.imagem&&localN.imagem.startsWith('data:'))return{...n,imagem:localN.imagem};
+        return n;
+      });
+      setNews(merged);
       loadDash();
-      toast(`✅ ${data.length} notícias sincronizadas do site!`);
+      toast(`✅ ${data.length} notícias sincronizadas!`);
     }else{toast('Erro ao buscar noticias.json','error');}
   }catch(e){toast('Erro de conexão: '+e.message,'error');}
 }
@@ -736,33 +743,32 @@ function deletarNot(id){
 // ── IMAGEM ────────────────────────────────────────────────────
 function handleFile(file){
   if(!file)return;
-  // Redimensiona a imagem antes de converter pra base64 (máx 900px, qualidade 80%)
+  toast('⏳ Carregando imagem...','warn');
   const reader=new FileReader();
   reader.onload=function(e){
-    const img=new Image();
-    img.onload=function(){
+    const tmpImg=new Image();
+    tmpImg.onload=function(){
       const maxW=900,maxH=900;
-      let w=img.width,h=img.height;
+      let w=tmpImg.width,h=tmpImg.height;
       if(w>maxW||h>maxH){
         if(w/h>maxW/maxH){h=Math.round(h*maxW/w);w=maxW;}
         else{w=Math.round(w*maxH/h);h=maxH;}
       }
       const canvas=document.createElement('canvas');
       canvas.width=w;canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      canvas.getContext('2d').drawImage(tmpImg,0,0,w,h);
       const base64=canvas.toDataURL('image/jpeg',0.80);
-      // Preenche o campo URL com o base64 para ser salvo no JSON
       const urlInput=document.getElementById('f-img-url');
       if(urlInput)urlInput.value=base64;
       showPrev(base64);
-      toast('✅ Imagem carregada! Salve a notícia para incluir no JSON.','ok');
+      toast('✅ Imagem pronta! Clique em Publicar Notícia.','ok');
     };
-    img.src=e.target.result;
+    tmpImg.src=e.target.result;
   };
   reader.readAsDataURL(file);
 }
 function handleDrop(e){e.preventDefault();document.getElementById('drop-area').classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))handleFile(f);}
-function onUrlInput(v){if(v.startsWith('http'))showPrev(v);else clearImg();}
+function onUrlInput(v){if(v.startsWith('http')||v.startsWith('data:'))showPrev(v);else clearImg();}
 function showPrev(src){
   const box=document.getElementById('img-prev-box');
   const img=document.getElementById('img-prev');
@@ -935,12 +941,22 @@ function clearAd(slot){
 // ── INIT ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',async()=>{
   document.getElementById('f-data').value=new Date().toISOString().slice(0,10);
-  if(!getNews().length){
-    try{
-      const r=await fetch('../data/noticias.json?v='+Date.now());
-      if(r.ok){const d=await r.json();if(d.length)setNews(d);}
-    }catch(e){}
-  }
+  try{
+    const r=await fetch('../data/noticias.json?v='+Date.now());
+    if(r.ok){
+      const data=await r.json();
+      if(data.length){
+        // Preserva imagens base64 locais — nunca sobrescreve com versão sem imagem
+        const local=getNewsWithImages();
+        const merged=data.map(n=>{
+          const localN=local.find(l=>l.id===n.id);
+          if(localN&&localN.imagem&&localN.imagem.startsWith('data:'))return{...n,imagem:localN.imagem};
+          return n;
+        });
+        setNews(merged);
+      }
+    }
+  }catch(e){}
   loadDash();
 });
 </script>
