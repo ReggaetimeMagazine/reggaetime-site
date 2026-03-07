@@ -151,12 +151,21 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 <div class="topbar">
   <div class="topbar-inner">
     <div id="topbar-date"></div>
-    <div>
-      <a id="link-instagram" href="https://www.instagram.com/reggaetimemagazine/" target="_blank">📷 Instagram</a>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <a id="link-instagram" href="https://www.instagram.com/reggaetimemagazine/" target="_blank" style="display:flex;align-items:center;gap:5px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="#FFD700" stroke-width="2"/><circle cx="12" cy="12" r="5" stroke="#FFD700" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="#FFD700"/></svg>
+        Instagram
+      </a>
       <span class="sep">|</span>
-      <a id="link-youtube" href="#" target="_blank">▶ YouTube</a>
+      <a id="link-youtube" href="#" target="_blank" style="display:flex;align-items:center;gap:5px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;"><rect x="2" y="4" width="20" height="16" rx="4" fill="#FFD700"/><polygon points="10,8 17,12 10,16" fill="#0a0a0a"/></svg>
+        YouTube
+      </a>
       <span class="sep">|</span>
-      <a id="link-email" href="/cdn-cgi/l/email-protection#087a6d6f6f696d7c61656d6a7a486f65696164266b6765">✉ Publicidade</a>
+      <a id="link-email" href="mailto:reggaetimebr@gmail.com" style="display:flex;align-items:center;gap:5px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;"><rect x="2" y="4" width="20" height="16" rx="3" stroke="#FFD700" stroke-width="2"/><polyline points="2,4 12,14 22,4" stroke="#FFD700" stroke-width="2"/></svg>
+        Publicidade
+      </a>
       <span class="sep">|</span>
       <span id="gt-wrap"></span>
     </div>
@@ -323,9 +332,16 @@ function getCfg(){try{return JSON.parse(localStorage.getItem('rt_config'))||{};}
 
 // ── LOAD ──────────────────────────────────────────────────────
 async function loadAll(){
-  try{const s=localStorage.getItem('reggaetime_noticias');if(s){const p=JSON.parse(s);if(Array.isArray(p)&&p.length){allNews=p;}}}catch(e){}
-  if(!allNews.length){
-    try{const r=await fetch('data/noticias.json?v='+Date.now());if(r.ok){allNews=await r.json();localStorage.setItem('reggaetime_noticias',JSON.stringify(allNews));}}catch(e){}
+  // Sempre busca o JSON do servidor — ignora localStorage para notícias
+  try{
+    const r=await fetch('data/noticias.json?v='+Date.now());
+    if(r.ok){
+      allNews=await r.json();
+      localStorage.setItem('reggaetime_noticias',JSON.stringify(allNews));
+    }
+  }catch(e){
+    // Offline fallback: usa localStorage se disponível
+    try{const s=localStorage.getItem('reggaetime_noticias');if(s){const p=JSON.parse(s);if(Array.isArray(p)&&p.length)allNews=p;}}catch(e2){}
   }
   if(!allNews.length)allNews=sampleData();
   applyCfg();render(allNews);buildTicker(allNews);buildTrending(allNews);buildTags(allNews);
