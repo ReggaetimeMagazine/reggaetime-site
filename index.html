@@ -34,11 +34,14 @@ nav a{font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spac
 nav a:hover{color:var(--yellow);}
 nav a.active{color:var(--yellow);}
 nav a.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;height:2px;background:var(--yellow);border-radius:2px;}
-.ticker-bar{background:var(--yellow);overflow:hidden;position:relative;padding:7px 0;}
-.ticker-label{position:absolute;left:0;top:0;bottom:0;background:var(--red);color:#fff;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:0 16px;display:flex;align-items:center;z-index:2;white-space:nowrap;}
-.ticker-track{display:flex;animation:ticker 35s linear infinite;padding-left:110px;}
-.ticker-track span{font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;padding:0 28px;color:var(--black);}
-.ticker-track span::before{content:'★';margin-right:10px;}
+.ticker-bar{background:#0f0f0f;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;overflow:hidden;position:relative;padding:0;}
+.ticker-label{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(135deg,#c0392b,#e63946);color:#fff;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:0 20px;display:flex;align-items:center;gap:7px;z-index:2;white-space:nowrap;box-shadow:4px 0 18px rgba(230,57,70,.35);}
+.ticker-dot{width:7px;height:7px;background:#fff;border-radius:50%;animation:blink 1.2s ease-in-out infinite;flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
+.ticker-track{display:flex;animation:ticker 40s linear infinite;padding-left:130px;}
+.ticker-track:hover{animation-play-state:paused;}
+.ticker-track span{font-family:'Oswald',sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;padding:10px 36px;color:#bbb;border-right:1px solid #1e1e1e;transition:color .2s;}
+.ticker-track span::before{content:'◆';margin-right:12px;color:#e63946;font-size:7px;vertical-align:middle;}
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .hero{max-width:1280px;margin:28px auto;padding:0 24px;display:grid;grid-template-columns:1fr 360px;gap:4px;min-height:380px;}
 .hero-main{position:relative;overflow:hidden;border-radius:4px;cursor:pointer;min-height:380px;}
@@ -112,7 +115,15 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .footer-bottom{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 .footer-bottom p{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#333;}
 
-/* ── MODAL ── */
+/* ── SPOTIFY PLAYER ── */
+.sp-player{position:fixed;bottom:24px;right:24px;z-index:500;display:none;flex-direction:column;align-items:flex-end;gap:8px;}
+.sp-player.visible{display:flex;}
+.sp-btn{background:linear-gradient(135deg,#1DB954,#17a346);border:none;border-radius:50px;color:#fff;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 20px;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(29,185,84,.4);transition:all .25s;}
+.sp-btn:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(29,185,84,.55);}
+.sp-btn svg{flex-shrink:0;}
+.sp-frame{background:#0f0f0f;border:1px solid #1e1e1e;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.7);width:320px;transform:translateY(10px) scale(.97);opacity:0;pointer-events:none;transition:all .3s ease;}
+.sp-frame.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all;}
+.sp-frame iframe{display:block;border:none;width:100%;}
 .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);display:flex;align-items:flex-start;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s ease;overflow-y:auto;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
 .modal-box{background:var(--deep);width:100%;max-width:800px;min-height:100vh;position:relative;transform:translateY(50px);transition:transform .35s ease;padding-bottom:80px;}
@@ -192,7 +203,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 </header>
 
 <div class="ticker-bar">
-  <div class="ticker-label">Ao vivo</div>
+  <div class="ticker-label"><div class="ticker-dot"></div>AO VIVO</div>
   <div class="ticker-track" id="ticker-track"><span>Carregando...</span></div>
 </div>
 
@@ -314,6 +325,17 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
     <button onclick="document.getElementById('gh-helper').style.display='none'" style="width:100%;background:none;border:1px solid #2a2a2a;border-radius:3px;padding:7px;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;color:#444;cursor:pointer;margin-top:8px;text-transform:uppercase;">Fechar</button>
   </div>
 </div>
+<!-- SPOTIFY PLAYER -->
+<div class="sp-player" id="sp-player">
+  <div class="sp-frame" id="sp-frame">
+    <div id="sp-embed"></div>
+  </div>
+  <button class="sp-btn" id="sp-btn" onclick="togglePlayer()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 11-.277-1.215c3.809-.87 7.076-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.72a.779.779 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.779.779 0 01-.973-.516.78.78 0 01.516-.974c3.632-1.102 8.147-.568 11.237 1.327a.78.78 0 01.257 1.072zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.935.935 0 11-.543-1.79c3.532-1.072 9.404-.865 13.115 1.338a.935.935 0 01-.955 1.611z"/></svg>
+    <span id="sp-btn-txt">Ouvir Rádio</span>
+  </button>
+</div>
+
 <!-- TOAST -->
 <div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:999;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:14px 22px;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.04em;color:var(--white);transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;min-width:230px;max-width:340px;"></div>
 
@@ -362,6 +384,12 @@ function applyCfg(){
     qw.innerHTML=`<div class="quote-block"><blockquote>"${c.quote_text}"</blockquote><cite>— ${c.quote_author}</cite></div>`;
   } else {
     qw.innerHTML=`<div class="quote-block"><blockquote>"Gostaria que as pessoas soubessem que eu fui o verdadeiro inventor do ska e do reggae."</blockquote><cite>— Ernest Ranglin, guitarrista lendário jamaicano</cite></div>`;
+  }
+  // Spotify player
+  if(c.spotify_playlist){
+    document.getElementById('sp-player').classList.add('visible');
+    const embedId=extractSpotifyId(c.spotify_playlist);
+    if(embedId)document.getElementById('sp-embed').dataset.src=`https://open.spotify.com/embed/playlist/${embedId}?utm_source=generator&theme=0`;
   }
 }
 
@@ -515,6 +543,25 @@ function toast(msg,type=''){
 function fmtd(s){if(!s)return '';const[y,m,d]=s.split('-');return `${d}/${m}/${y}`;}
 function sampleData(){return [{id:'s1',titulo:'Bem-vindo à Reggaetime Magazine!',resumo:'Publique sua primeira notícia pelo painel admin.',conteudo:'Acesse o painel admin para começar a publicar notícias.\n\nUse o link /admin/?token=reggaetime2026 para entrar no painel.',categoria:'Nacional',imagem:'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80',destaque:true,data:'2026-03-06',autor:'Reggaetime Staff'},{id:'s2',titulo:'Como publicar notícias no site',resumo:'Acesse o admin pelo link seguro e comece a publicar.',conteudo:'Use o painel admin para gerenciar suas publicações.',categoria:'Dancehall',imagem:'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80',destaque:true,data:'2026-03-05',autor:'Reggaetime Staff'},{id:'s3',titulo:'Personalize o ticker e redes sociais',resumo:'No admin você pode editar todos os textos do site.',conteudo:'Acesse Configurações no admin para personalizar tudo.',categoria:'Roots',imagem:'https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=800&q=80',destaque:false,data:'2026-03-04',autor:'Reggaetime Staff'}];}
 
+// ── SPOTIFY PLAYER ────────────────────────────────────────────
+let spOpen=false;
+function togglePlayer(){
+  const frame=document.getElementById('sp-frame');
+  const embed=document.getElementById('sp-embed');
+  const btn=document.getElementById('sp-btn-txt');
+  spOpen=!spOpen;
+  frame.classList.toggle('open',spOpen);
+  btn.textContent=spOpen?'Fechar':'Ouvir Rádio';
+  if(spOpen&&!embed.querySelector('iframe')){
+    const src=embed.dataset.src;
+    if(src){embed.innerHTML=`<iframe src="${src}" width="320" height="380" frameborder="0" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;}
+  }
+}
+function extractSpotifyId(url){
+  const m=url.match(/playlist\/([a-zA-Z0-9]+)/);
+  return m?m[1]:null;
+}
+
 // ── EXPORT JSON ───────────────────────────────────────────────
 function exportJSON(){
   const blob=new Blob([JSON.stringify(allNews,null,2)],{type:'application/json'});
@@ -530,4 +577,12 @@ if(new URLSearchParams(window.location.search).has('export')){
 }
 </script>
 </body>
-</html>
+</html>PK
+     mig\              reggaetime-site/UT	 �#�i�#�iux �      PK
+     �ig\              reggaetime-site/admin/UT	 �$�i�$�iux �      PK
+     :�f\              reggaetime-site/data/UT	 �4�i�4�iux �      PK
+     :�f\               reggaetime-site/{admin,js,data}/UT	 �4�i�4�iux �      PK 
+     mig\                     �A    reggaetime-site/UT �#�iux �      PK 
+     �ig\                     �AJ   reggaetime-site/admin/UT �$�iux �      PK 
+     :�f\                     �A�   reggaetime-site/data/UT �4�iux �      PK 
+     :�f\                      �A�   reggaetime-site/{admin,js,data}/UT �4�iux �      PK      s  C    
