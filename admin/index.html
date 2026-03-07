@@ -264,7 +264,9 @@ tr:hover td{background:rgba(255,255,255,.02);}
           <button class="btn btn-p" onclick="goPage('nova',document.querySelectorAll('.mi')[1])">✏️ Nova Notícia</button>
           <button class="btn btn-s" onclick="exportJSON()">📥 Baixar JSON</button>
           <button class="btn btn-g" onclick="goPage('inscritos',document.querySelectorAll('.mi')[4])">👥 Ver Inscritos</button>
-          <button class="btn btn-s" onclick="sincronizar()" title="Reimporta as notícias do arquivo noticias.json do site">🔄 Sincronizar</button>
+          <button class="btn btn-s" onclick="sincronizar()">🔄 Sincronizar</button>
+          <button class="btn btn-s" onclick="document.getElementById('inp-backup').click()" style="border-color:rgba(139,92,246,.4);color:#a78bfa;">📂 Carregar Backup</button>
+          <input type="file" id="inp-backup" accept=".json" style="display:none" onchange="carregarBackup(this)"/>
         </div>
       </div>
       <div class="fc">
@@ -592,6 +594,25 @@ async function sincronizar(){
       toast(`✅ ${data.length} notícias sincronizadas do site!`);
     }else{toast('Erro ao buscar noticias.json','error');}
   }catch(e){toast('Erro de conexão: '+e.message,'error');}
+}
+
+function carregarBackup(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!Array.isArray(data))throw new Error('Formato inválido');
+      setNews(data);
+      loadDash();
+      toast(`✅ ${data.length} notícias carregadas do backup!`);
+    }catch(err){
+      toast('❌ Arquivo inválido: '+err.message,'error');
+    }
+    input.value=''; // reset para permitir recarregar o mesmo arquivo
+  };
+  reader.readAsText(file);
 }
 
 // ── COUNTER ───────────────────────────────────────────────────
