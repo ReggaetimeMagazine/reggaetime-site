@@ -15,13 +15,16 @@ body{background:var(--black);color:var(--white);font-family:'Source Serif 4',Geo
 .topbar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
 .topbar a{color:var(--muted);text-decoration:none;transition:color .2s;}.topbar a:hover{color:var(--yellow);}
 .sep{margin:0 10px;color:var(--border);}
-/* GOOGLE TRANSLATE */
+/* TRANSLATE */
 .goog-te-banner-frame,.skiptranslate{display:none!important;}
 body{top:0!important;}
 #gt-btn{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;cursor:pointer;transition:all .2s;vertical-align:middle;}
 #gt-btn:hover{border-color:var(--yellow);color:var(--yellow);}
 #gt-wrap .goog-te-gadget{font-size:0;color:transparent;}
 #gt-wrap .goog-te-gadget select{background:var(--deep);border:1px solid var(--border);border-radius:3px;color:var(--white);font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.08em;padding:4px 8px;outline:none;cursor:pointer;max-width:160px;}
+#translate-status{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;background:rgba(0,0,0,.92);border:1px solid var(--border);border-radius:8px;padding:22px 32px;text-align:center;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--white);}
+#translate-status .ts-count{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--yellow);display:block;line-height:1;margin-bottom:6px;}
+#translate-status .ts-label{color:var(--muted);font-size:10px;letter-spacing:.2em;}
 .rasta-bar{height:4px;background:var(--rasta);}
 header{background:var(--deep);padding:16px 24px;position:sticky;top:0;z-index:90;border-bottom:1px solid var(--border);}
 .header-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px;}
@@ -185,7 +188,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
         Publicidade
       </a>
       <span class="sep">|</span>
-      <span id="gt-wrap"></span>
+      <span id="gt-wrap"><div id="google_translate_element"></div></span>
     </div>
   </div>
 </div>
@@ -341,6 +344,12 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 11-.277-1.215c3.809-.87 7.076-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.72a.779.779 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.779.779 0 01-.973-.516.78.78 0 01.516-.974c3.632-1.102 8.147-.568 11.237 1.327a.78.78 0 01.257 1.072zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.935.935 0 11-.543-1.79c3.532-1.072 9.404-.865 13.115 1.338a.935.935 0 01-.955 1.611z"/></svg>
     <span id="sp-btn-txt"></span>
   </button>
+</div>
+
+<!-- TRANSLATE STATUS -->
+<div id="translate-status">
+  <span class="ts-count" id="ts-count">8</span>
+  <span class="ts-label">Traduzindo...</span>
 </div>
 
 <!-- TOAST -->
@@ -578,6 +587,57 @@ function exportJSON(){
 }
 
 // ── SYNC ────────────────────────────────────────────�
+// ── GOOGLE TRANSLATE ──────────────────────────────────────────
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'pt',
+    autoDisplay:false,
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE
+  },'google_translate_element');
+
+  // Auto-detect browser language
+  const lang=navigator.language||navigator.userLanguage||'';
+  const code=lang.split('-')[0];
+  if(code&&code!=='pt'){
+    setTimeout(()=>autoTranslate(code),800);
+  }
+}
+
+function autoTranslate(lang){
+  const status=document.getElementById('translate-status');
+  const count=document.getElementById('ts-count');
+  if(!status)return;
+  status.style.display='block';
+  let n=8;
+  count.textContent=n;
+  const timer=setInterval(()=>{
+    n--;
+    count.textContent=n;
+    if(n<=0){
+      clearInterval(timer);
+      status.style.display='none';
+    }
+  },1000);
+  // Trigger translation via Google Translate cookie
+  const select=document.querySelector('.goog-te-combo');
+  if(select){
+    select.value=lang;
+    select.dispatchEvent(new Event('change'));
+  } else {
+    // Fallback: set cookie directly
+    document.cookie=`googtrans=/pt/${lang};path=/`;
+    document.cookie=`googtrans=/pt/${lang};domain=${location.hostname};path=/`;
+    setTimeout(()=>location.reload(),500);
+  }
+}
+
+window.addEventListener('load',function(){
+  const s=document.createElement('script');
+  s.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+  s.async=true;
+  document.body.appendChild(s);
+});
+
 window.addEventListener('load', loadAll);
 // Show export button if ?export param present
 if(new URLSearchParams(window.location.search).has('export')){
