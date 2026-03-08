@@ -240,7 +240,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
         YouTube
       </a>
       <span class="sep">|</span>
-      <a id="link-email" href="mailto:reggaetimebr@gmail.com" style="display:flex;align-items:center;gap:5px;">
+      <a id="link-email" href="/cdn-cgi/l/email-protection#62100705050307160b0f07001022050f030b0e4c010d0f" style="display:flex;align-items:center;gap:5px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;"><rect x="2" y="4" width="20" height="16" rx="3" stroke="#FFD700" stroke-width="2"/><polyline points="2,4 12,14 22,4" stroke="#FFD700" stroke-width="2"/></svg>
         Publicidade
       </a>
@@ -437,10 +437,10 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       <p style="margin-bottom:16px;">Este site pode exibir anúncios de parceiros. Os anunciantes podem utilizar tecnologias próprias de rastreamento conforme suas políticas de privacidade. Podemos futuramente utilizar Google AdSense, que usa cookies para personalização de anúncios.</p>
 
       <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">5. Seus direitos</h3>
-      <p style="margin-bottom:16px;">Você tem direito de solicitar acesso, correção ou exclusão de seus dados a qualquer momento. Para cancelar a newsletter ou exercer seus direitos, entre em contato pelo email <strong style="color:#FFD700;">reggaetimebr@gmail.com</strong></p>
+      <p style="margin-bottom:16px;">Você tem direito de solicitar acesso, correção ou exclusão de seus dados a qualquer momento. Para cancelar a newsletter ou exercer seus direitos, entre em contato pelo email <strong style="color:#FFD700;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="45372022222420312c28202737052228242c296b262a28">[email&#160;protected]</a></strong></p>
 
       <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">6. Contato</h3>
-      <p style="margin-bottom:0;">Reggaetime Magazine · reggaetimebr@gmail.com<br>Em conformidade com a LGPD (Lei nº 13.709/2018).</p>
+      <p style="margin-bottom:0;">Reggaetime Magazine · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d5a7b0b2b2b4b0a1bcb8b0b7a795b2b8b4bcb9fbb6bab8">[email&#160;protected]</a><br>Em conformidade com a LGPD (Lei nº 13.709/2018).</p>
     </div>
   </div>
 </div>
@@ -548,7 +548,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 <!-- TOAST -->
 <div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:999;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:14px 22px;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.04em;color:var(--white);transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;min-width:230px;max-width:340px;"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 'use strict';
 let allNews=[], currentCat='', currentId=null;
 
@@ -719,11 +719,11 @@ function openArt(id){
       </div>`).join('')}</div>`:'';
   const m=document.getElementById('art-modal');
   m.classList.add('open');m.scrollTop=0;
-  document.body.style.overflow='hidden';
+  lockScroll(true);
 }
 function closeModal(){
   document.getElementById('art-modal').classList.remove('open');
-  document.body.style.overflow='';
+  lockScroll(false);
   currentId=null;
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
@@ -766,6 +766,25 @@ function toast(msg,type=''){
 function fmtd(s){if(!s)return '';const[y,m,d]=s.split('-');return `${d}/${m}/${y}`;}
 function sampleData(){return [{id:'s1',titulo:'Bem-vindo à Reggaetime Magazine!',resumo:'Publique sua primeira notícia pelo painel admin.',conteudo:'Acesse o painel admin para começar a publicar notícias.\n\nUse o link /admin/?token=reggaetime2026 para entrar no painel.',categoria:'Nacional',imagem:'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80',destaque:true,data:'2026-03-06',autor:'Reggaetime Staff'},{id:'s2',titulo:'Como publicar notícias no site',resumo:'Acesse o admin pelo link seguro e comece a publicar.',conteudo:'Use o painel admin para gerenciar suas publicações.',categoria:'Dancehall',imagem:'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80',destaque:true,data:'2026-03-05',autor:'Reggaetime Staff'},{id:'s3',titulo:'Personalize o ticker e redes sociais',resumo:'No admin você pode editar todos os textos do site.',conteudo:'Acesse Configurações no admin para personalizar tudo.',categoria:'Roots',imagem:'https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=800&q=80',destaque:false,data:'2026-03-04',autor:'Reggaetime Staff'}];}
 
+// ── SCROLL LOCK (centralizado — evita travamento) ─────────────
+let _lockCount=0;
+function lockScroll(lock){
+  if(lock){
+    _lockCount++;
+    if(_lockCount===1){
+      const sb=window.innerWidth-document.documentElement.clientWidth;
+      document.body.style.paddingRight=sb+'px';
+      document.body.style.overflow='hidden';
+    }
+  }else{
+    _lockCount=Math.max(0,_lockCount-1);
+    if(_lockCount===0){
+      document.body.style.overflow='';
+      document.body.style.paddingRight='';
+    }
+  }
+}
+
 // ── SPOTIFY PLAYER ────────────────────────────────────────────
 let spOpen=false;
 function togglePlayer(){
@@ -790,7 +809,7 @@ function exportJSON(){
   toast('📥 JSON baixado! Suba pelo GitHub CLI 🚀');
 }
 
-// ── SYNC ────────────────────────────────────────────�
+// ── SYNC ────────────────────────────────────────────�
 // ── VISITOR COUNTER ───────────────────────────────────────────
 async function loadVisitorCount(){
   try{
@@ -842,14 +861,13 @@ function loadAds(){
 // ── MEDIA KIT ─────────────────────────────────────────────────
 function openMK(){
   document.getElementById('mk-modal').classList.add('open');
-  document.body.style.overflow='hidden';
-  // fill news count
+  lockScroll(true);
   const el=document.getElementById('mk-news');
   if(el)el.textContent=allNews.length||'—';
 }
 function closeMK(){
   document.getElementById('mk-modal').classList.remove('open');
-  document.body.style.overflow='';
+  lockScroll(false);
 }
 function enviarMK(){
   const nome=document.getElementById('mk-nome').value.trim();
@@ -866,8 +884,8 @@ function enviarMK(){
   closeMK();
 }
 
-function openPrivacy(){document.getElementById('privacy-modal').classList.add('open');document.body.style.overflow='hidden';}
-function closePrivacy(){document.getElementById('privacy-modal').classList.remove('open');document.body.style.overflow='';}
+function openPrivacy(){document.getElementById('privacy-modal').classList.add('open');lockScroll(true);}
+function closePrivacy(){document.getElementById('privacy-modal').classList.remove('open');lockScroll(false);}
 
 // ── GOOGLE TRANSLATE ──────────────────────────────────────────
 function googleTranslateElementInit(){
@@ -915,18 +933,4 @@ function autoTranslate(lang){
 
 window.addEventListener('load',function(){
   const s=document.createElement('script');
-  s.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-  s.async=true;
-  document.body.appendChild(s);
-});
-
-window.addEventListener('load', loadAll);
-window.addEventListener('load', loadVisitorCount);
-window.addEventListener('load', loadAds);
-// Show export button if ?export param present
-if(new URLSearchParams(window.location.search).has('export')){
-  document.getElementById('gh-helper').style.display='block';
-}
-</script>
-</body>
-</html>
+  s.src='https://translate.google.com/translate_a/element.js?cb=googleTransl
