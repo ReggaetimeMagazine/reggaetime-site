@@ -563,6 +563,7 @@ function getCfg(){try{return JSON.parse(localStorage.getItem('rt_config'))||{};}
 
 // ── LOAD ──────────────────────────────────────────────────────
 async function loadAll(){
+  // Sempre busca o JSON do servidor — ignora localStorage para notícias
   try{
     const r=await fetch('data/noticias.json?v='+Date.now());
     if(r.ok){
@@ -570,6 +571,7 @@ async function loadAll(){
       localStorage.setItem('reggaetime_noticias',JSON.stringify(allNews));
     }
   }catch(e){
+    // Offline fallback: usa localStorage se disponível
     try{const s=localStorage.getItem('reggaetime_noticias');if(s){const p=JSON.parse(s);if(Array.isArray(p)&&p.length)allNews=p;}}catch(e2){}
   }
   if(!allNews.length)allNews=sampleData();
@@ -680,8 +682,7 @@ function filterCat(e,cat){
   document.querySelectorAll('nav a[data-cat]').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
   document.querySelectorAll('.tag-pill').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
   render(cat?allNews.filter(n=>n.categoria===cat):allNews);
-  // Usa requestAnimationFrame para não bloquear o scroll do usuário
-  requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'smooth'}));
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // ── MODAL ─────────────────────────────────────────────────────
@@ -777,11 +778,9 @@ function togglePlayer(){
     const src=embed.dataset.src;
     if(!src){return;}
     spIframeLoaded=true;
-    // Mostra placeholder primeiro para não travar a UI
-    embed.innerHTML=`<div style="width:320px;height:152px;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#555;">Carregando...</div>`;
-    // Cria o iframe de forma assíncrona para não bloquear a página
+    embed.innerHTML=`<div style="width:320px;height:380px;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#555;">Carregando...</div>`;
     setTimeout(()=>{
-      embed.innerHTML=`<iframe src="${src}" width="320" height="152" frameborder="0" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+      embed.innerHTML=`<iframe src="${src}" width="320" height="380" frameborder="0" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
     }, 50);
   }
 }
@@ -802,7 +801,7 @@ function exportJSON(){
 async function loadVisitorCount(){
   try{
     const ctrl=new AbortController();
-    const tid=setTimeout(()=>ctrl.abort(),4000); // timeout de 4s para não travar scroll
+    const tid=setTimeout(()=>ctrl.abort(),4000);
     const r=await fetch('https://api.countapi.xyz/hit/reggaetimemagazine.com/visits',{signal:ctrl.signal});
     clearTimeout(tid);
     if(r.ok){
