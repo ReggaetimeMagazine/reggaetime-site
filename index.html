@@ -15,7 +15,6 @@ body{background:var(--black);color:var(--white);font-family:'Source Serif 4',Geo
 .topbar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
 .topbar a{color:var(--muted);text-decoration:none;transition:color .2s;}.topbar a:hover{color:var(--yellow);}
 .sep{margin:0 10px;color:var(--border);}
-/* TRANSLATE */
 .goog-te-banner-frame,.skiptranslate{display:none!important;}
 body{top:0!important;}
 #gt-btn{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;cursor:pointer;transition:all .2s;vertical-align:middle;}
@@ -117,8 +116,6 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .footer-col a:hover{color:var(--yellow);}
 .footer-bottom{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 .footer-bottom p{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#333;}
-
-/* ── SPOTIFY PLAYER ── */
 .sp-player{position:fixed;bottom:24px;right:24px;z-index:500;display:none;flex-direction:column;align-items:flex-end;gap:8px;}
 .sp-player.visible{display:flex;}
 .sp-btn{background:linear-gradient(135deg,#1DB954,#17a346);border:none;border-radius:50px;color:#fff;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 20px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(29,185,84,.4);transition:all .25s;}
@@ -141,8 +138,8 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .modal-topbar{position:sticky;top:0;z-index:10;background:var(--deep);border-bottom:1px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;}
 .btn-back{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--yellow);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;transition:gap .2s;padding:0;}
 .btn-back:hover{gap:13px;}
-.modal-actions{display:flex;gap:8px;}
-.btn-share{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;background:var(--card);border:1px solid var(--border);border-radius:3px;color:var(--muted);padding:7px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.modal-actions{display:flex;gap:6px;}
+.btn-share{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--card);border:1px solid var(--border);border-radius:3px;color:var(--muted);padding:6px 10px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;}
 .btn-share:hover{border-color:var(--yellow);color:var(--yellow);}
 .btn-share.wpp:hover{border-color:#25D366;color:#25D366;}
 .btn-share.twx:hover{border-color:#e7e7e7;color:#e7e7e7;}
@@ -162,8 +159,6 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .rel-card:hover img{filter:brightness(1);}
 .rel-card h5{font-family:'Oswald',sans-serif;font-size:13px;font-weight:500;line-height:1.3;color:#aaa;transition:color .2s;}
 .rel-card:hover h5{color:var(--yellow);}
-
-/* ── BANNER ADS ── */
 .ad-banner{width:100%;max-width:1280px;margin:0 auto 4px;padding:0 24px;}
 .ad-slot{background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(255,215,0,.03));border:1px dashed rgba(255,215,0,.2);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
 .ad-slot:hover{border-color:rgba(255,215,0,.5);background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(255,215,0,.06));}
@@ -175,16 +170,11 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .ad-banner-top .ad-slot{height:90px;}
 .ad-banner-mid .ad-slot{height:120px;}
 .ad-banner-foot .ad-slot{height:90px;}
-/* Sidebar ad */
 .ad-sidebar{width:100%;margin:0 0 20px;}
 .ad-sidebar .ad-slot{height:250px;border-radius:8px;}
-/* Article inline ad */
 .ad-article{margin:24px 0;}
 .ad-article .ad-slot{height:100px;border-radius:6px;}
-/* When empty - hide completely */
 .ad-empty{display:none!important;}
-
-/* ── VISITOR COUNTER ── */
 .visitor-bar{background:#0a0a0a;border-top:1px solid #141414;padding:8px 24px;}
 .visitor-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 .visitor-count{display:flex;align-items:center;gap:10px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#444;}
@@ -192,8 +182,6 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .visitor-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 2s ease-in-out infinite;}
 .anuncie-btn{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:linear-gradient(135deg,var(--yellow),var(--gold));color:var(--black);border:none;border-radius:3px;padding:6px 16px;cursor:pointer;transition:all .2s;}
 .anuncie-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,215,0,.3);}
-
-/* ── MEDIA KIT MODAL ── */
 .mk-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:20px;}
 .mk-overlay.open{opacity:1;pointer-events:all;}
 .mk-box{background:var(--deep);border:1px solid var(--border);border-radius:12px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;position:relative;}
@@ -219,10 +207,8 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .mk-contact textarea{min-height:80px;}
 .mk-submit{width:100%;background:linear-gradient(135deg,var(--yellow),var(--gold));color:var(--black);border:none;border-radius:4px;padding:13px;font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:4px;}
 .mk-submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,215,0,.3);}
-
 .loading{text-align:center;padding:60px;font-family:'Oswald',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
 .empty-msg{text-align:center;padding:48px;font-family:'Oswald',sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#333;font-size:13px;}
-
 @media(max-width:1024px){.hero{grid-template-columns:1fr;}.hero-main{min-height:420px;}.hero-side{flex-direction:row;}.content-area{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr 1fr;}.related-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:640px){.hero{margin:16px auto;padding:0 12px;gap:8px;}.hero-main{min-height:280px;border-radius:6px;}.hero-side{flex-direction:column;gap:8px;}.hero-card{min-height:160px;border-radius:6px;}.news-grid{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr;}.hero-overlay h1{font-size:20px;}.hero-overlay p{font-size:12px;display:none;}.modal-inner{padding:20px 16px 0;}.modal-title{font-size:24px;}.related-grid{grid-template-columns:1fr;}}
 </style>
@@ -243,7 +229,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
         YouTube
       </a>
       <span class="sep">|</span>
-      <a id="link-email" href="/cdn-cgi/l/email-protection#cfbdaaa8a8aeaabba6a2aaadbd8fa8a2aea6a3e1aca0a2" style="display:flex;align-items:center;gap:5px;">
+      <a id="link-email" href="mailto:reggaetimebr@gmail.com" style="display:flex;align-items:center;gap:5px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;"><rect x="2" y="4" width="20" height="16" rx="3" stroke="#FFD700" stroke-width="2"/><polyline points="2,4 12,14 22,4" stroke="#FFD700" stroke-width="2"/></svg>
         Publicidade
       </a>
@@ -254,7 +240,6 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 </div>
 <div class="rasta-bar"></div>
 
-<!-- VISITOR BAR -->
 <div class="visitor-bar">
   <div class="visitor-inner">
     <div class="visitor-count">
@@ -265,7 +250,6 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
   </div>
 </div>
 
-<!-- BANNER TOP -->
 <div class="ad-banner ad-banner-top ad-empty" id="ad-top">
   <div class="ad-slot">
     <div class="ad-slot-inner">
@@ -300,7 +284,6 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 </div>
 
 <div class="hero" id="hero-section"><div class="loading">Carregando...</div></div>
-
 <div id="quote-wrap" style="max-width:1280px;margin:0 auto;padding:0 24px 4px;"></div>
 
 <div class="content-area">
@@ -316,16 +299,8 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       <h2>Mais Notícias</h2>
       <div class="sec-line"></div>
     </div>
-
-    <!-- BANNER MEIO -->
     <div class="ad-banner ad-banner-mid ad-empty" id="ad-mid" style="padding:0;margin-bottom:0;">
-      <div class="ad-slot">
-        <div class="ad-slot-inner">
-          <span class="ad-slot-label">Espaço publicitário</span>
-          <div class="ad-slot-cta">Reserve seu banner — <span>fale conosco</span></div>
-          <div class="ad-slot-size">Banner 728×90 · Entre notícias</div>
-        </div>
-      </div>
+      <div class="ad-slot"><div class="ad-slot-inner"><span class="ad-slot-label">Espaço publicitário</span><div class="ad-slot-cta">Reserve seu banner — <span>fale conosco</span></div><div class="ad-slot-size">Banner 728×90 · Entre notícias</div></div></div>
     </div>
     <div class="list-articles" id="list-articles"></div>
   </main>
@@ -339,43 +314,21 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       </div>
     </div>
     <div class="sidebar-sec">
-      <div class="sec-head" style="margin-bottom:12px;">
-        <div class="sec-accent"></div>
-        <h2>Trending</h2>
-        <div class="sec-line"></div>
-      </div>
+      <div class="sec-head" style="margin-bottom:12px;"><div class="sec-accent"></div><h2>Trending</h2><div class="sec-line"></div></div>
       <div class="trending-list" id="trending-list"></div>
     </div>
     <div class="sidebar-sec">
-      <div class="sec-head" style="margin-bottom:12px;">
-        <div class="sec-accent"></div>
-        <h2>Categorias</h2>
-        <div class="sec-line"></div>
-      </div>
+      <div class="sec-head" style="margin-bottom:12px;"><div class="sec-accent"></div><h2>Categorias</h2><div class="sec-line"></div></div>
       <div class="tag-cloud" id="tag-cloud"></div>
     </div>
-    <!-- SIDEBAR AD 300x250 -->
     <div class="ad-sidebar ad-empty" id="ad-side">
-      <div class="ad-slot">
-        <div class="ad-slot-inner">
-          <span class="ad-slot-label">Publicidade</span>
-          <div class="ad-slot-cta"><span>Anuncie aqui</span></div>
-          <div class="ad-slot-size">300×250</div>
-        </div>
-      </div>
+      <div class="ad-slot"><div class="ad-slot-inner"><span class="ad-slot-label">Publicidade</span><div class="ad-slot-cta"><span>Anuncie aqui</span></div><div class="ad-slot-size">300×250</div></div></div>
     </div>
   </aside>
 </div>
 
-<!-- BANNER ANTES DO RODAPÉ -->
 <div class="ad-banner ad-banner-foot ad-empty" id="ad-foot" style="max-width:100%;padding:0;margin:0;">
-  <div class="ad-slot" style="border-radius:0;">
-    <div class="ad-slot-inner">
-      <span class="ad-slot-label">Publicidade</span>
-      <div class="ad-slot-cta"><span>Anuncie aqui</span></div>
-      <div class="ad-slot-size">728×90 · Antes do rodapé</div>
-    </div>
-  </div>
+  <div class="ad-slot" style="border-radius:0;"><div class="ad-slot-inner"><span class="ad-slot-label">Publicidade</span><div class="ad-slot-cta"><span>Anuncie aqui</span></div><div class="ad-slot-size">728×90 · Antes do rodapé</div></div></div>
 </div>
 
 <footer>
@@ -399,7 +352,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       </div>
       <div class="footer-col">
         <h5>Serviços</h5>
-        <a id="footer-email" href="/cdn-cgi/l/email-protection#d7a5b2b0b0b6b2a3bebab2b5a597b0bab6bebbf9b4b8ba">Publicidade</a>
+        <a id="footer-email" href="mailto:reggaetimebr@gmail.com">Publicidade</a>
         <a href="#" onclick="document.getElementById('nl-email').scrollIntoView({behavior:'smooth'});document.getElementById('nl-email').focus();return false;">Newsletter</a>
         <a href="#">Contato</a>
       </div>
@@ -418,7 +371,6 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
   </div>
 </footer>
 
-<!-- POLÍTICA DE PRIVACIDADE -->
 <div id="privacy-modal" class="mk-overlay" onclick="if(event.target===this)closePrivacy()">
   <div class="mk-box" style="max-width:700px;">
     <div class="mk-header">
@@ -429,21 +381,16 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
     <div class="mk-body" style="font-size:14px;line-height:1.8;color:#c8c0b4;letter-spacing:.01em;">
       <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">1. Informações que coletamos</h3>
       <p style="margin-bottom:16px;">Coletamos apenas o endereço de email quando você se inscreve voluntariamente em nossa newsletter. Não coletamos dados pessoais sem seu consentimento.</p>
-
       <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">2. Uso das informações</h3>
       <p style="margin-bottom:16px;">Seu email é utilizado exclusivamente para envio de nossa newsletter com notícias sobre reggae e dancehall. Não vendemos, alugamos ou compartilhamos seus dados com terceiros.</p>
-
       <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">3. Cookies</h3>
       <p style="margin-bottom:16px;">Utilizamos cookies essenciais para funcionamento do site e cookies de terceiros (Google Analytics, Google Translate) para análise de audiência e tradução de conteúdo. Você pode desativar cookies nas configurações do seu navegador.</p>
-
       <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">4. Publicidade</h3>
       <p style="margin-bottom:16px;">Este site pode exibir anúncios de parceiros. Os anunciantes podem utilizar tecnologias próprias de rastreamento conforme suas políticas de privacidade. Podemos futuramente utilizar Google AdSense, que usa cookies para personalização de anúncios.</p>
-
       <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">5. Seus direitos</h3>
-      <p style="margin-bottom:16px;">Você tem direito de solicitar acesso, correção ou exclusão de seus dados a qualquer momento. Para cancelar a newsletter ou exercer seus direitos, entre em contato pelo email <strong style="color:#FFD700;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="65170002020400110c08000717250208040c094b060a08">[email&#160;protected]</a></strong></p>
-
+      <p style="margin-bottom:16px;">Você tem direito de solicitar acesso, correção ou exclusão de seus dados a qualquer momento. Para cancelar a newsletter ou exercer seus direitos, entre em contato pelo email <strong style="color:#FFD700;">reggaetimebr@gmail.com</strong></p>
       <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">6. Contato</h3>
-      <p style="margin-bottom:0;">Reggaetime Magazine · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="25574042424440514c48404757654248444c490b464a48">[email&#160;protected]</a><br>Em conformidade com a LGPD (Lei nº 13.709/2018).</p>
+      <p style="margin-bottom:0;">Reggaetime Magazine · reggaetimebr@gmail.com<br>Em conformidade com a LGPD (Lei nº 13.709/2018).</p>
     </div>
   </div>
 </div>
@@ -454,20 +401,20 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
     <div class="modal-topbar">
       <button class="btn-back" onclick="closeModal()">← Voltar</button>
       <div class="modal-actions">
-        <button class="btn-share wpp" onclick="shareWA()" title="Compartilhar no WhatsApp">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <button class="btn-share wpp" onclick="shareWA()" title="WhatsApp">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           WPP
         </button>
-        <button class="btn-share twx" onclick="shareTwitter()" title="Compartilhar no X">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.629zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <button class="btn-share twx" onclick="shareTwitter()" title="X / Twitter">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.629zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           X
         </button>
-        <button class="btn-share inst" onclick="shareInstagram()" title="Compartilhar no Instagram">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        <button class="btn-share inst" onclick="shareInstagram()" title="Instagram">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
           Insta
         </button>
         <button class="btn-share" onclick="shareCopy()" title="Copiar link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
           Copiar
         </button>
       </div>
@@ -483,7 +430,6 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
   </div>
 </div>
 
-<!-- GITHUB UPDATE HELPER -->
 <div id="gh-helper" style="position:fixed;bottom:24px;left:24px;z-index:998;display:none;">
   <div style="background:#111;border:1px solid #2a2a2a;border-left:4px solid #FFD700;border-radius:6px;padding:14px 18px;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.08em;color:#F5F0E8;min-width:260px;">
     <div style="color:#FFD700;font-size:13px;font-weight:700;letter-spacing:.12em;margin-bottom:10px;">📤 PUBLICAR NO SITE</div>
@@ -493,18 +439,15 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
     <button onclick="document.getElementById('gh-helper').style.display='none'" style="width:100%;background:none;border:1px solid #2a2a2a;border-radius:3px;padding:7px;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;color:#444;cursor:pointer;margin-top:8px;text-transform:uppercase;">Fechar</button>
   </div>
 </div>
-<!-- SPOTIFY PLAYER -->
+
 <div class="sp-player" id="sp-player">
-  <div class="sp-frame" id="sp-frame">
-    <div id="sp-embed"></div>
-  </div>
+  <div class="sp-frame" id="sp-frame"><div id="sp-embed"></div></div>
   <button class="sp-btn" id="sp-btn" onclick="togglePlayer()">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 11-.277-1.215c3.809-.87 7.076-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.72a.779.779 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.779.779 0 01-.973-.516.78.78 0 01.516-.974c3.632-1.102 8.147-.568 11.237 1.327a.78.78 0 01.257 1.072zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.935.935 0 11-.543-1.79c3.532-1.072 9.404-.865 13.115 1.338a.935.935 0 01-.955 1.611z"/></svg>
     <span id="sp-btn-txt"></span>
   </button>
 </div>
 
-<!-- MEDIA KIT MODAL -->
 <div id="mk-modal" class="mk-overlay" onclick="if(event.target===this)closeMK()">
   <div class="mk-box">
     <div class="mk-header">
@@ -520,22 +463,10 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       </div>
       <div class="mk-formats">
         <h3>Formatos disponíveis</h3>
-        <div class="mk-format-row">
-          <div><div class="mk-format-name">Banner Topo</div><div class="mk-format-size">970×90px · Máxima visibilidade</div></div>
-          <div class="mk-format-price">Sob consulta</div>
-        </div>
-        <div class="mk-format-row">
-          <div><div class="mk-format-name">Banner Entre Notícias</div><div class="mk-format-size">728×90px · Alto engajamento</div></div>
-          <div class="mk-format-price">Sob consulta</div>
-        </div>
-        <div class="mk-format-row">
-          <div><div class="mk-format-name">Sidebar</div><div class="mk-format-size">300×250px · Desktop</div></div>
-          <div class="mk-format-price">Sob consulta</div>
-        </div>
-        <div class="mk-format-row">
-          <div><div class="mk-format-name">Conteúdo Patrocinado</div><div class="mk-format-size">Artigo com sua marca</div></div>
-          <div class="mk-format-price">Sob consulta</div>
-        </div>
+        <div class="mk-format-row"><div><div class="mk-format-name">Banner Topo</div><div class="mk-format-size">970×90px · Máxima visibilidade</div></div><div class="mk-format-price">Sob consulta</div></div>
+        <div class="mk-format-row"><div><div class="mk-format-name">Banner Entre Notícias</div><div class="mk-format-size">728×90px · Alto engajamento</div></div><div class="mk-format-price">Sob consulta</div></div>
+        <div class="mk-format-row"><div><div class="mk-format-name">Sidebar</div><div class="mk-format-size">300×250px · Desktop</div></div><div class="mk-format-price">Sob consulta</div></div>
+        <div class="mk-format-row"><div><div class="mk-format-name">Conteúdo Patrocinado</div><div class="mk-format-size">Artigo com sua marca</div></div><div class="mk-format-price">Sob consulta</div></div>
       </div>
       <div class="mk-contact">
         <h3>Fale com nossa equipe</h3>
@@ -556,81 +487,51 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
   </div>
 </div>
 
-<!-- TRANSLATE STATUS -->
 <div id="translate-status">
   <span class="ts-count" id="ts-count">8</span>
   <span class="ts-label">Traduzindo...</span>
 </div>
 
-<!-- TOAST -->
 <div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:999;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:14px 22px;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.04em;color:var(--white);transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;min-width:230px;max-width:340px;"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 'use strict';
 let allNews=[], currentCat='', currentId=null;
-
-// ── DATE ─────────────────────────────────────────────────────
 const dias=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 const meses=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 const nd=new Date();
 document.getElementById('topbar-date').textContent=`${dias[nd.getDay()]}, ${nd.getDate()} ${meses[nd.getMonth()]} ${nd.getFullYear()}`;
-
-// ── CONFIG ────────────────────────────────────────────────────
 function getCfg(){try{return JSON.parse(localStorage.getItem('rt_config'))||{};}catch(e){return{};}}
-
-// ── LOAD ──────────────────────────────────────────────────────
 async function loadAll(){
-  // Sempre busca o JSON do servidor — ignora localStorage para notícias
   try{
     const r=await fetch('data/noticias.json?v='+Date.now());
-    if(r.ok){
-      allNews=await r.json();
-      localStorage.setItem('reggaetime_noticias',JSON.stringify(allNews));
-    }
+    if(r.ok){allNews=await r.json();localStorage.setItem('reggaetime_noticias',JSON.stringify(allNews));}
   }catch(e){
-    // Offline fallback: usa localStorage se disponível
     try{const s=localStorage.getItem('reggaetime_noticias');if(s){const p=JSON.parse(s);if(Array.isArray(p)&&p.length)allNews=p;}}catch(e2){}
   }
   if(!allNews.length)allNews=sampleData();
   applyCfg();render(allNews);buildTicker(allNews);buildTrending(allNews);buildTags(allNews);
 }
-
-// ── APPLY CONFIG ──────────────────────────────────────────────
 function applyCfg(){
   const c=getCfg();
   const setHref=(id,v)=>{const el=document.getElementById(id);if(el&&v)el.href=v;};
   setHref('link-instagram',c.instagram);setHref('link-youtube',c.youtube);
   setHref('footer-instagram',c.instagram);setHref('footer-youtube',c.youtube);setHref('footer-spotify',c.spotify);
-  if(c.email){
-    setHref('link-email','mailto:'+c.email);setHref('footer-email','mailto:'+c.email);
-    const ft=document.getElementById('footer-email-txt');if(ft)ft.textContent=c.email;
-  }
+  if(c.email){setHref('link-email','mailto:'+c.email);setHref('footer-email','mailto:'+c.email);const ft=document.getElementById('footer-email-txt');if(ft)ft.textContent=c.email;}
   const qw=document.getElementById('quote-wrap');
-  if(c.quote_text&&c.quote_author){
-    qw.innerHTML=`<div class="quote-block"><blockquote>"${c.quote_text}"</blockquote><cite>— ${c.quote_author}</cite></div>`;
-  } else {
-    qw.innerHTML=`<div class="quote-block"><blockquote>"Gostaria que as pessoas soubessem que eu fui o verdadeiro inventor do ska e do reggae."</blockquote><cite>— Ernest Ranglin, guitarrista lendário jamaicano</cite></div>`;
-  }
-  // Spotify player — usa config do admin ou playlist padrão
+  if(c.quote_text&&c.quote_author){qw.innerHTML=`<div class="quote-block"><blockquote>"${c.quote_text}"</blockquote><cite>— ${c.quote_author}</cite></div>`;}
+  else{qw.innerHTML=`<div class="quote-block"><blockquote>"Gostaria que as pessoas soubessem que eu fui o verdadeiro inventor do ska e do reggae."</blockquote><cite>— Ernest Ranglin, guitarrista lendário jamaicano</cite></div>`;}
   const spUrl=c.spotify_playlist||'https://open.spotify.com/playlist/29XOYp9UQz2rbonRmoZvgK';
   const spPlayer=document.getElementById('sp-player');
   const spEmbed=document.getElementById('sp-embed');
-  if(spPlayer){
-    spPlayer.classList.add('visible');
-    const embedId=extractSpotifyId(spUrl);
-    if(embedId)spEmbed.dataset.src=`https://open.spotify.com/embed/playlist/${embedId}?utm_source=generator&theme=0`;
-  }
+  if(spPlayer){spPlayer.classList.add('visible');const embedId=extractSpotifyId(spUrl);if(embedId)spEmbed.dataset.src=`https://open.spotify.com/embed/playlist/${embedId}?utm_source=generator&theme=0`;}
 }
-
-// ── TICKER ────────────────────────────────────────────────────
 function buildTicker(news){
   const c=getCfg();
   const msgs=c.ticker&&c.ticker.length?c.ticker:news.slice(0,8).map(n=>n.titulo);
   const d=[...msgs,...msgs];
   document.getElementById('ticker-track').innerHTML=d.map(t=>`<span>${t}</span>`).join('');
 }
-
-// ── RENDER ────────────────────────────────────────────────────
 function render(news){
   if(!news.length){
     document.getElementById('hero-section').innerHTML='<div class="empty-msg">Nenhuma notícia nesta categoria ainda.</div>';
@@ -669,29 +570,22 @@ function render(news){
       <h3>${n.titulo}</h3><p>${n.resumo}</p>
       <div class="meta">${fmtd(n.data)}</div>
     </div>`).join('');
-  const lista=news.slice(4);
-  document.getElementById('list-articles').innerHTML=lista.map(n=>`
+  document.getElementById('list-articles').innerHTML=news.slice(4).map(n=>`
     <div class="list-art" onclick="openArt('${n.id}')">
       <img src="${n.imagem}" alt="" style="object-position:${pos(n)};" onerror="this.src='https://images.unsplash.com/photo-1559386484-97dfc0e15539?w=200&q=80'"/>
       <div><span class="cat-label">${n.categoria}</span><h4>${n.titulo}</h4><div class="meta">${fmtd(n.data)} · ${n.autor}</div></div>
     </div>`).join('');
 }
-
 function buildTrending(news){
   document.getElementById('trending-list').innerHTML=news.slice(0,5).map((n,i)=>`
-    <div class="trend-item" onclick="openArt('${n.id}')">
-      <div class="trend-num">${i+1}</div><h5>${n.titulo}</h5>
-    </div>`).join('');
+    <div class="trend-item" onclick="openArt('${n.id}')"><div class="trend-num">${i+1}</div><h5>${n.titulo}</h5></div>`).join('');
 }
 function buildTags(news){
   const cats=[...new Set(news.map(n=>n.categoria))];
   const ex=['Bob Marley','Rasta','Riddim','Ska','Cultura'];
   const all=[...new Set([...cats,...ex])];
-  document.getElementById('tag-cloud').innerHTML=all.map(t=>`
-    <a class="tag-pill${currentCat===t?' active':''}" href="#" data-cat="${t}" onclick="filterCat(event,'${t}')">${t}</a>`).join('');
+  document.getElementById('tag-cloud').innerHTML=all.map(t=>`<a class="tag-pill${currentCat===t?' active':''}" href="#" data-cat="${t}" onclick="filterCat(event,'${t}')">${t}</a>`).join('');
 }
-
-// ── FILTER ────────────────────────────────────────────────────
 function filterCat(e,cat){
   if(e)e.preventDefault();
   currentCat=cat;
@@ -701,54 +595,33 @@ function filterCat(e,cat){
   render(cat?allNews.filter(n=>n.categoria===cat):allNews);
   window.scrollTo({top:0,behavior:'smooth'});
 }
-
-// ── MODAL ─────────────────────────────────────────────────────
 function openArt(id){
-  const art=allNews.find(n=>n.id===id);
-  if(!art)return;
+  const art=allNews.find(n=>n.id===id);if(!art)return;
   currentId=id;
   const mimg=document.getElementById('m-img');
-  mimg.src=art.imagem;
-  mimg.style.objectPosition=art.imgPosition||'center top';
+  mimg.src=art.imagem;mimg.style.objectPosition=art.imgPosition||'center top';
   mimg.onerror=function(){this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80';};
   document.getElementById('m-cat').textContent=art.categoria;
   document.getElementById('m-title').textContent=art.titulo;
   document.getElementById('m-meta').textContent=`Por ${art.autor} · ${fmtd(art.data)}`;
-
-  // Build article body with optional inline ad after 2nd paragraph
   const paras=(art.conteudo||art.resumo).split('\n').filter(p=>p.trim()).map(p=>`<p>${p}</p>`);
   try{
     const ads=JSON.parse(localStorage.getItem('rt_ads')||'{}');
     if(ads.art_img&&paras.length>2){
-      const adHtml=`<div class="ad-article" id="ad-art"><div class="ad-slot" style="border:none;background:none;cursor:default;"><a href="${ads.art_link||'#'}" target="_blank" rel="noopener" style="display:block;width:100%;height:100%;"><img src="${ads.art_img}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:6px;" alt="Publicidade"/></a></div></div>`;
-      paras.splice(2,0,adHtml);
+      paras.splice(2,0,`<div class="ad-article" id="ad-art"><div class="ad-slot" style="border:none;background:none;cursor:default;"><a href="${ads.art_link||'#'}" target="_blank" rel="noopener" style="display:block;width:100%;height:100%;"><img src="${ads.art_img}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:6px;" alt="Publicidade"/></a></div></div>`);
     }
   }catch(e){}
   document.getElementById('m-body').innerHTML=paras.join('');
-
   const rel=allNews.filter(n=>n.id!==id&&n.categoria===art.categoria).slice(0,3);
-  document.getElementById('m-related').innerHTML=rel.length?`
-    <p class="modal-related-title">Leia também</p>
-    <div class="related-grid">${rel.map(n=>`
-      <div class="rel-card" onclick="openArt('${n.id}')">
-        <img src="${n.imagem}" alt="" style="object-position:${n.imgPosition||'center'};" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=70'"/>
-        <h5>${n.titulo}</h5>
-      </div>`).join('')}</div>`:'';
+  document.getElementById('m-related').innerHTML=rel.length?`<p class="modal-related-title">Leia também</p><div class="related-grid">${rel.map(n=>`<div class="rel-card" onclick="openArt('${n.id}')"><img src="${n.imagem}" alt="" style="object-position:${n.imgPosition||'center'};" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=70'"/><h5>${n.titulo}</h5></div>`).join('')}</div>`:'';
   const m=document.getElementById('art-modal');
-  m.classList.add('open');m.scrollTop=0;
-  document.body.style.overflow='hidden';
+  m.classList.add('open');m.scrollTop=0;document.body.style.overflow='hidden';
 }
-function closeModal(){
-  document.getElementById('art-modal').classList.remove('open');
-  document.body.style.overflow='';
-  currentId=null;
-}
+function closeModal(){document.getElementById('art-modal').classList.remove('open');document.body.style.overflow='';currentId=null;}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
-
-// ── SHARE ─────────────────────────────────────────────────────
 function shareWA(){
   const art=allNews.find(n=>n.id===currentId);if(!art)return;
-  window.open(`https://wa.me/?text=${encodeURIComponent('*'+art.titulo+'*\n\n'+art.resumo+'\n\n'+window.location.href)},'_blank'`);
+  window.open(`https://wa.me/?text=${encodeURIComponent('*'+art.titulo+'*\n\n'+art.resumo+'\n\n'+window.location.href)}`,'_blank');
 }
 function shareTwitter(){
   const art=allNews.find(n=>n.id===currentId);if(!art)return;
@@ -760,183 +633,90 @@ function shareInstagram(){
 function shareCopy(){
   navigator.clipboard.writeText(window.location.href).then(()=>toast('🔗 Link copiado!')).catch(()=>toast('Copie o link do navegador.'));
 }
-
-// ── NEWSLETTER ────────────────────────────────────────────────
 function subscribeNL(){
-  const el=document.getElementById('nl-email');
-  const email=el.value.trim();
+  const el=document.getElementById('nl-email');const email=el.value.trim();
   if(!email.includes('@')||!email.includes('.')){toast('Digite um email válido.','error');return;}
-  let list=[];
-  try{list=JSON.parse(localStorage.getItem('rt_inscritos'))||[];}catch(e){}
+  let list=[];try{list=JSON.parse(localStorage.getItem('rt_inscritos'))||[];}catch(e){}
   if(list.find(i=>i.email===email)){toast('Este email já está inscrito! 😎');return;}
   list.unshift({email,data:new Date().toISOString().split('T')[0]});
-  localStorage.setItem('rt_inscritos',JSON.stringify(list));
-  localStorage.setItem('reggaetime_updated',Date.now().toString());
-  el.value='';
-  toast('🎉 Inscrito! Bem-vindo à família Reggaetime 🌿');
+  localStorage.setItem('rt_inscritos',JSON.stringify(list));localStorage.setItem('reggaetime_updated',Date.now().toString());
+  el.value='';toast('🎉 Inscrito! Bem-vindo à família Reggaetime 🌿');
 }
-
-// ── TOAST ─────────────────────────────────────────────────────
 function toast(msg,type=''){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
+  const t=document.getElementById('toast');t.textContent=msg;
   t.style.borderLeftColor=type==='error'?'var(--red)':'var(--green)';
-  t.style.transform='translateY(0)';t.style.opacity='1';
-  clearTimeout(t._t);
+  t.style.transform='translateY(0)';t.style.opacity='1';clearTimeout(t._t);
   t._t=setTimeout(()=>{t.style.transform='translateY(80px)';t.style.opacity='0';},3200);
 }
-
-// ── UTILS ─────────────────────────────────────────────────────
 function fmtd(s){if(!s)return '';const[y,m,d]=s.split('-');return `${d}/${m}/${y}`;}
 function sampleData(){return [{id:'s1',titulo:'Bem-vindo à Reggaetime Magazine!',resumo:'Publique sua primeira notícia pelo painel admin.',conteudo:'Acesse o painel admin para começar a publicar notícias.\n\nUse o link /admin/?token=reggaetime2026 para entrar no painel.',categoria:'Nacional',imagem:'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80',destaque:true,data:'2026-03-06',autor:'Reggaetime Staff'},{id:'s2',titulo:'Como publicar notícias no site',resumo:'Acesse o admin pelo link seguro e comece a publicar.',conteudo:'Use o painel admin para gerenciar suas publicações.',categoria:'Dancehall',imagem:'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80',destaque:true,data:'2026-03-05',autor:'Reggaetime Staff'},{id:'s3',titulo:'Personalize o ticker e redes sociais',resumo:'No admin você pode editar todos os textos do site.',conteudo:'Acesse Configurações no admin para personalizar tudo.',categoria:'Roots',imagem:'https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=800&q=80',destaque:false,data:'2026-03-04',autor:'Reggaetime Staff'}];}
-
-// ── SPOTIFY PLAYER ────────────────────────────────────────────
 let spOpen=false;
 function togglePlayer(){
-  const frame=document.getElementById('sp-frame');
-  const embed=document.getElementById('sp-embed');
-  spOpen=!spOpen;
-  frame.classList.toggle('open',spOpen);
-  if(spOpen&&!embed.querySelector('iframe')){
-    const src=embed.dataset.src;
-    if(src){embed.innerHTML=`<iframe src="${src}" width="320" height="380" frameborder="0" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;}
-  }
+  const frame=document.getElementById('sp-frame');const embed=document.getElementById('sp-embed');
+  spOpen=!spOpen;frame.classList.toggle('open',spOpen);
+  if(spOpen&&!embed.querySelector('iframe')){const src=embed.dataset.src;if(src){embed.innerHTML=`<iframe src="${src}" width="320" height="380" frameborder="0" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;}}
 }
-function extractSpotifyId(url){
-  const m=url.match(/playlist\/([a-zA-Z0-9]+)/);
-  return m?m[1]:null;
-}
-
-// ── EXPORT JSON ───────────────────────────────────────────────
+function extractSpotifyId(url){const m=url.match(/playlist\/([a-zA-Z0-9]+)/);return m?m[1]:null;}
 function exportJSON(){
   const blob=new Blob([JSON.stringify(allNews,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='noticias.json';a.click();
   toast('📥 JSON baixado! Suba pelo GitHub CLI 🚀');
 }
-
-// ── SYNC ────────────────────────────────────────────�
-// ── VISITOR COUNTER ───────────────────────────────────────────
 async function loadVisitorCount(){
   try{
     const r=await fetch('https://api.countapi.xyz/hit/reggaetimemagazine.com/visits');
     if(r.ok){
-      const d=await r.json();
-      const n=d.value||0;
-      const fmt=n.toLocaleString('pt-BR');
-      const el=document.getElementById('visit-count');
-      const el2=document.getElementById('mk-visits');
-      const el3=document.getElementById('ad-reach');
-      if(el)el.textContent=fmt;
-      if(el2)el2.textContent=fmt;
-      if(el3)el3.textContent=fmt;
+      const d=await r.json();const n=d.value||0;const fmt=n.toLocaleString('pt-BR');
+      const el=document.getElementById('visit-count');const el2=document.getElementById('mk-visits');const el3=document.getElementById('ad-reach');
+      if(el)el.textContent=fmt;if(el2)el2.textContent=fmt;if(el3)el3.textContent=fmt;
     }
-  }catch(e){
-    ['visit-count','mk-visits','ad-reach'].forEach(id=>{
-      const el=document.getElementById(id);if(el)el.textContent='—';
-    });
-  }
+  }catch(e){['visit-count','mk-visits','ad-reach'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});}
 }
-
-// ── ADS FROM ADMIN ────────────────────────────────────────────
 function loadAds(){
   try{
     const ads=JSON.parse(localStorage.getItem('rt_ads')||'{}');
-    const slots=['top','mid','side','foot','art'];
-    slots.forEach(slot=>{
-      const imgUrl=ads[`${slot}_img`];
-      const linkUrl=ads[`${slot}_link`];
-      const container=document.getElementById(`ad-${slot}`);
+    ['top','mid','side','foot','art'].forEach(slot=>{
+      const imgUrl=ads[`${slot}_img`];const linkUrl=ads[`${slot}_link`];const container=document.getElementById(`ad-${slot}`);
       if(!container)return;
-      if(imgUrl){
-        // Show with image
-        container.classList.remove('ad-empty');
-        const inner=container.querySelector('.ad-slot');
-        if(inner){
-          inner.innerHTML=`<a href="${linkUrl||'#'}" target="_blank" rel="noopener" style="display:block;width:100%;height:100%;"><img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Publicidade"/></a>`;
-          inner.style.border='none';inner.style.background='none';inner.style.cursor='default';
-        }
-      } else {
-        // Hide completely when empty
-        container.classList.add('ad-empty');
-      }
+      if(imgUrl){container.classList.remove('ad-empty');const inner=container.querySelector('.ad-slot');if(inner){inner.innerHTML=`<a href="${linkUrl||'#'}" target="_blank" rel="noopener" style="display:block;width:100%;height:100%;"><img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;display:block;" alt="Publicidade"/></a>`;inner.style.border='none';inner.style.background='none';inner.style.cursor='default';}}
+      else{container.classList.add('ad-empty');}
     });
   }catch(e){}
 }
-
-// ── MEDIA KIT ─────────────────────────────────────────────────
-function openMK(){
-  document.getElementById('mk-modal').classList.add('open');
-  document.body.style.overflow='hidden';
-  // fill news count
-  const el=document.getElementById('mk-news');
-  if(el)el.textContent=allNews.length||'—';
-}
-function closeMK(){
-  document.getElementById('mk-modal').classList.remove('open');
-  document.body.style.overflow='';
-}
+function openMK(){document.getElementById('mk-modal').classList.add('open');document.body.style.overflow='hidden';const el=document.getElementById('mk-news');if(el)el.textContent=allNews.length||'—';}
+function closeMK(){document.getElementById('mk-modal').classList.remove('open');document.body.style.overflow='';}
 function enviarMK(){
-  const nome=document.getElementById('mk-nome').value.trim();
-  const email=document.getElementById('mk-email').value.trim();
-  const formato=document.getElementById('mk-formato').value;
-  const msg=document.getElementById('mk-msg').value.trim();
+  const nome=document.getElementById('mk-nome').value.trim();const email=document.getElementById('mk-email').value.trim();
+  const formato=document.getElementById('mk-formato').value;const msg=document.getElementById('mk-msg').value.trim();
   if(!nome||!email){toast('Preencha nome e email!','error');return;}
-  const cfg=getCfg();
-  const dest=cfg.email||'reggaetimebr@gmail.com';
+  const cfg=getCfg();const dest=cfg.email||'reggaetimebr@gmail.com';
   const subject=encodeURIComponent(`[Anúncio] ${nome} — ${formato||'Consulta'}`);
   const body=encodeURIComponent(`Nome/Empresa: ${nome}\nEmail: ${email}\nFormato: ${formato}\n\n${msg}`);
   window.open(`mailto:${dest}?subject=${subject}&body=${body}`);
-  toast('📧 Abrindo seu email... Obrigado pelo interesse!');
-  closeMK();
+  toast('📧 Abrindo seu email... Obrigado pelo interesse!');closeMK();
 }
-
 function openPrivacy(){document.getElementById('privacy-modal').classList.add('open');document.body.style.overflow='hidden';}
 function closePrivacy(){document.getElementById('privacy-modal').classList.remove('open');document.body.style.overflow='';}
-
-// ── GOOGLE TRANSLATE ──────────────────────────────────────────
 function googleTranslateElementInit(){
-  new google.translate.TranslateElement({
-    pageLanguage:'pt',
-    autoDisplay:false,
-    layout:google.translate.TranslateElement.InlineLayout.SIMPLE
-  },'google_translate_element');
-
-  // Auto-detect browser language
-  const lang=navigator.language||navigator.userLanguage||'';
-  const code=lang.split('-')[0];
-  if(code&&code!=='pt'){
-    setTimeout(()=>autoTranslate(code),800);
-  }
+  new google.translate.TranslateElement({pageLanguage:'pt',autoDisplay:false,layout:google.translate.TranslateElement.InlineLayout.SIMPLE},'google_translate_element');
+  const lang=navigator.language||navigator.userLanguage||'';const code=lang.split('-')[0];
+  if(code&&code!=='pt'){setTimeout(()=>autoTranslate(code),800);}
 }
-
 function autoTranslate(lang){
-  const status=document.getElementById('translate-status');
-  const count=document.getElementById('ts-count');
-  if(!status)return;
-  status.style.display='block';
-  let n=8;
-  count.textContent=n;
-  const timer=setInterval(()=>{
-    n--;
-    count.textContent=n;
-    if(n<=0){
-      clearInterval(timer);
-      status.style.display='none';
-    }
-  },1000);
-  // Trigger translation via Google Translate cookie
+  const status=document.getElementById('translate-status');const count=document.getElementById('ts-count');if(!status)return;
+  status.style.display='block';let n=8;count.textContent=n;
+  const timer=setInterval(()=>{n--;count.textContent=n;if(n<=0){clearInterval(timer);status.style.display='none';}},1000);
   const select=document.querySelector('.goog-te-combo');
-  if(select){
-    select.value=lang;
-    select.dispatchEvent(new Event('change'));
-  } else {
-    // Fallback: set cookie directly
-    document.cookie=`googtrans=/pt/${lang};path=/`;
-    document.cookie=`googtrans=/pt/${lang};domain=${location.hostname};path=/`;
-    setTimeout(()=>location.reload(),500);
-  }
+  if(select){select.value=lang;select.dispatchEvent(new Event('change'));}
+  else{document.cookie=`googtrans=/pt/${lang};path=/`;document.cookie=`googtrans=/pt/${lang};domain=${location.hostname};path=/`;setTimeout(()=>location.reload(),500);}
 }
-
 window.addEventListener('load',function(){
-  const s=document.createElement('script');
-  s.src='https://translate.google.com/translate_a/element.js?cb=googleTransl
+  const s=document.createElement('script');s.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';s.async=true;document.body.appendChild(s);
+});
+window.addEventListener('load', loadAll);
+window.addEventListener('load', loadVisitorCount);
+window.addEventListener('load', loadAds);
+if(new URLSearchParams(window.location.search).has('export')){document.getElementById('gh-helper').style.display='block';}
+</script>
+</body>
+</html>
