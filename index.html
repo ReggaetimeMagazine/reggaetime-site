@@ -209,39 +209,6 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .mk-submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,215,0,.3);}
 .loading{text-align:center;padding:60px;font-family:'Oswald',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
 .empty-msg{text-align:center;padding:48px;font-family:'Oswald',sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#333;font-size:13px;}
-/* ── PREFERENCE POPUP ── */
-.pref-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.96);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .5s ease;}
-.pref-overlay.show{opacity:1;}
-.pref-box{background:var(--deep);border:1px solid var(--border);border-radius:16px;width:100%;max-width:480px;overflow:hidden;transform:translateY(30px) scale(.96);transition:transform .5s ease;position:relative;}
-.pref-overlay.show .pref-box{transform:translateY(0) scale(1);}
-.pref-rasta-top{height:5px;background:var(--rasta);}
-.pref-head{padding:32px 32px 8px;text-align:center;}
-.pref-logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;background:linear-gradient(135deg,var(--yellow),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;}
-.pref-head h2{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;letter-spacing:.04em;color:var(--white);margin-bottom:8px;}
-.pref-head p{font-size:13px;color:var(--muted);line-height:1.6;max-width:320px;margin:0 auto;}
-.pref-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:24px 32px 28px;}
-.pref-card{border-radius:10px;padding:24px 16px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .25s;position:relative;overflow:hidden;}
-.pref-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;}
-.pref-card:hover::before{opacity:1;}
-.pref-card.dancehall{background:linear-gradient(145deg,#0d0d0d,#1a0a1a);}
-.pref-card.dancehall::before{background:linear-gradient(145deg,rgba(230,57,70,.12),rgba(180,0,60,.08));}
-.pref-card.dancehall:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 8px 32px rgba(230,57,70,.25);}
-.pref-card.roots{background:linear-gradient(145deg,#0a0d0a,#0a1a0a);}
-.pref-card.roots::before{background:linear-gradient(145deg,rgba(29,185,84,.12),rgba(0,120,40,.08));}
-.pref-card.roots:hover{border-color:var(--green);transform:translateY(-3px);box-shadow:0 8px 32px rgba(29,185,84,.25);}
-.pref-card-icon{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;position:relative;}
-.pref-card.dancehall .pref-card-icon{background:radial-gradient(circle at 38% 32%,rgba(255,100,100,.22),rgba(230,57,70,.05));box-shadow:0 0 0 1px rgba(230,57,70,.3),0 0 22px rgba(230,57,70,.25),inset 0 1px 0 rgba(255,200,200,.12);}
-.pref-card.roots .pref-card-icon{background:radial-gradient(circle at 38% 32%,rgba(100,255,150,.22),rgba(29,185,84,.05));box-shadow:0 0 0 1px rgba(29,185,84,.3),0 0 22px rgba(29,185,84,.25),inset 0 1px 0 rgba(180,255,200,.12);}
-.pref-card.dancehall:hover .pref-card-icon{box-shadow:0 0 0 1px rgba(230,57,70,.7),0 0 36px rgba(230,57,70,.5),inset 0 1px 0 rgba(255,200,200,.2);}
-.pref-card.roots:hover .pref-card-icon{box-shadow:0 0 0 1px rgba(29,185,84,.7),0 0 36px rgba(29,185,84,.5),inset 0 1px 0 rgba(180,255,200,.2);}
-.pref-card-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;margin-bottom:6px;}
-.pref-card.dancehall .pref-card-name{color:var(--red);}
-.pref-card.roots .pref-card-name{color:var(--green);}
-.pref-card-desc{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1.5;}
-.pref-skip{text-align:center;padding:0 32px 24px;}
-.pref-skip button{background:none;border:none;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#333;cursor:pointer;transition:color .2s;}
-.pref-skip button:hover{color:var(--muted);}
-.pref-rasta-bot{height:3px;background:var(--rasta);}
 @media(max-width:1024px){.hero{grid-template-columns:1fr;}.hero-main{min-height:420px;}.hero-side{flex-direction:row;}.content-area{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr 1fr;}.related-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:640px){.hero{margin:16px auto;padding:0 12px;gap:8px;}.hero-main{min-height:280px;border-radius:6px;}.hero-side{flex-direction:column;gap:8px;}.hero-card{min-height:160px;border-radius:6px;}.news-grid{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr;}.hero-overlay h1{font-size:20px;}.hero-overlay p{font-size:12px;display:none;}.modal-inner{padding:20px 16px 0;}.modal-title{font-size:24px;}.related-grid{grid-template-columns:1fr;}}
 </style>
@@ -527,67 +494,9 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 
 <div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:999;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:14px 22px;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.04em;color:var(--white);transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;min-width:230px;max-width:340px;"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><!-- PREFERENCE POPUP -->
-<div id="pref-overlay" class="pref-overlay" style="display:none;">
-  <div class="pref-box">
-    <div class="pref-rasta-top"></div>
-    <div class="pref-head">
-      <div class="pref-logo">Reggaetime</div>
-      <h2>Qual é o seu estilo?</h2>
-      <p>Escolha sua preferência e vamos personalizar sua experiência na revista.</p>
-    </div>
-    <div class="pref-cards">
-      <div class="pref-card dancehall" onclick="setPref('Dancehall')">
-        <div class="pref-card-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <!-- flame / fire LED - dancehall -->
-              <defs>
-                <radialGradient id="flame-g" cx="50%" cy="80%" r="70%">
-                  <stop offset="0%" stop-color="#FFD700"/>
-                  <stop offset="50%" stop-color="#E63946"/>
-                  <stop offset="100%" stop-color="#8B0000"/>
-                </radialGradient>
-                <filter id="flame-glow">
-                  <feGaussianBlur stdDeviation="1.2" result="blur"/>
-                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
-              </defs>
-              <path filter="url(#flame-glow)" fill="url(#flame-g)" d="M12 2c0 0-1 3.5.5 5.5C14 9.5 14 11 12.5 12.5c.5-2-1-3-2-3.5 0 2.5-2 4-2 6.5 0 3 2.5 5 5.5 5s5.5-2.5 5.5-5.5c0-4-4.5-6-7.5-13z"/>
-              <path fill="rgba(255,220,100,.45)" d="M12.5 14c0 0 1.5 1 1.5 3s-1.2 2.8-2 2.8c1-1.5.5-3.5.5-5.8z"/>
-            </svg>
-          </div>
-        <div class="pref-card-name">Dancehall</div>
-        <div class="pref-card-desc">Ritmo pesado<br>vibes urbanas<br>Jamaica moderna</div>
-      </div>
-      <div class="pref-card roots" onclick="setPref('Roots')">
-        <div class="pref-card-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <!-- leaf LED - roots -->
-              <defs>
-                <radialGradient id="leaf-g" cx="30%" cy="30%" r="80%">
-                  <stop offset="0%" stop-color="#A8FF78"/>
-                  <stop offset="50%" stop-color="#1DB954"/>
-                  <stop offset="100%" stop-color="#0a5c2a"/>
-                </radialGradient>
-                <filter id="leaf-glow">
-                  <feGaussianBlur stdDeviation="1.2" result="blur"/>
-                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
-              </defs>
-              <path filter="url(#leaf-glow)" fill="url(#leaf-g)" d="M17 8C8 10 5.9 16.17 3.82 19.43L5.71 21l1-1C7 19 7 19 8 18c0 0 1 0 2-2 4 0 9-3 9-10a9 9 0 00-2-5.5z"/>
-              <path fill="rgba(168,255,120,.35)" d="M3.82 19.43C6 16 9 13 14 11c-4 3-7 6-8 9l-2.18-.57z"/>
-              <line x1="12" y1="12" x2="6" y2="20" stroke="rgba(168,255,120,.5)" stroke-width="1" stroke-linecap="round"/>
-            </svg>
-          </div>
-        <div class="pref-card-name">Roots</div>
-        <div class="pref-card-desc">Reggae raiz<br>cultura rasta<br>mensagem positiva</div>
-      </div>
-    </div>
-    <div class="pref-skip">
-      <button onclick="setPref(null)">Ver tudo · pular esta etapa</button>
-    </div>
-    <div class="pref-rasta-bot"></div>
-  </div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><!-- ALGORITHM FEED BADGE -->
+<div id="algo-badge" style="display:none;position:fixed;bottom:80px;left:24px;z-index:400;background:rgba(17,17,17,.95);border:1px solid #2a2a2a;border-left:3px solid var(--yellow);border-radius:6px;padding:8px 14px;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#888;backdrop-filter:blur(8px);transition:opacity .4s;pointer-events:none;">
+  <span style="color:var(--yellow);margin-right:6px;">◆</span><span id="algo-badge-txt">Feed personalizado</span>
 </div>
 
 <script>
@@ -598,30 +507,50 @@ const meses=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','
 const nd=new Date();
 document.getElementById('topbar-date').textContent=`${dias[nd.getDay()]}, ${nd.getDate()} ${meses[nd.getMonth()]} ${nd.getFullYear()}`;
 function getCfg(){try{return JSON.parse(localStorage.getItem('rt_config'))||{};}catch(e){return{};}}
-// ── PREFERENCE POPUP ─────────────────────────────────────────
-function checkPref(){
-  const saved=localStorage.getItem('rt_pref');
-  if(saved)return; // já escolheu antes
-  const overlay=document.getElementById('pref-overlay');
-  overlay.style.display='flex';
-  requestAnimationFrame(()=>requestAnimationFrame(()=>overlay.classList.add('show')));
-  document.body.style.overflow='hidden';
+// ── SMART FEED ALGORITHM ─────────────────────────────────────
+// Tracks category clicks, builds a score map, re-ranks feed after 3+ interactions
+const ALGO_KEY='rt_algo_v1';
+const ALGO_THRESHOLD=3; // interactions before personalizing
+
+function algoGet(){
+  try{return JSON.parse(localStorage.getItem(ALGO_KEY))||{scores:{},total:0};}catch(e){return{scores:{},total:0};}
 }
-function setPref(cat){
-  const overlay=document.getElementById('pref-overlay');
-  overlay.classList.remove('show');
-  setTimeout(()=>{overlay.style.display='none';},500);
-  document.body.style.overflow='';
-  if(cat){
-    localStorage.setItem('rt_pref',cat);
-    // Apply preference: filter and update nav
-    currentCat=cat;
-    document.getElementById('section-title').textContent=cat.toUpperCase();
-    document.querySelectorAll('nav a[data-cat]').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
-    render(allNews.filter(n=>n.categoria===cat).length?allNews.filter(n=>n.categoria===cat):allNews);
-    toast(`🎵 Feed personalizado para ${cat}!`);
-  } else {
-    localStorage.setItem('rt_pref','all');
+function algoTrack(categoria){
+  const d=algoGet();
+  d.scores[categoria]=(d.scores[categoria]||0)+1;
+  d.total=(d.total||0)+1;
+  localStorage.setItem(ALGO_KEY,JSON.stringify(d));
+}
+function algoTopCat(){
+  const d=algoGet();
+  if(d.total<ALGO_THRESHOLD)return null;
+  let top=null,max=0;
+  Object.entries(d.scores).forEach(([cat,score])=>{if(score>max){max=score;top=cat;}});
+  return top;
+}
+function algoSort(news){
+  const d=algoGet();
+  if(d.total<ALGO_THRESHOLD)return news; // not enough data yet
+  return [...news].sort((a,b)=>{
+    const sa=d.scores[a.categoria]||0;
+    const sb=d.scores[b.categoria]||0;
+    // Mix: 70% score weight + 30% original order (index)
+    const ia=news.indexOf(a), ib=news.indexOf(b);
+    const wa=sa*0.7 - ia*0.3;
+    const wb=sb*0.7 - ib*0.3;
+    return wb-wa;
+  });
+}
+function algoShowBadge(){
+  const top=algoTopCat();
+  const badge=document.getElementById('algo-badge');
+  const txt=document.getElementById('algo-badge-txt');
+  if(!badge||!txt)return;
+  if(top){
+    txt.textContent=`Mais ${top} para você`;
+    badge.style.display='block';
+    badge.style.opacity='1';
+    setTimeout(()=>{badge.style.opacity='0';setTimeout(()=>{badge.style.display='none';},500);},3000);
   }
 }
 
@@ -635,20 +564,10 @@ async function loadAll(){
   if(!allNews.length)allNews=sampleData();
   applyCfg();
 
-  // Apply saved preference before rendering
-  const savedPref=localStorage.getItem('rt_pref');
-  if(savedPref&&savedPref!=='all'){
-    currentCat=savedPref;
-    document.getElementById('section-title').textContent=savedPref.toUpperCase();
-    document.querySelectorAll('nav a[data-cat]').forEach(a=>a.classList.toggle('active',a.dataset.cat===savedPref));
-    const filtered=allNews.filter(n=>n.categoria===savedPref);
-    render(filtered.length?filtered:allNews);
-  } else {
-    render(allNews);
-  }
+  // Smart feed: sort by user interest after enough interactions
+  const sortedNews=algoSort(allNews);
+  render(sortedNews);
   buildTicker(allNews);buildTrending(allNews);buildTags(allNews);
-  // Show popup only for first-timers, after a small delay
-  setTimeout(checkPref, 900);
 }
 function applyCfg(){
   const c=getCfg();
@@ -730,11 +649,14 @@ function filterCat(e,cat){
   document.getElementById('section-title').textContent=cat?cat.toUpperCase():'Últimas Notícias';
   document.querySelectorAll('nav a[data-cat]').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
   document.querySelectorAll('.tag-pill').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
-  render(cat?allNews.filter(n=>n.categoria===cat):allNews);
+  render(cat ? allNews.filter(n=>n.categoria===cat) : algoSort(allNews));
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function openArt(id){
   const art=allNews.find(n=>n.id===id);if(!art)return;
+  // Track interaction for algorithm
+  algoTrack(art.categoria);
+  algoShowBadge();
   currentId=id;
   const mimg=document.getElementById('m-img');
   mimg.src=art.imagem;mimg.style.objectPosition=art.imgPosition||'center top';
