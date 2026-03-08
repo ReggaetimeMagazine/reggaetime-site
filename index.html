@@ -562,15 +562,9 @@ document.getElementById('topbar-date').textContent=`${dias[nd.getDay()]}, ${nd.g
 function getCfg(){try{return JSON.parse(localStorage.getItem('rt_config'))||{};}catch(e){return{};}}
 
 // ── LOAD ──────────────────────────────────────────────────────
-let _loadAllCalled=false;
 async function loadAll(){
-  if(_loadAllCalled)return;
-  _loadAllCalled=true;
   try{
-    const ctrl=new AbortController();
-    const tid=setTimeout(()=>ctrl.abort(),5000);
-    const r=await fetch('data/noticias.json',{signal:ctrl.signal});
-    clearTimeout(tid);
+    const r=await fetch('data/noticias.json?v='+Date.now());
     if(r.ok){
       allNews=await r.json();
       localStorage.setItem('reggaetime_noticias',JSON.stringify(allNews));
