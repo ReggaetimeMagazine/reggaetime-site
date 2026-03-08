@@ -719,11 +719,11 @@ function openArt(id){
       </div>`).join('')}</div>`:'';
   const m=document.getElementById('art-modal');
   m.classList.add('open');m.scrollTop=0;
-  lockScroll(true);
+  document.body.style.overflow='hidden';
 }
 function closeModal(){
   document.getElementById('art-modal').classList.remove('open');
-  lockScroll(false);
+  document.body.style.overflow='';
   currentId=null;
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
@@ -765,13 +765,6 @@ function toast(msg,type=''){
 // ── UTILS ─────────────────────────────────────────────────────
 function fmtd(s){if(!s)return '';const[y,m,d]=s.split('-');return `${d}/${m}/${y}`;}
 function sampleData(){return [{id:'s1',titulo:'Bem-vindo à Reggaetime Magazine!',resumo:'Publique sua primeira notícia pelo painel admin.',conteudo:'Acesse o painel admin para começar a publicar notícias.\n\nUse o link /admin/?token=reggaetime2026 para entrar no painel.',categoria:'Nacional',imagem:'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80',destaque:true,data:'2026-03-06',autor:'Reggaetime Staff'},{id:'s2',titulo:'Como publicar notícias no site',resumo:'Acesse o admin pelo link seguro e comece a publicar.',conteudo:'Use o painel admin para gerenciar suas publicações.',categoria:'Dancehall',imagem:'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80',destaque:true,data:'2026-03-05',autor:'Reggaetime Staff'},{id:'s3',titulo:'Personalize o ticker e redes sociais',resumo:'No admin você pode editar todos os textos do site.',conteudo:'Acesse Configurações no admin para personalizar tudo.',categoria:'Roots',imagem:'https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=800&q=80',destaque:false,data:'2026-03-04',autor:'Reggaetime Staff'}];}
-
-// ── SCROLL LOCK ───────────────────────────────────────────────
-let _lockCount=0;
-function lockScroll(lock){
-  if(lock){_lockCount++;if(_lockCount===1){document.body.style.overflow='hidden';}}
-  else{_lockCount=Math.max(0,_lockCount-1);if(_lockCount===0){document.body.style.overflow='';}}
-}
 
 // ── SPOTIFY PLAYER ────────────────────────────────────────────
 let spOpen=false;
@@ -849,14 +842,14 @@ function loadAds(){
 // ── MEDIA KIT ─────────────────────────────────────────────────
 function openMK(){
   document.getElementById('mk-modal').classList.add('open');
-  lockScroll(true);
+  document.body.style.overflow='hidden';
   // fill news count
   const el=document.getElementById('mk-news');
   if(el)el.textContent=allNews.length||'—';
 }
 function closeMK(){
   document.getElementById('mk-modal').classList.remove('open');
-  lockScroll(false);
+  document.body.style.overflow='';
 }
 function enviarMK(){
   const nome=document.getElementById('mk-nome').value.trim();
@@ -873,8 +866,8 @@ function enviarMK(){
   closeMK();
 }
 
-function openPrivacy(){document.getElementById('privacy-modal').classList.add('open');lockScroll(true);}
-function closePrivacy(){document.getElementById('privacy-modal').classList.remove('open');lockScroll(false);}
+function openPrivacy(){document.getElementById('privacy-modal').classList.add('open');document.body.style.overflow='hidden';}
+function closePrivacy(){document.getElementById('privacy-modal').classList.remove('open');document.body.style.overflow='';}
 
 // ── GOOGLE TRANSLATE ──────────────────────────────────────────
 function googleTranslateElementInit(){
@@ -923,3 +916,10 @@ function autoTranslate(lang){
 window.addEventListener('load',function(){
   const s=document.createElement('script');
   s.src='https://translate.google.com/translate_a/element.js?cb=googleTransl
+ateElementInit');document.head.appendChild(s);
+});
+
+document.addEventListener('DOMContentLoaded', loadAll);
+</script>
+</body>
+</html>
