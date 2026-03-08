@@ -41,7 +41,7 @@ nav a.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;h
 .ticker-label{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(135deg,#c0392b,#e63946);color:#fff;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:0 20px;display:flex;align-items:center;gap:7px;z-index:2;white-space:nowrap;box-shadow:4px 0 18px rgba(230,57,70,.35);}
 .ticker-dot{width:7px;height:7px;background:#fff;border-radius:50%;animation:blink 1.2s ease-in-out infinite;flex-shrink:0;}
 @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
-.ticker-track{display:flex;animation:ticker 40s linear infinite;padding-left:130px;}
+.ticker-track{display:flex;animation:ticker 40s linear infinite;padding-left:130px;will-change:transform;}
 .ticker-track:hover{animation-play-state:paused;}
 .ticker-track span{font-family:'Oswald',sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;padding:10px 36px;color:#bbb;border-right:1px solid #1e1e1e;transition:color .2s;}
 .ticker-track span::before{content:'◆';margin-right:12px;color:#e63946;font-size:7px;vertical-align:middle;}
@@ -562,16 +562,20 @@ document.getElementById('topbar-date').textContent=`${dias[nd.getDay()]}, ${nd.g
 function getCfg(){try{return JSON.parse(localStorage.getItem('rt_config'))||{};}catch(e){return{};}}
 
 // ── LOAD ──────────────────────────────────────────────────────
+let _loadAllCalled=false;
 async function loadAll(){
-  // Sempre busca o JSON do servidor — ignora localStorage para notícias
+  if(_loadAllCalled)return;
+  _loadAllCalled=true;
   try{
-    const r=await fetch('data/noticias.json?v='+Date.now());
+    const ctrl=new AbortController();
+    const tid=setTimeout(()=>ctrl.abort(),5000);
+    const r=await fetch('data/noticias.json',{signal:ctrl.signal});
+    clearTimeout(tid);
     if(r.ok){
       allNews=await r.json();
       localStorage.setItem('reggaetime_noticias',JSON.stringify(allNews));
     }
   }catch(e){
-    // Offline fallback: usa localStorage se disponível
     try{const s=localStorage.getItem('reggaetime_noticias');if(s){const p=JSON.parse(s);if(Array.isArray(p)&&p.length)allNews=p;}}catch(e2){}
   }
   if(!allNews.length)allNews=sampleData();
@@ -682,7 +686,8 @@ function filterCat(e,cat){
   document.querySelectorAll('nav a[data-cat]').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
   document.querySelectorAll('.tag-pill').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
   render(cat?allNews.filter(n=>n.categoria===cat):allNews);
-  window.scrollTo({top:0,behavior:'smooth'});
+  // Usa requestAnimationFrame para não bloquear o scroll do usuário
+  requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'smooth'}));
 }
 
 // ── MODAL ─────────────────────────────────────────────────────
@@ -802,7 +807,10 @@ function exportJSON(){
 // ── VISITOR COUNTER ───────────────────────────────────────────
 async function loadVisitorCount(){
   try{
-    const r=await fetch('https://api.countapi.xyz/hit/reggaetimemagazine.com/visits');
+    const ctrl=new AbortController();
+    const tid=setTimeout(()=>ctrl.abort(),4000); // timeout de 4s para não travar scroll
+    const r=await fetch('https://api.countapi.xyz/hit/reggaetimemagazine.com/visits',{signal:ctrl.signal});
+    clearTimeout(tid);
     if(r.ok){
       const d=await r.json();
       const n=d.value||0;
