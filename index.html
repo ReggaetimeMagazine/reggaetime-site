@@ -209,6 +209,39 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .mk-submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,215,0,.3);}
 .loading{text-align:center;padding:60px;font-family:'Oswald',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
 .empty-msg{text-align:center;padding:48px;font-family:'Oswald',sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#333;font-size:13px;}
+/* ── PREFERENCE POPUP ── */
+.pref-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.96);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .5s ease;}
+.pref-overlay.show{opacity:1;}
+.pref-box{background:var(--deep);border:1px solid var(--border);border-radius:16px;width:100%;max-width:480px;overflow:hidden;transform:translateY(30px) scale(.96);transition:transform .5s ease;position:relative;}
+.pref-overlay.show .pref-box{transform:translateY(0) scale(1);}
+.pref-rasta-top{height:5px;background:var(--rasta);}
+.pref-head{padding:32px 32px 8px;text-align:center;}
+.pref-logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;background:linear-gradient(135deg,var(--yellow),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;}
+.pref-head h2{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;letter-spacing:.04em;color:var(--white);margin-bottom:8px;}
+.pref-head p{font-size:13px;color:var(--muted);line-height:1.6;max-width:320px;margin:0 auto;}
+.pref-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:24px 32px 28px;}
+.pref-card{border-radius:10px;padding:24px 16px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .25s;position:relative;overflow:hidden;}
+.pref-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;}
+.pref-card:hover::before{opacity:1;}
+.pref-card.dancehall{background:linear-gradient(145deg,#0d0d0d,#1a0a1a);}
+.pref-card.dancehall::before{background:linear-gradient(145deg,rgba(230,57,70,.12),rgba(180,0,60,.08));}
+.pref-card.dancehall:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 8px 32px rgba(230,57,70,.25);}
+.pref-card.roots{background:linear-gradient(145deg,#0a0d0a,#0a1a0a);}
+.pref-card.roots::before{background:linear-gradient(145deg,rgba(29,185,84,.12),rgba(0,120,40,.08));}
+.pref-card.roots:hover{border-color:var(--green);transform:translateY(-3px);box-shadow:0 8px 32px rgba(29,185,84,.25);}
+.pref-card-icon{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;position:relative;}
+.pref-card.dancehall .pref-card-icon{background:radial-gradient(circle at 38% 32%,rgba(255,100,100,.22),rgba(230,57,70,.05));box-shadow:0 0 0 1px rgba(230,57,70,.3),0 0 22px rgba(230,57,70,.25),inset 0 1px 0 rgba(255,200,200,.12);}
+.pref-card.roots .pref-card-icon{background:radial-gradient(circle at 38% 32%,rgba(100,255,150,.22),rgba(29,185,84,.05));box-shadow:0 0 0 1px rgba(29,185,84,.3),0 0 22px rgba(29,185,84,.25),inset 0 1px 0 rgba(180,255,200,.12);}
+.pref-card.dancehall:hover .pref-card-icon{box-shadow:0 0 0 1px rgba(230,57,70,.7),0 0 36px rgba(230,57,70,.5),inset 0 1px 0 rgba(255,200,200,.2);}
+.pref-card.roots:hover .pref-card-icon{box-shadow:0 0 0 1px rgba(29,185,84,.7),0 0 36px rgba(29,185,84,.5),inset 0 1px 0 rgba(180,255,200,.2);}
+.pref-card-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;margin-bottom:6px;}
+.pref-card.dancehall .pref-card-name{color:var(--red);}
+.pref-card.roots .pref-card-name{color:var(--green);}
+.pref-card-desc{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1.5;}
+.pref-skip{text-align:center;padding:0 32px 24px;}
+.pref-skip button{background:none;border:none;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#333;cursor:pointer;transition:color .2s;}
+.pref-skip button:hover{color:var(--muted);}
+.pref-rasta-bot{height:3px;background:var(--rasta);}
 @media(max-width:1024px){.hero{grid-template-columns:1fr;}.hero-main{min-height:420px;}.hero-side{flex-direction:row;}.content-area{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr 1fr;}.related-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:640px){.hero{margin:16px auto;padding:0 12px;gap:8px;}.hero-main{min-height:280px;border-radius:6px;}.hero-side{flex-direction:column;gap:8px;}.hero-card{min-height:160px;border-radius:6px;}.news-grid{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr;}.hero-overlay h1{font-size:20px;}.hero-overlay p{font-size:12px;display:none;}.modal-inner{padding:20px 16px 0;}.modal-title{font-size:24px;}.related-grid{grid-template-columns:1fr;}}
 </style>
@@ -229,7 +262,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
         YouTube
       </a>
       <span class="sep">|</span>
-      <a id="link-email" href="mailto:reggaetimebr@gmail.com" style="display:flex;align-items:center;gap:5px;">
+      <a id="link-email" href="/cdn-cgi/l/email-protection#b4c6d1d3d3d5d1c0ddd9d1d6c6f4d3d9d5ddd89ad7dbd9" style="display:flex;align-items:center;gap:5px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;"><rect x="2" y="4" width="20" height="16" rx="3" stroke="#FFD700" stroke-width="2"/><polyline points="2,4 12,14 22,4" stroke="#FFD700" stroke-width="2"/></svg>
         Publicidade
       </a>
@@ -352,7 +385,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       </div>
       <div class="footer-col">
         <h5>Serviços</h5>
-        <a id="footer-email" href="mailto:reggaetimebr@gmail.com">Publicidade</a>
+        <a id="footer-email" href="/cdn-cgi/l/email-protection#f5879092929490819c98909787b59298949c99db969a98">Publicidade</a>
         <a href="#" onclick="document.getElementById('nl-email').scrollIntoView({behavior:'smooth'});document.getElementById('nl-email').focus();return false;">Newsletter</a>
         <a href="#">Contato</a>
       </div>
@@ -388,9 +421,9 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">4. Publicidade</h3>
       <p style="margin-bottom:16px;">Este site pode exibir anúncios de parceiros. Os anunciantes podem utilizar tecnologias próprias de rastreamento conforme suas políticas de privacidade. Podemos futuramente utilizar Google AdSense, que usa cookies para personalização de anúncios.</p>
       <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">5. Seus direitos</h3>
-      <p style="margin-bottom:16px;">Você tem direito de solicitar acesso, correção ou exclusão de seus dados a qualquer momento. Para cancelar a newsletter ou exercer seus direitos, entre em contato pelo email <strong style="color:#FFD700;">reggaetimebr@gmail.com</strong></p>
+      <p style="margin-bottom:16px;">Você tem direito de solicitar acesso, correção ou exclusão de seus dados a qualquer momento. Para cancelar a newsletter ou exercer seus direitos, entre em contato pelo email <strong style="color:#FFD700;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="93e1f6f4f4f2f6e7fafef6f1e1d3f4fef2faffbdf0fcfe">[email&#160;protected]</a></strong></p>
       <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">6. Contato</h3>
-      <p style="margin-bottom:0;">Reggaetime Magazine · reggaetimebr@gmail.com<br>Em conformidade com a LGPD (Lei nº 13.709/2018).</p>
+      <p style="margin-bottom:0;">Reggaetime Magazine · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="790b1c1e1e181c0d10141c1b0b391e14181015571a1614">[email&#160;protected]</a><br>Em conformidade com a LGPD (Lei nº 13.709/2018).</p>
     </div>
   </div>
 </div>
@@ -494,6 +527,69 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 
 <div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:999;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:14px 22px;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.04em;color:var(--white);transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;min-width:230px;max-width:340px;"></div>
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><!-- PREFERENCE POPUP -->
+<div id="pref-overlay" class="pref-overlay" style="display:none;">
+  <div class="pref-box">
+    <div class="pref-rasta-top"></div>
+    <div class="pref-head">
+      <div class="pref-logo">Reggaetime</div>
+      <h2>Qual é o seu estilo?</h2>
+      <p>Escolha sua preferência e vamos personalizar sua experiência na revista.</p>
+    </div>
+    <div class="pref-cards">
+      <div class="pref-card dancehall" onclick="setPref('Dancehall')">
+        <div class="pref-card-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <!-- flame / fire LED - dancehall -->
+              <defs>
+                <radialGradient id="flame-g" cx="50%" cy="80%" r="70%">
+                  <stop offset="0%" stop-color="#FFD700"/>
+                  <stop offset="50%" stop-color="#E63946"/>
+                  <stop offset="100%" stop-color="#8B0000"/>
+                </radialGradient>
+                <filter id="flame-glow">
+                  <feGaussianBlur stdDeviation="1.2" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <path filter="url(#flame-glow)" fill="url(#flame-g)" d="M12 2c0 0-1 3.5.5 5.5C14 9.5 14 11 12.5 12.5c.5-2-1-3-2-3.5 0 2.5-2 4-2 6.5 0 3 2.5 5 5.5 5s5.5-2.5 5.5-5.5c0-4-4.5-6-7.5-13z"/>
+              <path fill="rgba(255,220,100,.45)" d="M12.5 14c0 0 1.5 1 1.5 3s-1.2 2.8-2 2.8c1-1.5.5-3.5.5-5.8z"/>
+            </svg>
+          </div>
+        <div class="pref-card-name">Dancehall</div>
+        <div class="pref-card-desc">Ritmo pesado<br>vibes urbanas<br>Jamaica moderna</div>
+      </div>
+      <div class="pref-card roots" onclick="setPref('Roots')">
+        <div class="pref-card-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <!-- leaf LED - roots -->
+              <defs>
+                <radialGradient id="leaf-g" cx="30%" cy="30%" r="80%">
+                  <stop offset="0%" stop-color="#A8FF78"/>
+                  <stop offset="50%" stop-color="#1DB954"/>
+                  <stop offset="100%" stop-color="#0a5c2a"/>
+                </radialGradient>
+                <filter id="leaf-glow">
+                  <feGaussianBlur stdDeviation="1.2" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <path filter="url(#leaf-glow)" fill="url(#leaf-g)" d="M17 8C8 10 5.9 16.17 3.82 19.43L5.71 21l1-1C7 19 7 19 8 18c0 0 1 0 2-2 4 0 9-3 9-10a9 9 0 00-2-5.5z"/>
+              <path fill="rgba(168,255,120,.35)" d="M3.82 19.43C6 16 9 13 14 11c-4 3-7 6-8 9l-2.18-.57z"/>
+              <line x1="12" y1="12" x2="6" y2="20" stroke="rgba(168,255,120,.5)" stroke-width="1" stroke-linecap="round"/>
+            </svg>
+          </div>
+        <div class="pref-card-name">Roots</div>
+        <div class="pref-card-desc">Reggae raiz<br>cultura rasta<br>mensagem positiva</div>
+      </div>
+    </div>
+    <div class="pref-skip">
+      <button onclick="setPref(null)">Ver tudo · pular esta etapa</button>
+    </div>
+    <div class="pref-rasta-bot"></div>
+  </div>
+</div>
+
 <script>
 'use strict';
 let allNews=[], currentCat='', currentId=null;
@@ -502,6 +598,33 @@ const meses=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','
 const nd=new Date();
 document.getElementById('topbar-date').textContent=`${dias[nd.getDay()]}, ${nd.getDate()} ${meses[nd.getMonth()]} ${nd.getFullYear()}`;
 function getCfg(){try{return JSON.parse(localStorage.getItem('rt_config'))||{};}catch(e){return{};}}
+// ── PREFERENCE POPUP ─────────────────────────────────────────
+function checkPref(){
+  const saved=localStorage.getItem('rt_pref');
+  if(saved)return; // já escolheu antes
+  const overlay=document.getElementById('pref-overlay');
+  overlay.style.display='flex';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>overlay.classList.add('show')));
+  document.body.style.overflow='hidden';
+}
+function setPref(cat){
+  const overlay=document.getElementById('pref-overlay');
+  overlay.classList.remove('show');
+  setTimeout(()=>{overlay.style.display='none';},500);
+  document.body.style.overflow='';
+  if(cat){
+    localStorage.setItem('rt_pref',cat);
+    // Apply preference: filter and update nav
+    currentCat=cat;
+    document.getElementById('section-title').textContent=cat.toUpperCase();
+    document.querySelectorAll('nav a[data-cat]').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
+    render(allNews.filter(n=>n.categoria===cat).length?allNews.filter(n=>n.categoria===cat):allNews);
+    toast(`🎵 Feed personalizado para ${cat}!`);
+  } else {
+    localStorage.setItem('rt_pref','all');
+  }
+}
+
 async function loadAll(){
   try{
     const r=await fetch('data/noticias.json?v='+Date.now());
@@ -510,7 +633,22 @@ async function loadAll(){
     try{const s=localStorage.getItem('reggaetime_noticias');if(s){const p=JSON.parse(s);if(Array.isArray(p)&&p.length)allNews=p;}}catch(e2){}
   }
   if(!allNews.length)allNews=sampleData();
-  applyCfg();render(allNews);buildTicker(allNews);buildTrending(allNews);buildTags(allNews);
+  applyCfg();
+
+  // Apply saved preference before rendering
+  const savedPref=localStorage.getItem('rt_pref');
+  if(savedPref&&savedPref!=='all'){
+    currentCat=savedPref;
+    document.getElementById('section-title').textContent=savedPref.toUpperCase();
+    document.querySelectorAll('nav a[data-cat]').forEach(a=>a.classList.toggle('active',a.dataset.cat===savedPref));
+    const filtered=allNews.filter(n=>n.categoria===savedPref);
+    render(filtered.length?filtered:allNews);
+  } else {
+    render(allNews);
+  }
+  buildTicker(allNews);buildTrending(allNews);buildTags(allNews);
+  // Show popup only for first-timers, after a small delay
+  setTimeout(checkPref, 900);
 }
 function applyCfg(){
   const c=getCfg();
@@ -650,11 +788,16 @@ function toast(msg,type=''){
 }
 function fmtd(s){if(!s)return '';const[y,m,d]=s.split('-');return `${d}/${m}/${y}`;}
 function sampleData(){return [{id:'s1',titulo:'Bem-vindo à Reggaetime Magazine!',resumo:'Publique sua primeira notícia pelo painel admin.',conteudo:'Acesse o painel admin para começar a publicar notícias.\n\nUse o link /admin/?token=reggaetime2026 para entrar no painel.',categoria:'Nacional',imagem:'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80',destaque:true,data:'2026-03-06',autor:'Reggaetime Staff'},{id:'s2',titulo:'Como publicar notícias no site',resumo:'Acesse o admin pelo link seguro e comece a publicar.',conteudo:'Use o painel admin para gerenciar suas publicações.',categoria:'Dancehall',imagem:'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80',destaque:true,data:'2026-03-05',autor:'Reggaetime Staff'},{id:'s3',titulo:'Personalize o ticker e redes sociais',resumo:'No admin você pode editar todos os textos do site.',conteudo:'Acesse Configurações no admin para personalizar tudo.',categoria:'Roots',imagem:'https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=800&q=80',destaque:false,data:'2026-03-04',autor:'Reggaetime Staff'}];}
-let spOpen=false;
+let spOpen=false,spLoaded=false;
 function togglePlayer(){
   const frame=document.getElementById('sp-frame');const embed=document.getElementById('sp-embed');
   spOpen=!spOpen;frame.classList.toggle('open',spOpen);
-  if(spOpen&&!embed.querySelector('iframe')){const src=embed.dataset.src;if(src){embed.innerHTML=`<iframe src="${src}" width="320" height="380" frameborder="0" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;}}
+  if(spOpen&&!spLoaded){
+    const src=embed.dataset.src;if(!src)return;
+    spLoaded=true;
+    embed.innerHTML=`<div style="padding:24px;text-align:center;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.1em;color:#555;text-transform:uppercase;">Carregando Spotify...</div>`;
+    setTimeout(()=>{embed.innerHTML=`<iframe src="${src}" width="320" height="380" frameborder="0" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;},80);
+  }
 }
 function extractSpotifyId(url){const m=url.match(/playlist\/([a-zA-Z0-9]+)/);return m?m[1]:null;}
 function exportJSON(){
@@ -699,16 +842,33 @@ function openPrivacy(){document.getElementById('privacy-modal').classList.add('o
 function closePrivacy(){document.getElementById('privacy-modal').classList.remove('open');document.body.style.overflow='';}
 function googleTranslateElementInit(){
   new google.translate.TranslateElement({pageLanguage:'pt',autoDisplay:false,layout:google.translate.TranslateElement.InlineLayout.SIMPLE},'google_translate_element');
-  const lang=navigator.language||navigator.userLanguage||'';const code=lang.split('-')[0];
-  if(code&&code!=='pt'){setTimeout(()=>autoTranslate(code),800);}
+  const lang=(navigator.language||navigator.userLanguage||'').split('-')[0];
+  if(lang&&lang!=='pt'){
+    // Retry until .goog-te-combo is ready (Google Translate can take 2-4s)
+    let attempts=0;
+    const tryTranslate=()=>{
+      attempts++;
+      const select=document.querySelector('.goog-te-combo');
+      if(select){
+        select.value=lang;
+        select.dispatchEvent(new Event('change'));
+        showTranslateStatus();
+      } else if(attempts<20){
+        setTimeout(tryTranslate,300);
+      } else {
+        // Final fallback: set cookie and reload
+        document.cookie=`googtrans=/pt/${lang};path=/`;
+        document.cookie=`googtrans=/pt/${lang};domain=${location.hostname};path=/`;
+        location.reload();
+      }
+    };
+    setTimeout(tryTranslate,500);
+  }
 }
-function autoTranslate(lang){
-  const status=document.getElementById('translate-status');const count=document.getElementById('ts-count');if(!status)return;
-  status.style.display='block';let n=8;count.textContent=n;
-  const timer=setInterval(()=>{n--;count.textContent=n;if(n<=0){clearInterval(timer);status.style.display='none';}},1000);
-  const select=document.querySelector('.goog-te-combo');
-  if(select){select.value=lang;select.dispatchEvent(new Event('change'));}
-  else{document.cookie=`googtrans=/pt/${lang};path=/`;document.cookie=`googtrans=/pt/${lang};domain=${location.hostname};path=/`;setTimeout(()=>location.reload(),500);}
+function showTranslateStatus(){
+  const status=document.getElementById('translate-status');if(!status)return;
+  status.style.display='block';let n=6;document.getElementById('ts-count').textContent=n;
+  const t=setInterval(()=>{n--;document.getElementById('ts-count').textContent=n;if(n<=0){clearInterval(t);status.style.display='none';}},1000);
 }
 window.addEventListener('load',function(){
   const s=document.createElement('script');s.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';s.async=true;document.body.appendChild(s);
