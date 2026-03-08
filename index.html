@@ -568,6 +568,13 @@ async function loadAll(){
   const sortedNews=algoSort(allNews);
   render(sortedNews);
   buildTicker(allNews);buildTrending(allNews);buildTags(allNews);
+
+  // Auto-open article if URL has ?a=ID (shared link)
+  const artParam=new URLSearchParams(window.location.search).get('a');
+  if(artParam){
+    const found=allNews.find(n=>n.id===artParam);
+    if(found)setTimeout(()=>openArt(artParam),300);
+  }
 }
 function applyCfg(){
   const c=getCfg();
@@ -679,19 +686,29 @@ function openArt(id){
 }
 function closeModal(){document.getElementById('art-modal').classList.remove('open');document.body.style.overflow='';currentId=null;}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+function artUrl(art){
+  return `${location.origin}${location.pathname}?a=${art.id}`;
+}
 function shareWA(){
   const art=allNews.find(n=>n.id===currentId);if(!art)return;
-  window.open(`https://wa.me/?text=${encodeURIComponent('*'+art.titulo+'*\n\n'+art.resumo+'\n\n'+window.location.href)}`,'_blank');
+  const url=artUrl(art);
+  window.open(`https://wa.me/?text=${encodeURIComponent('*'+art.titulo+'*\n\n'+art.resumo+'\n\n'+url)}`,'_blank');
 }
 function shareTwitter(){
   const art=allNews.find(n=>n.id===currentId);if(!art)return;
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(art.titulo)}&url=${encodeURIComponent(window.location.href)}`,'_blank');
+  const url=artUrl(art);
+  const tweetUrl=`https://twitter.com/intent/tweet?text=${encodeURIComponent(art.titulo)}&url=${encodeURIComponent(url)}`;
+  const a=document.createElement('a');
+  a.href=tweetUrl;a.target='_blank';a.rel='noopener';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 function shareInstagram(){
-  navigator.clipboard.writeText(window.location.href).then(()=>toast('🔗 Link copiado! Cole no Instagram Stories ou Bio.')).catch(()=>toast('Copie o link do navegador.'));
+  const art=allNews.find(n=>n.id===currentId);if(!art)return;
+  navigator.clipboard.writeText(artUrl(art)).then(()=>toast('🔗 Link copiado! Cole no Instagram Stories ou Bio.')).catch(()=>toast('Copie o link do navegador.'));
 }
 function shareCopy(){
-  navigator.clipboard.writeText(window.location.href).then(()=>toast('🔗 Link copiado!')).catch(()=>toast('Copie o link do navegador.'));
+  const art=allNews.find(n=>n.id===currentId);if(!art)return;
+  navigator.clipboard.writeText(artUrl(art)).then(()=>toast('🔗 Link copiado!')).catch(()=>toast('Copie o link do navegador.'));
 }
 function subscribeNL(){
   const el=document.getElementById('nl-email');const email=el.value.trim();
