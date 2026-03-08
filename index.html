@@ -746,13 +746,25 @@ function exportJSON(){
 }
 async function loadVisitorCount(){
   try{
-    const r=await fetch('https://api.countapi.xyz/hit/reggaetimemagazine.com/visits');
+    // counterapi.dev — substituto gratuito do countapi.xyz
+    const r=await fetch('https://api.counterapi.dev/v1/reggaetimemagazine/visits/up',{signal:AbortSignal.timeout(5000)});
     if(r.ok){
-      const d=await r.json();const n=d.value||0;const fmt=n.toLocaleString('pt-BR');
-      const el=document.getElementById('visit-count');const el2=document.getElementById('mk-visits');const el3=document.getElementById('ad-reach');
-      if(el)el.textContent=fmt;if(el2)el2.textContent=fmt;if(el3)el3.textContent=fmt;
+      const d=await r.json();
+      const n=d.count||0;
+      const fmt=n.toLocaleString('pt-BR');
+      const el=document.getElementById('visit-count');
+      const el2=document.getElementById('mk-visits');
+      const el3=document.getElementById('ad-reach');
+      if(el)el.textContent=fmt;
+      if(el2)el2.textContent=fmt;
+      if(el3)el3.textContent=fmt;
     }
-  }catch(e){['visit-count','mk-visits','ad-reach'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});}
+  }catch(e){
+    ['visit-count','mk-visits','ad-reach'].forEach(id=>{
+      const el=document.getElementById(id);if(el)el.textContent='—';
+    });
+  }
+}
 }
 function loadAds(){
   try{
