@@ -37,6 +37,10 @@ nav a:hover{color:var(--yellow);}
 nav a.active{color:var(--yellow);}
 nav a.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;height:2px;background:var(--yellow);border-radius:2px;}
 .nav-records-btn{color:var(--yellow)!important;border:1px solid rgba(255,215,0,.25);border-radius:3px;padding:6px 12px!important;display:inline-flex!important;align-items:center;}
+.nav-translate-btn{color:#aaa!important;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:6px 12px!important;display:inline-flex!important;align-items:center;transition:all .2s!important;}
+.nav-translate-btn:hover{color:#fff!important;border-color:rgba(255,255,255,.3)!important;}
+.lang-btn{display:flex;align-items:center;gap:8px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:6px;padding:10px 12px;cursor:pointer;transition:all .2s;text-decoration:none;color:#ccc;font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spacing:.06em;}
+.lang-btn:hover{background:#222;border-color:#FFD700;color:#FFD700;}
 .nav-mais{position:relative;display:flex;align-items:center;}
 .nav-mais-btn{font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--white);background:none;border:none;cursor:pointer;padding:7px 12px;border-radius:3px;transition:color .2s;}
 .nav-mais-btn:hover{color:var(--yellow);}
@@ -381,9 +385,24 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       </div>
       <a href="#records-section" onclick="scrollToRecords(event)" class="nav-records-btn">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="1" fill="#FFD700" stroke="none"/></svg>Records</a>
+      <a href="#" onclick="openTranslate(event)" class="nav-translate-btn" title="Traduzir site">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Traduzir</a>
     </nav>
   </div>
 </header>
+
+<!-- TRANSLATE MODAL -->
+<div id="translate-modal" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);" onclick="closeTranslate(event)">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#111;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:32px 36px;width:min(420px,90vw);box-shadow:0 24px 60px rgba(0,0,0,.8);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <div style="font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;">🌐 Traduzir Site</div>
+      <button onclick="closeTranslate()" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer;line-height:1;">✕</button>
+    </div>
+    <p style="font-size:13px;color:#888;margin-bottom:20px;line-height:1.6;">Escolha o idioma e o Google Translate vai abrir o site traduzido numa nova aba.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="lang-grid"></div>
+    <p style="font-size:10px;color:#444;margin-top:16px;text-align:center;letter-spacing:.05em;">Tradução via Google Translate · Pode haver imprecisões</p>
+  </div>
+</div>
 
 <div class="ticker-bar">
   <div class="ticker-label"><div class="ticker-dot"></div>ONLINE</div>
@@ -1041,6 +1060,42 @@ window.addEventListener('load',function(){
 });
 // ── RECORDS ──────────────────────────────────────────────────
 function scrollToRecords(e){if(e)e.preventDefault();document.getElementById('records-section').scrollIntoView({behavior:'smooth'});}
+
+// ── TRADUTOR ─────────────────────────────────────────────────
+const LANGS=[
+  {code:'en',flag:'🇺🇸',nome:'English'},
+  {code:'es',flag:'🇪🇸',nome:'Español'},
+  {code:'fr',flag:'🇫🇷',nome:'Français'},
+  {code:'de',flag:'🇩🇪',nome:'Deutsch'},
+  {code:'it',flag:'🇮🇹',nome:'Italiano'},
+  {code:'ja',flag:'🇯🇵',nome:'日本語'},
+  {code:'ko',flag:'🇰🇷',nome:'한국어'},
+  {code:'zh-CN',flag:'🇨🇳',nome:'中文'},
+  {code:'ru',flag:'🇷🇺',nome:'Русский'},
+  {code:'ar',flag:'🇸🇦',nome:'العربية'},
+  {code:'hi',flag:'🇮🇳',nome:'हिन्दी'},
+  {code:'nl',flag:'🇳🇱',nome:'Nederlands'},
+  {code:'pl',flag:'🇵🇱',nome:'Polski'},
+  {code:'tr',flag:'🇹🇷',nome:'Türkçe'},
+  {code:'sv',flag:'🇸🇪',nome:'Svenska'},
+  {code:'jm',flag:'🇯🇲',nome:'Patois (JA)'},
+];
+function openTranslate(e){
+  if(e)e.preventDefault();
+  const url=encodeURIComponent(location.href);
+  const grid=document.getElementById('lang-grid');
+  grid.innerHTML=LANGS.map(l=>`
+    <a class="lang-btn" href="https://translate.google.com/translate?sl=pt&tl=${l.code}&u=${url}" target="_blank" rel="noopener" onclick="closeTranslate()">
+      <span style="font-size:18px;">${l.flag}</span>${l.nome}
+    </a>`).join('');
+  document.getElementById('translate-modal').style.display='block';
+  document.body.style.overflow='hidden';
+}
+function closeTranslate(e){
+  if(e&&e.target!==document.getElementById('translate-modal'))return;
+  document.getElementById('translate-modal').style.display='none';
+  document.body.style.overflow='';
+}
 
 function toggleNavMais(e){
   if(e)e.stopPropagation();
