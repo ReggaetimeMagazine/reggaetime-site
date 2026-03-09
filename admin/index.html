@@ -208,6 +208,17 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .ins-art-cliques{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--yellow);}
 .ins-reset-btn{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:none;border:1px solid rgba(230,57,70,.3);border-radius:3px;color:var(--red);padding:5px 12px;cursor:pointer;transition:all .2s;}
 .ins-reset-btn:hover{background:var(--red);color:#fff;}
+/* EDITOR TOOLBAR */
+.editor-tool-btn{font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--deep);border:1px solid var(--border);border-radius:3px;color:var(--muted);padding:5px 10px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;}
+.editor-tool-btn:hover{border-color:var(--yellow);color:var(--yellow);}
+.editor-tool-img{border-color:rgba(29,185,84,.3);color:var(--green);}
+.editor-tool-img:hover{border-color:var(--green);background:rgba(29,185,84,.08);}
+#editor-preview img{max-width:100%;border-radius:6px;margin:16px 0;display:block;}
+#editor-preview h2{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:var(--white);margin:24px 0 10px;letter-spacing:.04em;}
+#editor-preview blockquote{border-left:3px solid var(--yellow);padding:12px 18px;margin:16px 0;background:rgba(255,215,0,.04);font-style:italic;color:#aaa;border-radius:0 4px 4px 0;}
+#editor-preview strong{color:var(--white);}
+#editor-preview em{color:#c8c0b4;}
+#editor-preview p{margin-bottom:16px;}
 @media(max-width:900px){.ins-kpi{grid-template-columns:1fr 1fr;}.ins-two-col{grid-template-columns:1fr;}}
   .admin-wrap{grid-template-columns:1fr;}
   .sidebar{position:static;height:auto;}
@@ -359,7 +370,24 @@ tr:hover td{background:rgba(255,255,255,.02);}
         <div class="fr full">
           <div class="fg">
             <label>Conteúdo completo (opcional)</label>
-            <textarea id="f-conteudo" placeholder="Texto completo. Use Enter para separar parágrafos." style="min-height:180px;"></textarea>
+            <!-- BARRA DE FERRAMENTAS DO EDITOR -->
+            <div style="display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;">
+              <button type="button" class="editor-tool-btn" onclick="editorInsert('bold')" title="Negrito"><b>N</b></button>
+              <button type="button" class="editor-tool-btn" onclick="editorInsert('italic')" title="Itálico"><i>I</i></button>
+              <button type="button" class="editor-tool-btn" onclick="editorInsert('h2')" title="Subtítulo">H2</button>
+              <button type="button" class="editor-tool-btn" onclick="editorInsert('quote')" title="Citação">"</button>
+              <div style="width:1px;background:var(--border);margin:0 2px;"></div>
+              <button type="button" class="editor-tool-btn editor-tool-img" onclick="document.getElementById('editor-img-input').click()" title="Inserir imagem no texto">
+                📷 Inserir foto
+              </button>
+              <input type="file" id="editor-img-input" accept="image/*" style="display:none" onchange="editorInsertImg(this)"/>
+            </div>
+            <textarea id="f-conteudo" placeholder="Texto completo. Use Enter para separar parágrafos.&#10;&#10;Use os botões acima para inserir fotos, negrito, subtítulos..." style="min-height:240px;font-size:13px;line-height:1.7;" oninput="editorPreviewUpdate()"></textarea>
+            <!-- PREVIEW INLINE -->
+            <div id="editor-preview-toggle" style="margin-top:6px;">
+              <button type="button" class="editor-tool-btn" onclick="toggleEditorPreview()" style="width:100%;justify-content:center;">👁 Ver preview do conteúdo</button>
+            </div>
+            <div id="editor-preview" style="display:none;margin-top:10px;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;padding:20px 24px;font-size:15px;line-height:1.88;color:#c8c0b4;"></div>
           </div>
         </div>
       </div>
@@ -1548,6 +1576,76 @@ function loadRecords(){
 }
 
 // Patch goPage — handled natively above
+
+// ── EDITOR DE CONTEÚDO ───────────────────────────────────────
+function editorInsert(tipo){
+  const ta=document.getElementById('f-conteudo');
+  const start=ta.selectionStart, end=ta.selectionEnd;
+  const sel=ta.value.substring(start,end);
+  let ins='';
+  if(tipo==='bold') ins=`**${sel||'texto em negrito'}**`;
+  else if(tipo==='italic') ins=`_${sel||'texto em itálico'}_`;
+  else if(tipo==='h2') ins=`\n## ${sel||'Subtítulo'}\n`;
+  else if(tipo==='quote') ins=`\n> ${sel||'Citação aqui'}\n`;
+  ta.setRangeText(ins, start, end, 'end');
+  ta.focus();
+  editorPreviewUpdate();
+}
+
+function editorInsertImg(input){
+  const file=input.files[0]; if(!file)return;
+  const ta=document.getElementById('f-conteudo');
+  const pos=ta.selectionStart;
+  // Mostra loading
+  const loadTxt='\n[img:carregando...]\n';
+  ta.setRangeText(loadTxt, pos, pos, 'end');
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const b64=e.target.result;
+    // Substitui o placeholder pelo base64 real
+    ta.value=ta.value.replace('[img:carregando...]',`[img:${b64}]`);
+    editorPreviewUpdate();
+    toast('📷 Foto inserida no texto!');
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+function parseConteudo(texto){
+  if(!texto)return '';
+  return texto.split('\n').map(linha=>{
+    if(!linha.trim())return '';
+    // Imagem inline
+    if(linha.trim().startsWith('[img:')){
+      const src=linha.trim().slice(5,-1);
+      return `<img src="${src}" style="max-width:100%;border-radius:6px;margin:16px 0;display:block;" alt=""/>`;
+    }
+    // Subtítulo
+    if(linha.startsWith('## ')) return `<h2>${linha.slice(3)}</h2>`;
+    // Citação
+    if(linha.startsWith('> ')) return `<blockquote>${linha.slice(2)}</blockquote>`;
+    // Negrito e itálico inline
+    let l=linha
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/_(.+?)_/g,'<em>$1</em>');
+    return `<p>${l}</p>`;
+  }).filter(Boolean).join('');
+}
+
+let previewOpen=false;
+function toggleEditorPreview(){
+  previewOpen=!previewOpen;
+  const pv=document.getElementById('editor-preview');
+  pv.style.display=previewOpen?'block':'none';
+  if(previewOpen)editorPreviewUpdate();
+  document.querySelector('#editor-preview-toggle button').textContent=
+    previewOpen?'👁 Fechar preview':'👁 Ver preview do conteúdo';
+}
+function editorPreviewUpdate(){
+  if(!previewOpen)return;
+  const txt=document.getElementById('f-conteudo').value;
+  document.getElementById('editor-preview').innerHTML=parseConteudo(txt);
+}
 
 // ── INSIGHTS ─────────────────────────────────────────────────
 const IKEY='rt_insights';

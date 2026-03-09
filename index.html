@@ -857,14 +857,30 @@ function openArt(id){
   document.getElementById('m-cat').textContent=art.categoria;
   document.getElementById('m-title').textContent=art.titulo;
   document.getElementById('m-meta').textContent=`Por ${art.autor} · ${fmtd(art.data)}`;
-  const paras=(art.conteudo||art.resumo).split('\n').filter(p=>p.trim()).map(p=>`<p>${p}</p>`);
+  const rawTexto=art.conteudo||art.resumo||'';
+  // ── parseConteudo: suporta [img:...], ## H2, > quote, **bold**, _italic_
+  function parseConteudo(texto){
+    return texto.split('\n').map(linha=>{
+      if(!linha.trim())return '';
+      if(linha.trim().startsWith('[img:')){
+        const src=linha.trim().slice(5,-1);
+        return`<img src="${src}" style="max-width:100%;border-radius:6px;margin:20px 0;display:block;" alt=""/>`;
+      }
+      if(linha.startsWith('## '))return`<h2 style="font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:#fff;margin:28px 0 10px;letter-spacing:.04em;">${linha.slice(3)}</h2>`;
+      if(linha.startsWith('> '))return`<blockquote style="border-left:3px solid #FFD700;padding:12px 18px;margin:18px 0;background:rgba(255,215,0,.04);font-style:italic;color:#aaa;border-radius:0 4px 4px 0;">${linha.slice(2)}</blockquote>`;
+      let l=linha.replace(/\*\*(.+?)\*\*/g,'<strong style="color:#fff;">$1</strong>').replace(/_(.+?)_/g,'<em>$1</em>');
+      return`<p>${l}</p>`;
+    }).filter(Boolean).join('');
+  }
+  const paras=parseConteudo(rawTexto).split('</p>').filter(p=>p.trim());
+  // Injeta anúncio após 2º parágrafo se configurado
   try{
     const ads=JSON.parse(localStorage.getItem('rt_ads')||'{}');
     if(ads.art_img&&paras.length>2){
       paras.splice(2,0,`<div class="ad-article" id="ad-art"><div class="ad-slot" style="border:none;background:none;cursor:default;"><a href="${ads.art_link||'#'}" target="_blank" rel="noopener" style="display:block;width:100%;height:100%;"><img src="${ads.art_img}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:6px;" alt="Publicidade"/></a></div></div>`);
     }
   }catch(e){}
-  document.getElementById('m-body').innerHTML=paras.join('');
+  document.getElementById('m-body').innerHTML=paras.join('</p>');
   const rel=allNews.filter(n=>n.id!==id&&n.categoria===art.categoria).slice(0,3);
   document.getElementById('m-related').innerHTML=rel.length?`<p class="modal-related-title">Leia também</p><div class="related-grid">${rel.map(n=>`<div class="rel-card" onclick="openArt('${n.id}')"><img src="${n.imagem}" alt="" style="object-position:${n.imgPosition||'center'};" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=70'"/><h5>${n.titulo}</h5></div>`).join('')}</div>`:'';
   const m=document.getElementById('art-modal');
