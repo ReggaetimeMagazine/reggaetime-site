@@ -340,7 +340,6 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
         Publicidade
       </a>
       <span class="sep">|</span>
-      <span id="gt-wrap"><div id="google_translate_element"></div></span>
     </div>
   </div>
 </div>
@@ -647,14 +646,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       </div>
     </div>
   </div>
-</div>
-
-<div id="translate-status">
-  <span class="ts-count" id="ts-count">8</span>
-  <span class="ts-label">Traduzindo...</span>
-</div>
-
-<div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:999;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:14px 22px;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.04em;color:var(--white);transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;min-width:230px;max-width:340px;"></div>
+</div><div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:999;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:14px 22px;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.04em;color:var(--white);transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;min-width:230px;max-width:340px;"></div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><!-- ALGORITHM FEED BADGE -->
 <div id="algo-badge" style="display:none;position:fixed;bottom:80px;left:24px;z-index:400;background:rgba(17,17,17,.95);border:1px solid #2a2a2a;border-left:3px solid var(--yellow);border-radius:6px;padding:8px 14px;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#888;backdrop-filter:blur(8px);transition:opacity .4s;pointer-events:none;">
@@ -1018,44 +1010,10 @@ function enviarMK(){
 }
 function openPrivacy(){document.getElementById('privacy-modal').classList.add('open');document.body.style.overflow='hidden';}
 function closePrivacy(){document.getElementById('privacy-modal').classList.remove('open');document.body.style.overflow='';}
-,'google_translate_element');
-  const lang=(navigator.language||navigator.userLanguage||'').split('-')[0];
-  if(lang&&lang!=='pt'){
-    // Retry until .goog-te-combo is ready (Google Translate can take 2-4s)
-    let attempts=0;
-    const tryTranslate=()=>{
-      attempts++;
-      const select=document.querySelector('.goog-te-combo');
-      if(select){
-        select.value=lang;
-        select.dispatchEvent(new Event('change'));
-        showTranslateStatus();
-      } else if(attempts<20){
-        setTimeout(tryTranslate,300);
-      } else {
-        // Final fallback: set cookie and reload
-        document.cookie=`googtrans=/pt/${lang};path=/`;
-        document.cookie=`googtrans=/pt/${lang};domain=${location.hostname};path=/`;
-        location.reload();
-      }
-    };
-    setTimeout(tryTranslate,500);
-  }
-}
-function showTranslateStatus(){
-  const status=document.getElementById('translate-status');if(!status)return;
-  status.style.display='block';let n=6;document.getElementById('ts-count').textContent=n;
-  const t=setInterval(()=>{n--;document.getElementById('ts-count').textContent=n;if(n<=0){clearInterval(t);status.style.display='none';}},1000);
-}
-window.addEventListener('load',function(){
-  const s=document.createElement('script');s.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';s.async=true;document.body.appendChild(s);
-});
 // ── RECORDS ──────────────────────────────────────────────────
 function scrollToRecords(e){if(e)e.preventDefault();document.getElementById('records-section').scrollIntoView({behavior:'smooth'});}
 
-// ── TRADUTOR ─────────────────────────────────────────────────
-,'google_translate_element');
-}
+
 
 function toggleNavMais(e){
   if(e)e.stopPropagation();
