@@ -15,15 +15,15 @@ body{background:var(--black);color:var(--white);font-family:'Source Serif 4',Geo
 .topbar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
 .topbar a{color:var(--muted);text-decoration:none;transition:color .2s;}.topbar a:hover{color:var(--yellow);}
 .sep{margin:0 10px;color:var(--border);}
-.goog-te-banner-frame,.skiptranslate{display:none!important;}
-body{top:0!important;}
+
+
 #gt-btn{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;cursor:pointer;transition:all .2s;vertical-align:middle;}
 #gt-btn:hover{border-color:var(--yellow);color:var(--yellow);}
-#gt-wrap .goog-te-gadget{font-size:0;color:transparent;}
-#gt-wrap .goog-te-gadget select{background:var(--deep);border:1px solid var(--border);border-radius:3px;color:var(--white);font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.08em;padding:4px 8px;outline:none;cursor:pointer;max-width:160px;}
-#translate-status{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;background:rgba(0,0,0,.92);border:1px solid var(--border);border-radius:8px;padding:22px 32px;text-align:center;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--white);}
-#translate-status .ts-count{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--yellow);display:block;line-height:1;margin-bottom:6px;}
-#translate-status .ts-label{color:var(--muted);font-size:10px;letter-spacing:.2em;}
+
+
+
+
+
 .rasta-bar{height:4px;background:var(--rasta);}
 header{background:var(--deep);padding:16px 24px;position:sticky;top:0;z-index:90;border-bottom:1px solid var(--border);}
 .header-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px;}
@@ -37,17 +37,17 @@ nav a:hover{color:var(--yellow);}
 nav a.active{color:var(--yellow);}
 nav a.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;height:2px;background:var(--yellow);border-radius:2px;}
 .nav-records-btn{color:var(--yellow)!important;border:1px solid rgba(255,215,0,.25);border-radius:3px;padding:6px 12px!important;display:inline-flex!important;align-items:center;}
-.nav-translate-btn{color:#aaa!important;border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:6px 12px!important;display:inline-flex!important;align-items:center;transition:all .2s!important;}
-.nav-translate-btn:hover{color:#fff!important;border-color:rgba(255,255,255,.3)!important;}
+
+
 /* Google Translate Widget — tema escuro */
-#google_translate_element .goog-te-gadget-simple{background:#1a1a1a!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:3px!important;padding:5px 10px!important;font-family:'Oswald',sans-serif!important;}
-#google_translate_element .goog-te-gadget-simple span{color:#aaa!important;font-size:11px!important;letter-spacing:.08em!important;text-transform:uppercase!important;}
-#google_translate_element .goog-te-gadget-simple .goog-te-menu-value span{color:#aaa!important;}
-#google_translate_element a.goog-te-menu-value{text-decoration:none!important;}
-#google_translate_element img{display:none!important;}
-body{top:0!important;}
-.skiptranslate iframe{display:none!important;}
-.goog-te-banner-frame{display:none!important;}
+
+
+
+
+
+
+
+
 .nav-mais{position:relative;display:flex;align-items:center;}
 .nav-mais-btn{font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--white);background:none;border:none;cursor:pointer;padding:7px 12px;border-radius:3px;transition:color .2s;}
 .nav-mais-btn:hover{color:var(--yellow);}
@@ -392,7 +392,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       </div>
       <a href="#records-section" onclick="scrollToRecords(event)" class="nav-records-btn">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="1" fill="#FFD700" stroke="none"/></svg>Records</a>
-      <div id="google_translate_element" style="display:inline-block;vertical-align:middle;"></div>
+      
     </nav>
   </div>
 </header>
@@ -1018,8 +1018,7 @@ function enviarMK(){
 }
 function openPrivacy(){document.getElementById('privacy-modal').classList.add('open');document.body.style.overflow='hidden';}
 function closePrivacy(){document.getElementById('privacy-modal').classList.remove('open');document.body.style.overflow='';}
-function googleTranslateElementInit(){
-  new google.translate.TranslateElement({pageLanguage:'pt',autoDisplay:false,layout:google.translate.TranslateElement.InlineLayout.SIMPLE},'google_translate_element');
+,'google_translate_element');
   const lang=(navigator.language||navigator.userLanguage||'').split('-')[0];
   if(lang&&lang!=='pt'){
     // Retry until .goog-te-combo is ready (Google Translate can take 2-4s)
@@ -1055,13 +1054,7 @@ window.addEventListener('load',function(){
 function scrollToRecords(e){if(e)e.preventDefault();document.getElementById('records-section').scrollIntoView({behavior:'smooth'});}
 
 // ── TRADUTOR ─────────────────────────────────────────────────
-function googleTranslateElementInit(){
-  new google.translate.TranslateElement({
-    pageLanguage:'pt',
-    includedLanguages:'en,es,fr,de,it,ja,ko,zh-CN,ru,ar,hi,nl,pl,tr,sv',
-    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
-    autoDisplay:false
-  },'google_translate_element');
+,'google_translate_element');
 }
 
 function toggleNavMais(e){
@@ -1196,6 +1189,6 @@ window.addEventListener('load', loadAds);
 window.addEventListener('load', loadRecords);
 if(new URLSearchParams(window.location.search).has('export')){document.getElementById('gh-helper').style.display='block';}
 </script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
 </html>
