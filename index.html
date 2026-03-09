@@ -210,7 +210,85 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .loading{text-align:center;padding:60px;font-family:'Oswald',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
 .empty-msg{text-align:center;padding:48px;font-family:'Oswald',sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#333;font-size:13px;}
 @media(max-width:1024px){.hero{grid-template-columns:1fr;}.hero-main{min-height:420px;}.hero-side{flex-direction:row;}.content-area{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr 1fr;}.related-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:640px){.hero{margin:16px auto;padding:0 12px;gap:8px;}.hero-main{min-height:280px;border-radius:6px;}.hero-side{flex-direction:column;gap:8px;}.hero-card{min-height:160px;border-radius:6px;}.news-grid{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr;}.hero-overlay h1{font-size:20px;}.hero-overlay p{font-size:12px;display:none;}.modal-inner{padding:20px 16px 0;}.modal-title{font-size:24px;}.related-grid{grid-template-columns:1fr;}}
+/* ===== RECORDS SECTION ===== */
+.records-section{max-width:1280px;margin:0 auto;padding:0 24px 60px;}
+.records-header{display:flex;align-items:center;gap:12px;margin-bottom:30px;padding-top:10px;}
+.records-logo-badge{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;background:var(--rasta);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* DESTAQUE */
+.records-destaque{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:8px;overflow:hidden;margin-bottom:44px;min-height:340px;position:relative;border:1px solid rgba(255,215,0,.15);}
+.records-dest-img{position:relative;overflow:hidden;}
+.records-dest-img img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.7);transition:transform .6s,filter .4s;}
+.records-destaque:hover .records-dest-img img{transform:scale(1.03);filter:brightness(.85);}
+.records-dest-img::after{content:'';position:absolute;top:0;right:0;bottom:0;width:60%;background:linear-gradient(to right,transparent,#0a0a0a);}
+.records-dest-info{background:linear-gradient(135deg,#0f0a00,#0a0a0a);padding:44px 40px;display:flex;flex-direction:column;justify-content:center;border-left:1px solid rgba(255,215,0,.1);}
+.records-dest-label{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--yellow);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.records-dest-label::before{content:'';display:inline-block;width:24px;height:2px;background:var(--yellow);}
+.records-dest-artista{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:.05em;line-height:1;color:var(--white);margin-bottom:4px;}
+.records-dest-musica{font-family:'Oswald',sans-serif;font-size:20px;font-weight:400;color:rgba(255,255,255,.55);margin-bottom:18px;letter-spacing:.03em;}
+.records-dest-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:28px;max-width:380px;}
+.records-dest-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#1DB954,#17a346);color:#fff;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:12px 24px;border-radius:4px;text-decoration:none;width:fit-content;transition:all .25s;border:none;cursor:pointer;}
+.records-dest-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(29,185,84,.4);}
+.records-dest-btn svg{flex-shrink:0;}
+.records-dest-placeholder{width:100%;height:100%;background:linear-gradient(135deg,#1a1200,#0a0a0a);display:flex;align-items:center;justify-content:center;font-size:80px;}
+
+/* ARTISTAS GRID */
+.records-artistas-title{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--white);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.records-artistas-title::before{content:'';display:inline-block;width:4px;height:16px;background:var(--rasta);border-radius:2px;}
+.artistas-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:44px;}
+.artista-card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;transition:all .3s;position:relative;}
+.artista-card:hover{border-color:rgba(255,215,0,.3);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.5);}
+.artista-card-img{position:relative;aspect-ratio:1;overflow:hidden;}
+.artista-card-img img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.8);transition:all .4s;}
+.artista-card:hover .artista-card-img img{filter:brightness(1);transform:scale(1.05);}
+.artista-card-img-placeholder{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#1a1200,#0d0d0d);display:flex;align-items:center;justify-content:center;font-size:52px;}
+.artista-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,transparent 50%);opacity:0;transition:opacity .3s;}
+.artista-card:hover .artista-card-overlay{opacity:1;}
+.artista-card-links{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:8px;opacity:0;transform:translateY(8px);transition:all .3s;}
+.artista-card:hover .artista-card-links{opacity:1;transform:translateY(0);}
+.artista-link-btn{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:5px 10px;border-radius:3px;text-decoration:none;border:none;cursor:pointer;transition:all .2s;}
+.artista-link-sp{background:rgba(29,185,84,.9);color:#fff;}
+.artista-link-ig{background:rgba(225,48,108,.9);color:#fff;}
+.artista-link-yt{background:rgba(230,57,70,.9);color:#fff;}
+.artista-card-info{padding:14px 16px;}
+.artista-card-nome{font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:var(--white);margin-bottom:3px;transition:color .2s;}
+.artista-card:hover .artista-card-nome{color:var(--yellow);}
+.artista-card-genero{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.artista-card-musicas{font-family:'Oswald',sans-serif;font-size:10px;color:#444;margin-top:5px;letter-spacing:.05em;}
+
+/* CATÁLOGO */
+.catalogo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
+.musica-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;cursor:pointer;transition:all .3s;position:relative;}
+.musica-card:hover{border-color:rgba(255,215,0,.25);transform:translateY(-2px);}
+.musica-card.destaque-mus{border-color:rgba(255,215,0,.35);}
+.musica-card.destaque-mus::before{content:'⭐';position:absolute;top:6px;right:6px;font-size:12px;z-index:2;}
+.musica-card-img{position:relative;aspect-ratio:1;overflow:hidden;}
+.musica-card-img img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.85);transition:all .4s;}
+.musica-card:hover .musica-card-img img{filter:brightness(1.05);transform:scale(1.06);}
+.musica-card-img-placeholder{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#0d1a0d,#0a0a0a);display:flex;align-items:center;justify-content:center;font-size:36px;}
+.musica-play-btn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);opacity:0;transition:opacity .3s;}
+.musica-card:hover .musica-play-btn{opacity:1;}
+.musica-play-btn svg{filter:drop-shadow(0 2px 8px rgba(0,0,0,.8));}
+.musica-card-info{padding:10px 12px;}
+.musica-card-titulo{font-family:'Oswald',sans-serif;font-size:13px;font-weight:500;color:var(--white);margin-bottom:2px;line-height:1.25;transition:color .2s;}
+.musica-card:hover .musica-card-titulo{color:var(--yellow);}
+.musica-card-artista{font-family:'Oswald',sans-serif;font-size:10px;color:var(--muted);letter-spacing:.05em;}
+.musica-card-tipo{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#444;margin-top:3px;}
+.records-empty{text-align:center;padding:40px;color:var(--muted);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.15em;text-transform:uppercase;grid-column:1/-1;}
+
+@media(max-width:1024px){
+  .records-destaque{grid-template-columns:1fr;}
+  .records-dest-img{min-height:280px;}
+  .artistas-grid{grid-template-columns:repeat(3,1fr);}
+  .catalogo-grid{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:640px){
+  .records-destaque{min-height:auto;}
+  .records-dest-info{padding:28px 22px;}
+  .records-dest-artista{font-size:34px;}
+  .artistas-grid{grid-template-columns:repeat(2,1fr);}
+  .catalogo-grid{grid-template-columns:repeat(2,1fr);}
+}
 </style>
 </head>
 <body>
@@ -274,6 +352,8 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       <a href="#" data-cat="Dancehall" onclick="filterCat(event,'Dancehall')">Dancehall</a>
       <a href="#" data-cat="Jamaica" onclick="filterCat(event,'Jamaica')">Jamaica</a>
       <a href="#" data-cat="Entrevista" onclick="filterCat(event,'Entrevista')">Entrevistas</a>
+      <a href="#" data-cat="Shows e Eventos" onclick="filterCat(event,'Shows e Eventos')">Shows</a>
+      <a href="#records-section" onclick="scrollToRecords(event)" style="color:var(--yellow);border:1px solid rgba(255,215,0,.25);border-radius:3px;padding:6px 12px;">🎵 Records</a>
     </nav>
   </div>
 </header>
@@ -331,6 +411,47 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
   <div class="ad-slot" style="border-radius:0;"><div class="ad-slot-inner"><span class="ad-slot-label">Publicidade</span><div class="ad-slot-cta"><span>Anuncie aqui</span></div><div class="ad-slot-size">728×90 · Antes do rodapé</div></div></div>
 </div>
 
+<!-- ===== REGGAETIME RECORDS ===== -->
+<div id="records-section" style="background:linear-gradient(180deg,#0a0a0a 0%,#080800 50%,#0a0a0a 100%);border-top:1px solid rgba(255,215,0,.08);padding-top:44px;">
+  <div class="records-section">
+
+    <div class="records-header">
+      <div class="sec-accent"></div>
+      <h2 style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--white);">Reggaetime Records</h2>
+      <div class="sec-line"></div>
+      <span class="records-logo-badge">Gravadora</span>
+    </div>
+
+    <!-- DESTAQUE -->
+    <div id="records-destaque-wrap"></div>
+
+    <!-- ARTISTAS -->
+    <div id="records-artistas-wrap" style="display:none;">
+      <div class="records-artistas-title">Nossos Artistas</div>
+      <div class="artistas-grid" id="artistas-grid"></div>
+    </div>
+
+    <!-- CATÁLOGO -->
+    <div id="records-catalogo-wrap" style="display:none;">
+      <div class="records-artistas-title">Catálogo de Lançamentos</div>
+      <div class="catalogo-grid" id="catalogo-grid"></div>
+    </div>
+
+    <!-- FALLBACK: sem dados -->
+    <div id="records-fallback" style="text-align:center;padding:60px 20px;">
+      <div style="font-size:48px;margin-bottom:16px;">🎵</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:.06em;color:var(--white);margin-bottom:8px;">Reggaetime Records</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:28px;">Selo independente de Reggae, Roots, Dancehall e Trap Reggae do Brasil.</div>
+      <a href="https://www.instagram.com/reggaetimerecords/" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:#fff;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:11px 22px;border-radius:4px;text-decoration:none;transition:all .25s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        @reggaetimerecords
+      </a>
+    </div>
+
+  </div>
+</div>
+<!-- ===== FIM RECORDS ===== -->
+
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
@@ -349,6 +470,8 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
         <a href="#" onclick="filterCat(event,'Dancehall')">Dancehall</a>
         <a href="#" onclick="filterCat(event,'Jamaica')">Jamaica</a>
         <a href="#" onclick="filterCat(event,'Entrevista')">Entrevistas</a>
+        <a href="#" onclick="filterCat(event,'Shows e Eventos')">Shows e Eventos</a>
+        <a href="#records-section" onclick="scrollToRecords(event);return false;">Records</a>
       </div>
       <div class="footer-col">
         <h5>Serviços</h5>
@@ -823,9 +946,105 @@ function showTranslateStatus(){
 window.addEventListener('load',function(){
   const s=document.createElement('script');s.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';s.async=true;document.body.appendChild(s);
 });
+// ── RECORDS ──────────────────────────────────────────────────
+function scrollToRecords(e){if(e)e.preventDefault();document.getElementById('records-section').scrollIntoView({behavior:'smooth'});}
+
+async function loadRecords(){
+  let data=null;
+  // 1. Tenta carregar do JSON salvo pelo admin
+  try{
+    const r=await fetch('data/records.json?v='+Date.now(),{signal:AbortSignal.timeout(4000)});
+    if(r.ok)data=await r.json();
+  }catch(e){}
+  // 2. Fallback: lê do localStorage (admin local)
+  if(!data){
+    const artistas=JSON.parse(localStorage.getItem('rt_records_artistas')||'[]');
+    const musicas=JSON.parse(localStorage.getItem('rt_records_musicas')||'[]');
+    const destaque=JSON.parse(localStorage.getItem('rt_records_destaque')||'{}');
+    if(artistas.length||musicas.length||destaque.artista){data={artistas,musicas,destaque};}
+  }
+  if(!data){document.getElementById('records-fallback').style.display='block';return;}
+  document.getElementById('records-fallback').style.display='none';
+
+  // DESTAQUE
+  const dest=data.destaque||{};
+  const dWrap=document.getElementById('records-destaque-wrap');
+  if(dest.artista||dest.titulo){
+    dWrap.innerHTML=`
+    <div class="records-destaque">
+      <div class="records-dest-img">
+        ${dest.img
+          ?`<img src="${dest.img}" alt="${dest.artista||''}" loading="lazy"/>`
+          :`<div class="records-dest-placeholder">🎵</div>`}
+      </div>
+      <div class="records-dest-info">
+        <div class="records-dest-label">Lançamento em Destaque</div>
+        <div class="records-dest-artista">${dest.artista||''}</div>
+        <div class="records-dest-musica">${dest.musica||''}</div>
+        <div class="records-dest-desc">${dest.desc||'Novo lançamento Reggaetime Records.'}</div>
+        ${dest.link?`<a href="${dest.link}" target="_blank" rel="noopener" class="records-dest-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 11-.277-1.215c3.809-.87 7.076-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.72a.779.779 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.779.779 0 01-.973-.516.78.78 0 01.516-.974c3.632-1.102 8.147-.568 11.237 1.327a.78.78 0 01.257 1.072zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.935.935 0 11-.543-1.79c3.532-1.072 9.404-.865 13.115 1.338a.935.935 0 01-.955 1.611z"/></svg>
+          Ouvir Agora
+        </a>`:''}
+      </div>
+    </div>`;
+  }
+
+  // ARTISTAS
+  const artistas=data.artistas||[];
+  const musicas=data.musicas||[];
+  if(artistas.length){
+    document.getElementById('records-artistas-wrap').style.display='block';
+    document.getElementById('artistas-grid').innerHTML=artistas.map(a=>{
+      const qtd=musicas.filter(m=>m.artistaId===a.id).length;
+      return`<div class="artista-card" onclick="${a.spotify?`window.open('${a.spotify}','_blank')`:'void(0)'}">
+        <div class="artista-card-img">
+          ${a.foto?`<img src="${a.foto}" alt="${a.nome}" loading="lazy"/>`:`<div class="artista-card-img-placeholder">🎤</div>`}
+          <div class="artista-card-overlay"></div>
+          <div class="artista-card-links">
+            ${a.spotify?`<a href="${a.spotify}" target="_blank" class="artista-link-btn artista-link-sp" onclick="event.stopPropagation()">Spotify</a>`:''}
+            ${a.instagram?`<a href="${a.instagram}" target="_blank" class="artista-link-btn artista-link-ig" onclick="event.stopPropagation()">IG</a>`:''}
+            ${a.youtube?`<a href="${a.youtube}" target="_blank" class="artista-link-btn artista-link-yt" onclick="event.stopPropagation()">YT</a>`:''}
+          </div>
+        </div>
+        <div class="artista-card-info">
+          <div class="artista-card-nome">${a.nome}</div>
+          <div class="artista-card-genero">${a.genero||'Reggae'}</div>
+          ${qtd?`<div class="artista-card-musicas">${qtd} lançamento${qtd!==1?'s':''}</div>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // CATÁLOGO
+  if(musicas.length){
+    document.getElementById('records-catalogo-wrap').style.display='block';
+    document.getElementById('catalogo-grid').innerHTML=musicas.map(m=>{
+      const art=artistas.find(a=>a.id===m.artistaId);
+      return`<div class="musica-card${m.destaque?' destaque-mus':''}" onclick="${m.link?`window.open('${m.link}','_blank')`:'void(0)'}">
+        <div class="musica-card-img">
+          ${m.capa?`<img src="${m.capa}" alt="${m.titulo}" loading="lazy"/>`:`<div class="musica-card-img-placeholder">🎵</div>`}
+          ${m.link?`<div class="musica-play-btn">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,.6)"/><polygon points="10,8 17,12 10,16" fill="white"/></svg>
+          </div>`:''}
+        </div>
+        <div class="musica-card-info">
+          <div class="musica-card-titulo">${m.titulo}</div>
+          <div class="musica-card-artista">${art?art.nome:''}</div>
+          <div class="musica-card-tipo">${m.tipo||'Single'}${m.ano?' · '+m.ano:''}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  if(!artistas.length&&!musicas.length&&!dest.artista){
+    document.getElementById('records-fallback').style.display='block';
+  }
+}
+
 window.addEventListener('load', loadAll);
 window.addEventListener('load', loadVisitorCount);
 window.addEventListener('load', loadAds);
+window.addEventListener('load', loadRecords);
 if(new URLSearchParams(window.location.search).has('export')){document.getElementById('gh-helper').style.display='block';}
 </script>
 </body>

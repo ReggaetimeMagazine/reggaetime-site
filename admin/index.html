@@ -242,6 +242,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
       <div class="mi" onclick="goPage('inscritos',this)"><span class="mi-ico">👥</span>Inscritos</div>
       <div class="mi" onclick="goPage('config',this)"><span class="mi-ico">⚙️</span>Configurações</div>
       <div class="mi" onclick="goPage('publi',this)"><span class="mi-ico">📢</span>Publicidade</div>
+      <div class="mi" onclick="goPage('records',this)" style="border-top:1px solid var(--border);margin-top:8px;padding-top:14px;"><span class="mi-ico">🎵</span>Records — Artistas</div>
     </nav>
     <div class="sidebar-foot"><a href="../index.html" target="_blank">← Ver Site</a></div>
   </aside>
@@ -296,6 +297,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
               <option>Nacional</option><option>Roots</option><option>Dancehall</option>
               <option>Jamaica</option><option>Entrevista</option><option>Hall da Fama</option>
               <option>Lançamento</option><option>Cultura</option><option>Records</option><option>Collab</option>
+              <option>Shows e Eventos</option>
             </select>
           </div>
           <div class="fg">
@@ -544,6 +546,194 @@ tr:hover td{background:rgba(255,255,255,.02);}
       </div>
     </div>
 
+    <!-- RECORDS — ARTISTAS & CATÁLOGO -->
+    <div id="pg-records" class="page">
+      <div class="ph">
+        <h1>🎵 Reggaetime Records</h1>
+        <p>Gerencie artistas, músicas e o catálogo da gravadora</p>
+      </div>
+
+      <!-- DESTAQUE DA GRAVADORA -->
+      <div class="fc" style="background:linear-gradient(135deg,#111 0%,#1a1200 50%,#0a0a0a 100%);border-color:rgba(255,215,0,.2);">
+        <h2 style="color:var(--yellow);">⭐ Destaque da Gravadora</h2>
+        <p style="font-size:11px;color:var(--muted);margin-bottom:18px;letter-spacing:.03em;text-transform:none;">Este conteúdo aparece em destaque na vitrine do site — use para promover lançamentos principais.</p>
+        <div class="fr full">
+          <div class="fg">
+            <label>Título do Destaque</label>
+            <input id="rec-dest-titulo" type="text" placeholder="Ex: Novo lançamento — Arcanjo Ras · Ela Tá Com Fogo"/>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fg">
+            <label>Artista em Destaque</label>
+            <input id="rec-dest-artista" type="text" placeholder="Arcanjo Ras"/>
+          </div>
+          <div class="fg">
+            <label>Música / EP / Álbum</label>
+            <input id="rec-dest-musica" type="text" placeholder="Ela Tá Com Fogo"/>
+          </div>
+        </div>
+        <div class="fr full">
+          <div class="fg">
+            <label>Link Spotify / YouTube / Streaming</label>
+            <input id="rec-dest-link" type="url" placeholder="https://open.spotify.com/track/..."/>
+          </div>
+        </div>
+        <div class="fr full">
+          <div class="fg">
+            <label>URL da Capa / Arte</label>
+            <input id="rec-dest-img" type="url" placeholder="https://..." oninput="prevRecDest()"/>
+          </div>
+        </div>
+        <div id="rec-dest-prev" style="display:none;margin:8px 0;border-radius:6px;overflow:hidden;max-height:200px;text-align:center;background:#0a0a0a;">
+          <img id="rec-dest-prev-img" src="" style="max-height:200px;max-width:100%;object-fit:contain;" alt=""/>
+        </div>
+        <div class="fr full">
+          <div class="fg">
+            <label>Descrição (aparece na vitrine)</label>
+            <textarea id="rec-dest-desc" style="min-height:70px;" placeholder="Breve descrição do lançamento..."></textarea>
+          </div>
+        </div>
+        <div class="br">
+          <button class="btn btn-p" onclick="saveRecDest()">⭐ Salvar Destaque</button>
+        </div>
+      </div>
+
+      <!-- CADASTRAR ARTISTA -->
+      <div class="fc">
+        <h2 id="rec-form-title">➕ Cadastrar Artista</h2>
+        <input type="hidden" id="rec-edit-id"/>
+        <div class="fr">
+          <div class="fg">
+            <label>Nome do Artista *</label>
+            <input id="rec-nome" type="text" placeholder="Ex: Arcanjo Ras"/>
+          </div>
+          <div class="fg">
+            <label>Gênero / Estilo</label>
+            <input id="rec-genero" type="text" placeholder="Roots, Dancehall, Trap Reggae..."/>
+          </div>
+        </div>
+        <div class="fr full">
+          <div class="fg">
+            <label>Bio / Descrição</label>
+            <textarea id="rec-bio" style="min-height:80px;" placeholder="Breve apresentação do artista..."></textarea>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fg">
+            <label>Foto do Artista (URL)</label>
+            <input id="rec-foto" type="url" placeholder="https://..." oninput="prevRecFoto()"/>
+          </div>
+          <div class="fg">
+            <label>Instagram</label>
+            <input id="rec-ig" type="url" placeholder="https://instagram.com/..."/>
+          </div>
+        </div>
+        <div id="rec-foto-prev" style="display:none;margin:6px 0;border-radius:6px;overflow:hidden;height:120px;width:120px;background:#0a0a0a;">
+          <img id="rec-foto-prev-img" src="" style="width:100%;height:100%;object-fit:cover;" alt=""/>
+        </div>
+        <div class="fr">
+          <div class="fg">
+            <label>Spotify do Artista</label>
+            <input id="rec-spotify" type="url" placeholder="https://open.spotify.com/artist/..."/>
+          </div>
+          <div class="fg">
+            <label>YouTube</label>
+            <input id="rec-yt" type="url" placeholder="https://youtube.com/@..."/>
+          </div>
+        </div>
+        <div class="br">
+          <button class="btn btn-p" onclick="saveArtista()">✅ Salvar Artista</button>
+          <button class="btn btn-s" onclick="clearRecForm()">🗑 Limpar</button>
+        </div>
+      </div>
+
+      <!-- CATÁLOGO DE MÚSICAS -->
+      <div class="fc">
+        <h2>🎶 Adicionar Música ao Catálogo</h2>
+        <div class="fr">
+          <div class="fg">
+            <label>Artista *</label>
+            <select id="mus-artista-sel">
+              <option value="">Selecione o artista...</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Título da Música *</label>
+            <input id="mus-titulo" type="text" placeholder="Nome da música..."/>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fg">
+            <label>Tipo</label>
+            <select id="mus-tipo">
+              <option>Single</option>
+              <option>EP</option>
+              <option>Álbum</option>
+              <option>Feat.</option>
+              <option>Remix</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Ano de Lançamento</label>
+            <input id="mus-ano" type="number" placeholder="2024" min="2000" max="2099"/>
+          </div>
+        </div>
+        <div class="fr full">
+          <div class="fg">
+            <label>Link de Streaming (Spotify / YouTube)</label>
+            <input id="mus-link" type="url" placeholder="https://open.spotify.com/track/..."/>
+          </div>
+        </div>
+        <div class="fr full">
+          <div class="fg">
+            <label>Capa da Música (URL)</label>
+            <input id="mus-capa" type="url" placeholder="https://..."/>
+          </div>
+        </div>
+        <div class="fr full">
+          <div class="fg">
+            <label>Destaque na vitrine?</label>
+            <div class="tog-wrap">
+              <label class="tog"><input type="checkbox" id="mus-dest"/><span class="tog-s"></span></label>
+              <span class="tog-label">Marcar como lançamento em destaque</span>
+            </div>
+          </div>
+        </div>
+        <div class="br">
+          <button class="btn btn-p" onclick="saveMusica()">🎵 Salvar Música</button>
+          <button class="btn btn-s" onclick="clearMusForm()">🗑 Limpar</button>
+        </div>
+      </div>
+
+      <!-- LISTA DE ARTISTAS -->
+      <div class="fc" style="padding:0;overflow:hidden;">
+        <div style="padding:16px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <h2 style="margin:0;border:none;padding:0;">Artistas Cadastrados</h2>
+          <button class="btn btn-s" style="padding:7px 16px;" onclick="exportRecordsJSON()">📥 Baixar JSON</button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Foto</th><th>Artista</th><th>Gênero</th><th>Músicas</th><th>Links</th><th>Ações</th></tr></thead>
+            <tbody id="rec-artistas-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- LISTA DE MÚSICAS -->
+      <div class="fc" style="padding:0;overflow:hidden;margin-top:20px;">
+        <div style="padding:16px 22px;border-bottom:1px solid var(--border);">
+          <h2 style="margin:0;border:none;padding:0;">Catálogo de Músicas</h2>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Capa</th><th>Música</th><th>Artista</th><th>Tipo</th><th>Ano</th><th>Destaque</th><th>Ações</th></tr></thead>
+            <tbody id="rec-musicas-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -605,6 +795,7 @@ function goPage(id,el){
   if(id==='config')loadConfig();
   if(id==='ticker')loadTicker();
   if(id==='publi')loadAds();
+  if(id==='records')loadRecords();
 }
 
 async function sincronizar(){
@@ -938,7 +1129,199 @@ function clearAd(slot){
   toast(`🗑 Banner removido.`,'warn');
 }
 
-// ── INIT ──────────────────────────────────────────────────────
+// ── RECORDS ──────────────────────────────────────────────────
+const REC_KEY='rt_records_artistas';
+const MUS_KEY='rt_records_musicas';
+const REC_DEST_KEY='rt_records_destaque';
+
+function getArtistas(){return JSON.parse(localStorage.getItem(REC_KEY)||'[]');}
+function setArtistas(a){localStorage.setItem(REC_KEY,JSON.stringify(a));}
+function getMusicas(){return JSON.parse(localStorage.getItem(MUS_KEY)||'[]');}
+function setMusicas(m){localStorage.setItem(MUS_KEY,JSON.stringify(m));}
+function getRecDest(){return JSON.parse(localStorage.getItem(REC_DEST_KEY)||'{}');}
+
+function prevRecDest(){
+  const url=document.getElementById('rec-dest-img').value.trim();
+  const prev=document.getElementById('rec-dest-prev');
+  const img=document.getElementById('rec-dest-prev-img');
+  if(url){img.src=url;prev.style.display='block';}else{prev.style.display='none';}
+}
+function prevRecFoto(){
+  const url=document.getElementById('rec-foto').value.trim();
+  const prev=document.getElementById('rec-foto-prev');
+  const img=document.getElementById('rec-foto-prev-img');
+  if(url){img.src=url;prev.style.display='block';}else{prev.style.display='none';}
+}
+function saveRecDest(){
+  const d={
+    titulo:document.getElementById('rec-dest-titulo').value.trim(),
+    artista:document.getElementById('rec-dest-artista').value.trim(),
+    musica:document.getElementById('rec-dest-musica').value.trim(),
+    link:document.getElementById('rec-dest-link').value.trim(),
+    img:document.getElementById('rec-dest-img').value.trim(),
+    desc:document.getElementById('rec-dest-desc').value.trim()
+  };
+  localStorage.setItem(REC_DEST_KEY,JSON.stringify(d));
+  toast('⭐ Destaque da gravadora salvo!');
+}
+function loadRecDest(){
+  const d=getRecDest();
+  if(d.titulo)document.getElementById('rec-dest-titulo').value=d.titulo||'';
+  if(d.artista)document.getElementById('rec-dest-artista').value=d.artista||'';
+  if(d.musica)document.getElementById('rec-dest-musica').value=d.musica||'';
+  if(d.link)document.getElementById('rec-dest-link').value=d.link||'';
+  if(d.img){document.getElementById('rec-dest-img').value=d.img||'';prevRecDest();}
+  if(d.desc)document.getElementById('rec-dest-desc').value=d.desc||'';
+}
+function saveArtista(){
+  const nome=document.getElementById('rec-nome').value.trim();
+  if(!nome){toast('⚠️ Nome do artista obrigatório.','warn');return;}
+  const editId=document.getElementById('rec-edit-id').value;
+  const artistas=getArtistas();
+  const obj={
+    id:editId||'art_'+Date.now(),
+    nome,
+    genero:document.getElementById('rec-genero').value.trim(),
+    bio:document.getElementById('rec-bio').value.trim(),
+    foto:document.getElementById('rec-foto').value.trim(),
+    instagram:document.getElementById('rec-ig').value.trim(),
+    spotify:document.getElementById('rec-spotify').value.trim(),
+    youtube:document.getElementById('rec-yt').value.trim()
+  };
+  if(editId){
+    const idx=artistas.findIndex(a=>a.id===editId);
+    if(idx>=0)artistas[idx]=obj;
+  }else{artistas.push(obj);}
+  setArtistas(artistas);
+  clearRecForm();
+  renderArtistas();
+  populateArtistaSelect();
+  toast('✅ Artista salvo!');
+}
+function clearRecForm(){
+  ['rec-nome','rec-genero','rec-bio','rec-foto','rec-ig','rec-spotify','rec-yt'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('rec-edit-id').value='';
+  document.getElementById('rec-form-title').textContent='➕ Cadastrar Artista';
+  document.getElementById('rec-foto-prev').style.display='none';
+}
+function editArtista(id){
+  const a=getArtistas().find(x=>x.id===id);if(!a)return;
+  document.getElementById('rec-edit-id').value=a.id;
+  document.getElementById('rec-nome').value=a.nome||'';
+  document.getElementById('rec-genero').value=a.genero||'';
+  document.getElementById('rec-bio').value=a.bio||'';
+  document.getElementById('rec-foto').value=a.foto||'';prevRecFoto();
+  document.getElementById('rec-ig').value=a.instagram||'';
+  document.getElementById('rec-spotify').value=a.spotify||'';
+  document.getElementById('rec-yt').value=a.youtube||'';
+  document.getElementById('rec-form-title').textContent='✏️ Editar Artista — '+a.nome;
+  document.querySelector('#pg-records .fc').scrollIntoView({behavior:'smooth'});
+}
+function deleteArtista(id){
+  if(!confirm('Remover artista?'))return;
+  setArtistas(getArtistas().filter(a=>a.id!==id));
+  setMusicas(getMusicas().filter(m=>m.artistaId!==id));
+  renderArtistas();renderMusicas();populateArtistaSelect();
+  toast('🗑 Artista removido.','warn');
+}
+function renderArtistas(){
+  const artistas=getArtistas();
+  const tbody=document.getElementById('rec-artistas-body');
+  if(!artistas.length){tbody.innerHTML='<tr><td colspan="6"><div class="empty">Nenhum artista cadastrado</div></td></tr>';return;}
+  const musicas=getMusicas();
+  tbody.innerHTML=artistas.map(a=>{
+    const qtd=musicas.filter(m=>m.artistaId===a.id).length;
+    const links=[];
+    if(a.instagram)links.push(`<a href="${a.instagram}" target="_blank" style="color:var(--yellow);font-size:11px;">IG</a>`);
+    if(a.spotify)links.push(`<a href="${a.spotify}" target="_blank" style="color:var(--green);font-size:11px;">SP</a>`);
+    if(a.youtube)links.push(`<a href="${a.youtube}" target="_blank" style="color:var(--red);font-size:11px;">YT</a>`);
+    return`<tr>
+      <td>${a.foto?`<img src="${a.foto}" class="tbl-img" style="border-radius:50%;" onerror="this.style.display='none'">`:'<div style="width:40px;height:40px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;">🎤</div>'}</td>
+      <td><div class="tbl-title">${a.nome}</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">${a.bio?a.bio.slice(0,60)+'…':''}</div></td>
+      <td><span class="cat-tag">${a.genero||'—'}</span></td>
+      <td style="font-size:13px;color:var(--white);">${qtd} música${qtd!==1?'s':''}</td>
+      <td style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">${links.join('')||'—'}</td>
+      <td><div class="acts">
+        <button class="bsm bsm-e" onclick="editArtista('${a.id}')">✏️ Editar</button>
+        <button class="bsm bsm-d" onclick="deleteArtista('${a.id}')">✕</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+function populateArtistaSelect(){
+  const sel=document.getElementById('mus-artista-sel');
+  const artistas=getArtistas();
+  const cur=sel.value;
+  sel.innerHTML='<option value="">Selecione o artista...</option>'+artistas.map(a=>`<option value="${a.id}">${a.nome}</option>`).join('');
+  sel.value=cur;
+}
+function saveMusica(){
+  const artistaId=document.getElementById('mus-artista-sel').value;
+  const titulo=document.getElementById('mus-titulo').value.trim();
+  if(!artistaId||!titulo){toast('⚠️ Artista e título obrigatórios.','warn');return;}
+  const musicas=getMusicas();
+  musicas.push({
+    id:'mus_'+Date.now(),
+    artistaId,
+    titulo,
+    tipo:document.getElementById('mus-tipo').value,
+    ano:document.getElementById('mus-ano').value,
+    link:document.getElementById('mus-link').value.trim(),
+    capa:document.getElementById('mus-capa').value.trim(),
+    destaque:document.getElementById('mus-dest').checked
+  });
+  setMusicas(musicas);
+  clearMusForm();renderMusicas();
+  toast('🎵 Música adicionada!');
+}
+function clearMusForm(){
+  ['mus-titulo','mus-link','mus-capa','mus-ano'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('mus-artista-sel').value='';
+  document.getElementById('mus-dest').checked=false;
+}
+function deleteMusica(id){
+  if(!confirm('Remover música?'))return;
+  setMusicas(getMusicas().filter(m=>m.id!==id));
+  renderMusicas();toast('🗑 Música removida.','warn');
+}
+function renderMusicas(){
+  const musicas=getMusicas();
+  const artistas=getArtistas();
+  const tbody=document.getElementById('rec-musicas-body');
+  if(!musicas.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty">Nenhuma música cadastrada</div></td></tr>';return;}
+  tbody.innerHTML=[...musicas].reverse().map(m=>{
+    const art=artistas.find(a=>a.id===m.artistaId);
+    return`<tr>
+      <td>${m.capa?`<img src="${m.capa}" class="tbl-img" onerror="this.style.display='none'">`:'<div style="width:60px;height:40px;background:var(--border);display:flex;align-items:center;justify-content:center;border-radius:3px;">🎵</div>'}</td>
+      <td><div class="tbl-title">${m.link?`<a href="${m.link}" target="_blank" style="color:var(--white);text-decoration:none;">${m.titulo}</a>`:m.titulo}</div></td>
+      <td style="font-size:12px;">${art?art.nome:'—'}</td>
+      <td><span class="cat-tag">${m.tipo||'—'}</span></td>
+      <td style="font-size:12px;color:var(--muted);">${m.ano||'—'}</td>
+      <td>${m.destaque?'<span class="dest-tag">⭐ Destaque</span>':'<span style="color:var(--muted);font-size:11px;">—</span>'}</td>
+      <td><button class="bsm bsm-d" onclick="deleteMusica('${m.id}')">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+function exportRecordsJSON(){
+  const data={artistas:getArtistas(),musicas:getMusicas(),destaque:getRecDest()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='records.json';a.click();
+  toast('📥 records.json baixado!');
+}
+function loadRecords(){
+  loadRecDest();
+  renderArtistas();
+  renderMusicas();
+  populateArtistaSelect();
+}
+
+// Patch goPage — handled natively above
+
+</script>
+</body>
+</html>
 document.addEventListener('DOMContentLoaded',async()=>{
   document.getElementById('f-data').value=new Date().toISOString().slice(0,10);
   try{
