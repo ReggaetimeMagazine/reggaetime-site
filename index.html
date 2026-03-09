@@ -714,6 +714,21 @@ async function loadAll(){
     try{const s=localStorage.getItem('reggaetime_noticias');if(s){const p=JSON.parse(s);if(Array.isArray(p)&&p.length)allNews=p;}}catch(e2){}
   }
   if(!allNews.length)allNews=sampleData();
+  // ── INSIGHT: pageview + sessão ────────────────────────────────
+  try{
+    const IKEY='rt_insights';
+    const ins=JSON.parse(localStorage.getItem(IKEY)||'{"artigos":{},"categorias":{},"sessoes":[],"pageviews":0}');
+    ins.pageviews=(ins.pageviews||0)+1;
+    // Sessão: agrupa visitas por dia
+    const hoje=new Date().toISOString().slice(0,10);
+    const idx=ins.sessoes.findIndex(s=>s.d===hoje);
+    if(idx>=0)ins.sessoes[idx].v++;
+    else ins.sessoes.push({d:hoje,v:1});
+    // Mantém só últimos 30 dias
+    ins.sessoes=ins.sessoes.slice(-30);
+    localStorage.setItem(IKEY,JSON.stringify(ins));
+  }catch(e){}
+  // ─────────────────────────────────────────────────────────────
   applyCfg();
 
   // Smart feed: sort by user interest after enough interactions
@@ -805,6 +820,8 @@ function buildTags(news){
 function filterCat(e,cat){
   if(e)e.preventDefault();
   currentCat=cat;
+  // Track categoria no insight
+  if(cat){try{const IKEY='rt_insights';const ins=JSON.parse(localStorage.getItem(IKEY)||'{"artigos":{},"categorias":{},"sessoes":[],"pageviews":0}');ins.categorias[cat]=(ins.categorias[cat]||0)+1;localStorage.setItem(IKEY,JSON.stringify(ins));}catch(ex){}}
   document.getElementById('section-title').textContent=cat?cat.toUpperCase():'Últimas Notícias';
   document.querySelectorAll('nav a[data-cat], .nav-mais-drop a[data-cat]').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
   // Destaca botão "Mais" se categoria ativa está no dropdown
@@ -820,6 +837,19 @@ function openArt(id){
   // Track interaction for algorithm
   algoTrack(art.categoria);
   algoShowBadge();
+  // ── INSIGHT TRACKING ──────────────────────────────────────────
+  try{
+    const IKEY='rt_insights';
+    const ins=JSON.parse(localStorage.getItem(IKEY)||'{"artigos":{},"categorias":{},"sessoes":[],"pageviews":0}');
+    // Artigo
+    if(!ins.artigos[id])ins.artigos[id]={titulo:art.titulo,categoria:art.categoria,img:art.imagem||'',cliques:0,ultima:''};
+    ins.artigos[id].cliques++;
+    ins.artigos[id].ultima=new Date().toISOString();
+    // Categoria
+    ins.categorias[art.categoria]=(ins.categorias[art.categoria]||0)+1;
+    localStorage.setItem(IKEY,JSON.stringify(ins));
+  }catch(e){}
+  // ─────────────────────────────────────────────────────────────
   currentId=id;
   const mimg=document.getElementById('m-img');
   mimg.src=art.imagem;mimg.style.objectPosition=art.imgPosition||'center top';
