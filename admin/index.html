@@ -467,17 +467,35 @@ tr:hover td{background:rgba(255,255,255,.02);}
         </div>
       </div>
 
-      <div class="fc">
-        <h2>🎵 Player de Rádio (Spotify)</h2>
-        <div class="fr full">
-          <div class="fg">
-            <label>Link da Playlist do Spotify</label>
-            <input id="cfg-sp-playlist" type="url" placeholder="https://open.spotify.com/playlist/..."/>
-            <div style="font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.03em;">Cole o link de qualquer playlist pública. O botão verde aparecerá no site automaticamente.</div>
+      <div class="fc" style="background:linear-gradient(135deg,#0f0a00,#111);border-color:rgba(255,215,0,.15);">
+        <h2 style="color:var(--yellow);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" style="vertical-align:middle;margin-right:6px;margin-top:-2px;display:inline-block;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="1" fill="#FFD700" stroke="none"/></svg>
+          Reggaetime Records — Acesso Rápido
+        </h2>
+        <p style="font-size:11px;color:var(--muted);margin-bottom:20px;letter-spacing:.02em;text-transform:none;">Gerencie artistas, lançamentos e o destaque da gravadora direto pela aba Records.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+          <div style="background:#0a0a0a;border:1px solid rgba(255,215,0,.1);border-radius:6px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;" onclick="goPage('records',document.querySelectorAll('.mi')[7])" onmouseover="this.style.borderColor='rgba(255,215,0,.4)'" onmouseout="this.style.borderColor='rgba(255,215,0,.1)'">
+            <div style="font-size:24px;margin-bottom:6px;"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="12" stroke="#FFD700" stroke-width="1.2" opacity=".5"/><circle cx="14" cy="14" r="6" stroke="#C9A84C" stroke-width="1" opacity=".4"/><circle cx="14" cy="14" r="2" fill="#FFD700" opacity=".9"/></svg></div>
+            <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow);">Destaque</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:3px;">Editar lançamento</div>
+          </div>
+          <div style="background:#0a0a0a;border:1px solid rgba(255,215,0,.1);border-radius:6px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;" onclick="goPage('records',document.querySelectorAll('.mi')[7])" onmouseover="this.style.borderColor='rgba(255,215,0,.4)'" onmouseout="this.style.borderColor='rgba(255,215,0,.1)'">
+            <div style="font-size:24px;margin-bottom:6px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5" opacity=".8"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0014 0"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg></div>
+            <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow);">Artistas</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:3px;" id="cfg-rec-artistas-count">— cadastrados</div>
+          </div>
+          <div style="background:#0a0a0a;border:1px solid rgba(255,215,0,.1);border-radius:6px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;" onclick="goPage('records',document.querySelectorAll('.mi')[7])" onmouseover="this.style.borderColor='rgba(255,215,0,.4)'" onmouseout="this.style.borderColor='rgba(255,215,0,.1)'">
+            <div style="font-size:24px;margin-bottom:6px;"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="12" stroke="#1DB954" stroke-width="1.2" opacity=".5"/><circle cx="14" cy="14" r="7" stroke="#1DB954" stroke-width="1" opacity=".3"/><polygon points="11,9 20,14 11,19" fill="#1DB954" opacity=".7"/></svg></div>
+            <div style="font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--green);">Catálogo</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:3px;" id="cfg-rec-musicas-count">— lançamentos</div>
           </div>
         </div>
         <div class="br">
           <button class="btn btn-p" onclick="saveConfig()">💾 Salvar Configurações</button>
+          <button class="btn btn-s" onclick="goPage('records',document.querySelectorAll('.mi')[7])">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+            Abrir Records
+          </button>
         </div>
       </div>
     </div>
@@ -1077,7 +1095,13 @@ function loadConfig(){
   document.getElementById('cfg-email').value=c.email||'';
   document.getElementById('cfg-qt').value=c.quote||'';
   document.getElementById('cfg-qa').value=c.quote_autor||'';
-  document.getElementById('cfg-sp-playlist').value=c.spotify_playlist||'';
+  // Records counters
+  const artCount=JSON.parse(localStorage.getItem('rt_records_artistas')||'[]').length;
+  const musCount=JSON.parse(localStorage.getItem('rt_records_musicas')||'[]').length;
+  const el1=document.getElementById('cfg-rec-artistas-count');
+  const el2=document.getElementById('cfg-rec-musicas-count');
+  if(el1)el1.textContent=artCount+' cadastrado'+(artCount!==1?'s':'');
+  if(el2)el2.textContent=musCount+' lançamento'+(musCount!==1?'s':'');
 }
 function saveConfig(){
   const c={
@@ -1319,9 +1343,7 @@ function loadRecords(){
 
 // Patch goPage — handled natively above
 
-</script>
-</body>
-</html>
+// ── INIT ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',async()=>{
   document.getElementById('f-data').value=new Date().toISOString().slice(0,10);
   try{
@@ -1329,7 +1351,6 @@ document.addEventListener('DOMContentLoaded',async()=>{
     if(r.ok){
       const data=await r.json();
       if(data.length){
-        // Preserva imagens base64 locais — nunca sobrescreve com versão sem imagem
         const local=getNewsWithImages();
         const merged=data.map(n=>{
           const localN=local.find(l=>l.id===n.id);

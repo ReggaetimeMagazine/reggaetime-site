@@ -353,7 +353,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       <a href="#" data-cat="Jamaica" onclick="filterCat(event,'Jamaica')">Jamaica</a>
       <a href="#" data-cat="Entrevista" onclick="filterCat(event,'Entrevista')">Entrevistas</a>
       <a href="#" data-cat="Shows e Eventos" onclick="filterCat(event,'Shows e Eventos')">Shows</a>
-      <a href="#records-section" onclick="scrollToRecords(event)" style="color:var(--yellow);border:1px solid rgba(255,215,0,.25);border-radius:3px;padding:6px 12px;">🎵 Records</a>
+      <a href="#records-section" onclick="scrollToRecords(event)" style="color:var(--yellow);border:1px solid rgba(255,215,0,.25);border-radius:3px;padding:6px 12px;display:inline-flex;align-items:center;gap:6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="1" fill="#FFD700" stroke="none"/></svg> Records</a>
     </nav>
   </div>
 </header>
@@ -439,7 +439,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 
     <!-- FALLBACK: sem dados -->
     <div id="records-fallback" style="text-align:center;padding:60px 20px;">
-      <div style="font-size:48px;margin-bottom:16px;">🎵</div>
+      <div style="margin-bottom:16px;"><svg width="56" height="56" viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="26" stroke="#FFD700" stroke-width="1.5" opacity=".4"/><circle cx="28" cy="28" r="18" stroke="#FFD700" stroke-width="1" opacity=".25"/><circle cx="28" cy="28" r="6" stroke="#C9A84C" stroke-width="1.5"/><circle cx="28" cy="28" r="2.5" fill="#FFD700"/><line x1="28" y1="2" x2="28" y2="10" stroke="#FFD700" stroke-width="1" opacity=".3"/><line x1="28" y1="46" x2="28" y2="54" stroke="#FFD700" stroke-width="1" opacity=".3"/><line x1="2" y1="28" x2="10" y2="28" stroke="#FFD700" stroke-width="1" opacity=".3"/><line x1="46" y1="28" x2="54" y2="28" stroke="#FFD700" stroke-width="1" opacity=".3"/></svg></div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:.06em;color:var(--white);margin-bottom:8px;">Reggaetime Records</div>
       <div style="font-size:13px;color:var(--muted);margin-bottom:28px;">Selo independente de Reggae, Roots, Dancehall e Trap Reggae do Brasil.</div>
       <a href="https://www.instagram.com/reggaetimerecords/" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:#fff;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:11px 22px;border-radius:4px;text-decoration:none;transition:all .25s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
@@ -975,7 +975,7 @@ async function loadRecords(){
       <div class="records-dest-img">
         ${dest.img
           ?`<img src="${dest.img}" alt="${dest.artista||''}" loading="lazy"/>`
-          :`<div class="records-dest-placeholder">🎵</div>`}
+          :`<div class="records-dest-placeholder"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="37" stroke="#FFD700" stroke-width="1.5" opacity=".35"/><circle cx="40" cy="40" r="26" stroke="#C9A84C" stroke-width="1" opacity=".2"/><circle cx="40" cy="40" r="9" stroke="#FFD700" stroke-width="1.5" opacity=".6"/><circle cx="40" cy="40" r="3.5" fill="#FFD700" opacity=".8"/></svg></div>`}
       </div>
       <div class="records-dest-info">
         <div class="records-dest-label">Lançamento em Destaque</div>
@@ -999,7 +999,7 @@ async function loadRecords(){
       const qtd=musicas.filter(m=>m.artistaId===a.id).length;
       return`<div class="artista-card" onclick="${a.spotify?`window.open('${a.spotify}','_blank')`:'void(0)'}">
         <div class="artista-card-img">
-          ${a.foto?`<img src="${a.foto}" alt="${a.nome}" loading="lazy"/>`:`<div class="artista-card-img-placeholder">🎤</div>`}
+          ${a.foto?`<img src="${a.foto}" alt="${a.nome}" loading="lazy"/>`:`<div class="artista-card-img-placeholder"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.2" opacity=".6"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0014 0"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg></div>`}
           <div class="artista-card-overlay"></div>
           <div class="artista-card-links">
             ${a.spotify?`<a href="${a.spotify}" target="_blank" class="artista-link-btn artista-link-sp" onclick="event.stopPropagation()">Spotify</a>`:''}
@@ -1023,9 +1023,9 @@ async function loadRecords(){
       const art=artistas.find(a=>a.id===m.artistaId);
       return`<div class="musica-card${m.destaque?' destaque-mus':''}" onclick="${m.link?`window.open('${m.link}','_blank')`:'void(0)'}">
         <div class="musica-card-img">
-          ${m.capa?`<img src="${m.capa}" alt="${m.titulo}" loading="lazy"/>`:`<div class="musica-card-img-placeholder">🎵</div>`}
+          ${m.capa?`<img src="${m.capa}" alt="${m.titulo}" loading="lazy"/>`:`<div class="musica-card-img-placeholder"><svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" stroke="#C9A84C" stroke-width="1" opacity=".5"/><circle cx="18" cy="18" r="10" stroke="#FFD700" stroke-width="1" opacity=".3"/><circle cx="18" cy="18" r="4" stroke="#FFD700" stroke-width="1.2" opacity=".7"/><circle cx="18" cy="18" r="1.5" fill="#FFD700" opacity=".9"/></svg></div>`}
           ${m.link?`<div class="musica-play-btn">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="11" fill="rgba(0,0,0,.6)"/><polygon points="10,8 17,12 10,16" fill="white"/></svg>
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="20" fill="rgba(0,0,0,.55)" stroke="#FFD700" stroke-width="1" opacity=".7"/><polygon points="18,14 32,22 18,30" fill="#FFD700"/></svg>
           </div>`:''}
         </div>
         <div class="musica-card-info">
