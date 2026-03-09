@@ -36,6 +36,16 @@ nav a{font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spac
 nav a:hover{color:var(--yellow);}
 nav a.active{color:var(--yellow);}
 nav a.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;height:2px;background:var(--yellow);border-radius:2px;}
+.nav-records-btn{color:var(--yellow)!important;border:1px solid rgba(255,215,0,.25);border-radius:3px;padding:6px 12px!important;display:inline-flex!important;align-items:center;}
+.nav-mais{position:relative;display:flex;align-items:center;}
+.nav-mais-btn{font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--white);background:none;border:none;cursor:pointer;padding:7px 12px;border-radius:3px;transition:color .2s;}
+.nav-mais-btn:hover{color:var(--yellow);}
+.nav-mais-btn.active-drop{color:var(--yellow);}
+.nav-mais-drop{display:none;position:absolute;top:calc(100% + 6px);left:0;background:var(--deep);border:1px solid var(--border);border-radius:6px;min-width:160px;z-index:200;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.6);}
+.nav-mais-drop.open{display:block;}
+.nav-mais-drop a{display:block;font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:10px 16px;transition:all .15s;border-bottom:1px solid var(--border);}
+.nav-mais-drop a:last-child{border-bottom:none;}
+.nav-mais-drop a:hover,.nav-mais-drop a.active{background:rgba(255,215,0,.06);color:var(--yellow);}
 .ticker-bar{background:#0f0f0f;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;overflow:hidden;position:relative;padding:0;}
 .ticker-label{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(135deg,#c0392b,#e63946);color:#fff;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:0 20px;display:flex;align-items:center;gap:7px;z-index:2;white-space:nowrap;box-shadow:4px 0 18px rgba(230,57,70,.35);}
 .ticker-dot{width:7px;height:7px;background:#fff;border-radius:50%;animation:blink 1.2s ease-in-out infinite;flex-shrink:0;}
@@ -53,7 +63,7 @@ nav a.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;h
 .tag-badge{display:inline-block;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;border-radius:2px;margin-bottom:10px;}
 .tag-red{background:var(--red);color:#fff;}.tag-green{background:var(--green);color:#fff;}.tag-yellow{background:var(--yellow);color:var(--black);}
 .hero-overlay h1{font-family:'Oswald',sans-serif;font-size:30px;font-weight:700;line-height:1.15;color:#fff;margin-bottom:8px;}
-.hero-overlay p{font-size:14px;color:rgba(255,255,255,.7);max-width:520px;line-height:1.5;display:none;}
+.hero-overlay p{font-size:14px;color:rgba(255,255,255,.7);max-width:520px;line-height:1.5;}
 .hero-meta{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow);margin-top:10px;}
 .hero-side{display:flex;flex-direction:column;gap:4px;}
 .hero-card{position:relative;overflow:hidden;border-radius:4px;cursor:pointer;flex:1;min-height:180px;}
@@ -360,7 +370,18 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       <a href="#" data-cat="Jamaica" onclick="filterCat(event,'Jamaica')">Jamaica</a>
       <a href="#" data-cat="Entrevista" onclick="filterCat(event,'Entrevista')">Entrevistas</a>
       <a href="#" data-cat="Shows e Eventos" onclick="filterCat(event,'Shows e Eventos')">Shows</a>
-      <a href="#records-section" onclick="scrollToRecords(event)" style="color:var(--yellow);border:1px solid rgba(255,215,0,.25);border-radius:3px;padding:6px 12px;display:inline-flex;align-items:center;gap:6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="1" fill="#FFD700" stroke="none"/></svg> Records</a>
+      <div class="nav-mais" id="nav-mais">
+        <button class="nav-mais-btn" onclick="toggleNavMais(event)">Mais ▾</button>
+        <div class="nav-mais-drop" id="nav-mais-drop">
+          <a href="#" data-cat="Cultura" onclick="filterCat(event,'Cultura');toggleNavMais()">Cultura</a>
+          <a href="#" data-cat="Lançamento" onclick="filterCat(event,'Lançamento');toggleNavMais()">Lançamento</a>
+          <a href="#" data-cat="Hall da Fama" onclick="filterCat(event,'Hall da Fama');toggleNavMais()">Hall da Fama</a>
+          <a href="#" data-cat="Collab" onclick="filterCat(event,'Collab');toggleNavMais()">Collab</a>
+          <a href="#" data-cat="Records" onclick="filterCat(event,'Records');toggleNavMais()">Records</a>
+        </div>
+      </div>
+      <a href="#records-section" onclick="scrollToRecords(event)" class="nav-records-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="1" fill="#FFD700" stroke="none"/></svg>Records</a>
     </nav>
   </div>
 </header>
@@ -789,7 +810,11 @@ function filterCat(e,cat){
   if(e)e.preventDefault();
   currentCat=cat;
   document.getElementById('section-title').textContent=cat?cat.toUpperCase():'Últimas Notícias';
-  document.querySelectorAll('nav a[data-cat]').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
+  document.querySelectorAll('nav a[data-cat], .nav-mais-drop a[data-cat]').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
+  // Destaca botão "Mais" se categoria ativa está no dropdown
+  const dropCats=['Cultura','Lançamento','Hall da Fama','Collab','Records'];
+  const btn=document.querySelector('.nav-mais-btn');
+  if(btn)btn.classList.toggle('active-drop', dropCats.includes(cat));
   document.querySelectorAll('.tag-pill').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
   render(cat ? allNews.filter(n=>n.categoria===cat) : algoSort(allNews));
   window.scrollTo({top:0,behavior:'smooth'});
@@ -960,6 +985,24 @@ window.addEventListener('load',function(){
 });
 // ── RECORDS ──────────────────────────────────────────────────
 function scrollToRecords(e){if(e)e.preventDefault();document.getElementById('records-section').scrollIntoView({behavior:'smooth'});}
+
+function toggleNavMais(e){
+  if(e)e.stopPropagation();
+  const drop=document.getElementById('nav-mais-drop');
+  const btn=document.querySelector('.nav-mais-btn');
+  if(!drop)return;
+  const isOpen=drop.classList.contains('open');
+  drop.classList.toggle('open',!isOpen);
+  if(btn)btn.classList.toggle('active-drop',!isOpen);
+}
+document.addEventListener('click',function(e){
+  if(!e.target.closest('#nav-mais')){
+    const drop=document.getElementById('nav-mais-drop');
+    const btn=document.querySelector('.nav-mais-btn');
+    if(drop)drop.classList.remove('open');
+    if(btn)btn.classList.remove('active-drop');
+  }
+});
 
 async function loadRecords(){
   let data=null;
