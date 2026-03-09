@@ -687,7 +687,12 @@ function algoShowBadge(){
 async function loadAll(){
   try{
     const r=await fetch('data/noticias.json?v='+Date.now());
-    if(r.ok){allNews=await r.json();localStorage.setItem('reggaetime_noticias',JSON.stringify(allNews));}
+    if(r.ok){
+      const raw=await r.json();
+      // Formato novo: {noticias:[...], records:{...}} — formato legado: [...]
+      allNews=Array.isArray(raw)?raw:(raw.noticias||[]);
+      localStorage.setItem('reggaetime_noticias',JSON.stringify(allNews));
+    }
   }catch(e){
     try{const s=localStorage.getItem('reggaetime_noticias');if(s){const p=JSON.parse(s);if(Array.isArray(p)&&p.length)allNews=p;}}catch(e2){}
   }
@@ -958,12 +963,16 @@ function scrollToRecords(e){if(e)e.preventDefault();document.getElementById('rec
 
 async function loadRecords(){
   let data=null;
-  // 1. Tenta carregar do JSON salvo pelo admin
+  // Lê do noticias.json unificado
   try{
-    const r=await fetch('data/records.json?v='+Date.now(),{signal:AbortSignal.timeout(4000)});
-    if(r.ok)data=await r.json();
+    const r=await fetch('data/noticias.json?v='+Date.now(),{signal:AbortSignal.timeout(4000)});
+    if(r.ok){
+      const raw=await r.json();
+      // Formato novo: {noticias:[...], records:{...}}
+      if(!Array.isArray(raw)&&raw.records) data=raw.records;
+    }
   }catch(e){}
-  // 2. Fallback: lê do localStorage (admin local — só funciona no mesmo dispositivo)
+  // Fallback localStorage (mesmo dispositivo)
   if(!data){
     const artistas=JSON.parse(localStorage.getItem('rt_records_artistas')||'[]');
     const musicas=JSON.parse(localStorage.getItem('rt_records_musicas')||'[]');

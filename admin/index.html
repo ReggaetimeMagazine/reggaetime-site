@@ -851,8 +851,9 @@ async function sincronizar(){
     toast('🔄 Sincronizando...','warn');
     const r=await fetch('../data/noticias.json?v='+Date.now());
     if(r.ok){
-      const data=await r.json();
-      // Preserva imagens base64 locais ao sincronizar
+      const raw=await r.json();
+      // Suporta formato novo {noticias:[...], records:{...}} e formato legado [...]
+      const data=Array.isArray(raw)?raw:(raw.noticias||[]);
       const local=getNewsWithImages();
       const merged=data.map(n=>{
         const localN=local.find(l=>l.id===n.id);
@@ -860,8 +861,14 @@ async function sincronizar(){
         return n;
       });
       setNews(merged);
+      // Sincroniza records se presentes no JSON
+      if(!Array.isArray(raw)&&raw.records){
+        if(raw.records.artistas)setArtistas(raw.records.artistas);
+        if(raw.records.musicas)setMusicas(raw.records.musicas);
+        if(raw.records.destaque)localStorage.setItem(REC_DEST_KEY,JSON.stringify(raw.records.destaque));
+      }
       loadDash();
-      toast(`✅ ${data.length} notícias sincronizadas!`);
+      toast(`✅ ${merged.length} notícias sincronizadas!`);
     }else{toast('Erro ao buscar noticias.json','error');}
   }catch(e){toast('Erro de conexão: '+e.message,'error');}
 }
@@ -872,15 +879,22 @@ function carregarBackup(input){
   const reader=new FileReader();
   reader.onload=function(e){
     try{
-      const data=JSON.parse(e.target.result);
-      if(!Array.isArray(data))throw new Error('Formato inválido');
+      const raw=JSON.parse(e.target.result);
+      // Suporta formato novo {noticias:[...], records:{...}} e legado [...]
+      const data=Array.isArray(raw)?raw:(raw.noticias||[]);
+      if(!data.length&&Array.isArray(raw))throw new Error('Formato inválido');
       setNews(data);
+      if(!Array.isArray(raw)&&raw.records){
+        if(raw.records.artistas)setArtistas(raw.records.artistas);
+        if(raw.records.musicas)setMusicas(raw.records.musicas);
+        if(raw.records.destaque)localStorage.setItem(REC_DEST_KEY,JSON.stringify(raw.records.destaque));
+      }
       loadDash();
-      toast(`✅ ${data.length} notícias carregadas do backup!`);
+      toast(`✅ ${data.length} notícias + records carregados do backup!`);
     }catch(err){
       toast('❌ Arquivo inválido: '+err.message,'error');
     }
-    input.value=''; // reset para permitir recarregar o mesmo arquivo
+    input.value='';
   };
   reader.readAsText(file);
 }
@@ -1044,10 +1058,17 @@ function loadTable(){
 }
 
 function exportJSON(){
-  const news=getNewsWithImages();
-  const blob=new Blob([JSON.stringify(news,null,2)],{type:'application/json'});
+  const payload={
+    noticias: getNewsWithImages(),
+    records: {
+      artistas: getArtistas(),
+      musicas:  getMusicas(),
+      destaque: getRecDest()
+    }
+  };
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='noticias.json';a.click();
-  toast('📥 JSON baixado! Coloque em data/ e suba o git.');
+  toast('📥 noticias.json baixado! Suba em data/ no git.');
 }
 
 // ── TICKER ────────────────────────────────────────────────────
@@ -1395,10 +1416,8 @@ function renderMusicas(){
   }).join('');
 }
 function exportRecordsJSON(){
-  const data={artistas:getArtistas(),musicas:getMusicas(),destaque:getRecDest()};
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='records.json';a.click();
-  toast('📥 records.json baixado!');
+  exportJSON();
+  toast('📥 noticias.json baixado com Records incluído!');
 }
 function loadRecords(){
   loadRecDest();
@@ -1415,7 +1434,8 @@ document.addEventListener('DOMContentLoaded',async()=>{
   try{
     const r=await fetch('../data/noticias.json?v='+Date.now());
     if(r.ok){
-      const data=await r.json();
+      const raw=await r.json();
+      const data=Array.isArray(raw)?raw:(raw.noticias||[]);
       if(data.length){
         const local=getNewsWithImages();
         const merged=data.map(n=>{
@@ -1424,6 +1444,15 @@ document.addEventListener('DOMContentLoaded',async()=>{
           return n;
         });
         setNews(merged);
+      }
+      // Carrega records do JSON se disponível (sem sobrescrever dados locais mais recentes)
+      if(!Array.isArray(raw)&&raw.records){
+        const localArt=getArtistas();
+        const localMus=getMusicas();
+        if(!localArt.length&&raw.records.artistas)setArtistas(raw.records.artistas);
+        if(!localMus.length&&raw.records.musicas)setMusicas(raw.records.musicas);
+        const localDest=getRecDest();
+        if(!localDest.artista&&raw.records.destaque)localStorage.setItem(REC_DEST_KEY,JSON.stringify(raw.records.destaque));
       }
     }
   }catch(e){}
