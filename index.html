@@ -288,7 +288,14 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
   .records-dest-artista{font-size:34px;}
   .artistas-grid{grid-template-columns:repeat(2,1fr);}
   .catalogo-grid{grid-template-columns:repeat(2,1fr);}
+  /* Links e play sempre visíveis no mobile */
+  .artista-card-links{opacity:1!important;transform:none!important;}
+  .artista-card-overlay{opacity:1!important;}
+  .musica-play-btn{opacity:1!important;}
+  .musica-play-btn svg{width:36px;height:36px;}
 }
+/* Links sempre visíveis quando classe aplicada (mobile sem hover) */
+.artista-card-links-always{opacity:1!important;transform:none!important;}
 </style>
 </head>
 <body>
@@ -956,18 +963,35 @@ async function loadRecords(){
     const r=await fetch('data/records.json?v='+Date.now(),{signal:AbortSignal.timeout(4000)});
     if(r.ok)data=await r.json();
   }catch(e){}
-  // 2. Fallback: lê do localStorage (admin local)
+  // 2. Fallback: lê do localStorage (admin local — só funciona no mesmo dispositivo)
   if(!data){
     const artistas=JSON.parse(localStorage.getItem('rt_records_artistas')||'[]');
     const musicas=JSON.parse(localStorage.getItem('rt_records_musicas')||'[]');
     const destaque=JSON.parse(localStorage.getItem('rt_records_destaque')||'{}');
     if(artistas.length||musicas.length||destaque.artista){data={artistas,musicas,destaque};}
   }
-  if(!data){document.getElementById('records-fallback').style.display='block';return;}
-  document.getElementById('records-fallback').style.display='none';
+
+  // Sempre mostra o fallback do Instagram como base — esconde só se tiver dados completos
+  const fallback=document.getElementById('records-fallback');
+
+  if(!data){
+    fallback.style.display='block';
+    return;
+  }
+  
+  const dest=data.destaque||{};
+  const artistas=data.artistas||[];
+  const musicas=data.musicas||[];
+  const temConteudo=dest.artista||artistas.length||musicas.length;
+  
+  if(!temConteudo){
+    fallback.style.display='block';
+    return;
+  }
+  
+  fallback.style.display='none';
 
   // DESTAQUE
-  const dest=data.destaque||{};
   const dWrap=document.getElementById('records-destaque-wrap');
   if(dest.artista||dest.titulo){
     dWrap.innerHTML=`
@@ -990,22 +1014,20 @@ async function loadRecords(){
     </div>`;
   }
 
-  // ARTISTAS
-  const artistas=data.artistas||[];
-  const musicas=data.musicas||[];
+  // ARTISTAS — links sempre visíveis (mobile não tem hover)
   if(artistas.length){
     document.getElementById('records-artistas-wrap').style.display='block';
     document.getElementById('artistas-grid').innerHTML=artistas.map(a=>{
       const qtd=musicas.filter(m=>m.artistaId===a.id).length;
+      const links=[];
+      if(a.spotify)links.push(`<a href="${a.spotify}" target="_blank" class="artista-link-btn artista-link-sp" onclick="event.stopPropagation()">Spotify</a>`);
+      if(a.instagram)links.push(`<a href="${a.instagram}" target="_blank" class="artista-link-btn artista-link-ig" onclick="event.stopPropagation()">IG</a>`);
+      if(a.youtube)links.push(`<a href="${a.youtube}" target="_blank" class="artista-link-btn artista-link-yt" onclick="event.stopPropagation()">YT</a>`);
       return`<div class="artista-card" onclick="${a.spotify?`window.open('${a.spotify}','_blank')`:'void(0)'}">
         <div class="artista-card-img">
           ${a.foto?`<img src="${a.foto}" alt="${a.nome}" loading="lazy"/>`:`<div class="artista-card-img-placeholder"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.2" opacity=".6"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0014 0"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg></div>`}
           <div class="artista-card-overlay"></div>
-          <div class="artista-card-links">
-            ${a.spotify?`<a href="${a.spotify}" target="_blank" class="artista-link-btn artista-link-sp" onclick="event.stopPropagation()">Spotify</a>`:''}
-            ${a.instagram?`<a href="${a.instagram}" target="_blank" class="artista-link-btn artista-link-ig" onclick="event.stopPropagation()">IG</a>`:''}
-            ${a.youtube?`<a href="${a.youtube}" target="_blank" class="artista-link-btn artista-link-yt" onclick="event.stopPropagation()">YT</a>`:''}
-          </div>
+          ${links.length?`<div class="artista-card-links artista-card-links-always">${links.join('')}</div>`:''}
         </div>
         <div class="artista-card-info">
           <div class="artista-card-nome">${a.nome}</div>
@@ -1035,9 +1057,6 @@ async function loadRecords(){
         </div>
       </div>`;
     }).join('');
-  }
-  if(!artistas.length&&!musicas.length&&!dest.artista){
-    document.getElementById('records-fallback').style.display='block';
   }
 }
 
