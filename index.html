@@ -377,11 +377,8 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
           <a href="#" data-cat="Lançamento" onclick="filterCat(event,'Lançamento');toggleNavMais()">Lançamento</a>
           <a href="#" data-cat="Hall da Fama" onclick="filterCat(event,'Hall da Fama');toggleNavMais()">Hall da Fama</a>
           <a href="#" data-cat="Collab" onclick="filterCat(event,'Collab');toggleNavMais()">Collab</a>
-          <a href="#" data-cat="Records" onclick="filterCat(event,'Records');toggleNavMais()">Records</a>
         </div>
       </div>
-      <a href="#records-section" onclick="scrollToRecords(event)" class="nav-records-btn">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="1" fill="#FFD700" stroke="none"/></svg>Records</a>
     </nav>
   </div>
 </header>
@@ -499,7 +496,6 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
         <a href="#" onclick="filterCat(event,'Jamaica')">Jamaica</a>
         <a href="#" onclick="filterCat(event,'Entrevista')">Entrevistas</a>
         <a href="#" onclick="filterCat(event,'Shows e Eventos')">Shows e Eventos</a>
-        <a href="#records-section" onclick="scrollToRecords(event);return false;">Records</a>
       </div>
       <div class="footer-col">
         <h5>Serviços</h5>
@@ -812,7 +808,7 @@ function filterCat(e,cat){
   document.getElementById('section-title').textContent=cat?cat.toUpperCase():'Últimas Notícias';
   document.querySelectorAll('nav a[data-cat], .nav-mais-drop a[data-cat]').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
   // Destaca botão "Mais" se categoria ativa está no dropdown
-  const dropCats=['Cultura','Lançamento','Hall da Fama','Collab','Records'];
+  const dropCats=['Cultura','Lançamento','Hall da Fama','Collab'];
   const btn=document.querySelector('.nav-mais-btn');
   if(btn)btn.classList.toggle('active-drop', dropCats.includes(cat));
   document.querySelectorAll('.tag-pill').forEach(a=>a.classList.toggle('active',a.dataset.cat===cat));
