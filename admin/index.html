@@ -599,12 +599,21 @@ tr:hover td{background:rgba(255,255,255,.02);}
         </div>
         <div class="fr full">
           <div class="fg">
-            <label>URL da Capa / Arte</label>
-            <input id="rec-dest-img" type="url" placeholder="https://..." oninput="prevRecDest()"/>
+            <label>Capa / Arte do Destaque</label>
+            <div class="img-upload-area" id="rec-dest-drop"
+              ondragover="event.preventDefault();this.classList.add('drag')"
+              ondragleave="this.classList.remove('drag')"
+              ondrop="recHandleDrop(event,'dest')">
+              <input type="file" accept="image/*" onchange="recHandleFile(this.files[0],'dest')"/>
+              <div class="img-upload-txt"><span>🖼</span>Toque para escolher arte</div>
+            </div>
+            <div class="img-preview-box" id="rec-dest-prev">
+              <img id="rec-dest-prev-img" src="" alt=""/>
+              <button class="img-del" onclick="recClearImg('dest')">✕ Remover</button>
+            </div>
+            <div class="or-sep">— ou cole uma URL —</div>
+            <input id="rec-dest-img-url" type="url" placeholder="https://..." oninput="recOnUrlInput(this.value,'dest')"/>
           </div>
-        </div>
-        <div id="rec-dest-prev" style="display:none;margin:8px 0;border-radius:6px;overflow:hidden;max-height:200px;text-align:center;background:#0a0a0a;">
-          <img id="rec-dest-prev-img" src="" style="max-height:200px;max-width:100%;object-fit:contain;" alt=""/>
         </div>
         <div class="fr full">
           <div class="fg">
@@ -639,16 +648,25 @@ tr:hover td{background:rgba(255,255,255,.02);}
         </div>
         <div class="fr">
           <div class="fg">
-            <label>Foto do Artista (URL)</label>
-            <input id="rec-foto" type="url" placeholder="https://..." oninput="prevRecFoto()"/>
+            <label>Foto do Artista</label>
+            <div class="img-upload-area" id="rec-foto-drop"
+              ondragover="event.preventDefault();this.classList.add('drag')"
+              ondragleave="this.classList.remove('drag')"
+              ondrop="recHandleDrop(event,'foto')">
+              <input type="file" accept="image/*" onchange="recHandleFile(this.files[0],'foto')"/>
+              <div class="img-upload-txt"><span>📸</span>Toque para escolher foto</div>
+            </div>
+            <div class="img-preview-box" id="rec-foto-prev">
+              <img id="rec-foto-prev-img" src="" alt=""/>
+              <button class="img-del" onclick="recClearImg('foto')">✕ Remover</button>
+            </div>
+            <div class="or-sep">— ou cole uma URL —</div>
+            <input id="rec-foto-url" type="url" placeholder="https://..." oninput="recOnUrlInput(this.value,'foto')"/>
           </div>
           <div class="fg">
             <label>Instagram</label>
             <input id="rec-ig" type="url" placeholder="https://instagram.com/..."/>
           </div>
-        </div>
-        <div id="rec-foto-prev" style="display:none;margin:6px 0;border-radius:6px;overflow:hidden;height:120px;width:120px;background:#0a0a0a;">
-          <img id="rec-foto-prev-img" src="" style="width:100%;height:100%;object-fit:cover;" alt=""/>
         </div>
         <div class="fr">
           <div class="fg">
@@ -705,8 +723,20 @@ tr:hover td{background:rgba(255,255,255,.02);}
         </div>
         <div class="fr full">
           <div class="fg">
-            <label>Capa da Música (URL)</label>
-            <input id="mus-capa" type="url" placeholder="https://..."/>
+            <label>Capa da Música</label>
+            <div class="img-upload-area" id="mus-capa-drop"
+              ondragover="event.preventDefault();this.classList.add('drag')"
+              ondragleave="this.classList.remove('drag')"
+              ondrop="recHandleDrop(event,'capa')">
+              <input type="file" accept="image/*" onchange="recHandleFile(this.files[0],'capa')"/>
+              <div class="img-upload-txt"><span>🎨</span>Toque para escolher capa</div>
+            </div>
+            <div class="img-preview-box" id="mus-capa-prev">
+              <img id="mus-capa-prev-img" src="" alt=""/>
+              <button class="img-del" onclick="recClearImg('capa')">✕ Remover</button>
+            </div>
+            <div class="or-sep">— ou cole uma URL —</div>
+            <input id="mus-capa-url" type="url" placeholder="https://..." oninput="recOnUrlInput(this.value,'capa')"/>
           </div>
         </div>
         <div class="fr full">
@@ -1164,25 +1194,60 @@ function getMusicas(){return JSON.parse(localStorage.getItem(MUS_KEY)||'[]');}
 function setMusicas(m){localStorage.setItem(MUS_KEY,JSON.stringify(m));}
 function getRecDest(){return JSON.parse(localStorage.getItem(REC_DEST_KEY)||'{}');}
 
-function prevRecDest(){
-  const url=document.getElementById('rec-dest-img').value.trim();
-  const prev=document.getElementById('rec-dest-prev');
-  const img=document.getElementById('rec-dest-prev-img');
-  if(url){img.src=url;prev.style.display='block';}else{prev.style.display='none';}
+// ── RECORDS — UPLOAD DE IMAGENS ──────────────────────────────
+// Armazena base64 temporariamente antes de salvar
+const recImgData={foto:null, capa:null, dest:null};
+
+function recHandleFile(file, slot){
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    recImgData[slot]=e.target.result;
+    recShowPreview(slot, e.target.result);
+  };
+  reader.readAsDataURL(file);
 }
-function prevRecFoto(){
-  const url=document.getElementById('rec-foto').value.trim();
-  const prev=document.getElementById('rec-foto-prev');
-  const img=document.getElementById('rec-foto-prev-img');
-  if(url){img.src=url;prev.style.display='block';}else{prev.style.display='none';}
+function recHandleDrop(event, slot){
+  event.preventDefault();
+  const dropEl=event.currentTarget;
+  dropEl.classList.remove('drag');
+  const file=event.dataTransfer.files[0];
+  if(file&&file.type.startsWith('image/')) recHandleFile(file, slot);
 }
+function recOnUrlInput(val, slot){
+  if(val){recImgData[slot]=val; recShowPreview(slot, val);}
+  else recClearImg(slot);
+}
+function recShowPreview(slot, src){
+  const ids={foto:'rec-foto-prev', capa:'mus-capa-prev', dest:'rec-dest-prev'};
+  const imgIds={foto:'rec-foto-prev-img', capa:'mus-capa-prev-img', dest:'rec-dest-prev-img'};
+  const box=document.getElementById(ids[slot]);
+  const img=document.getElementById(imgIds[slot]);
+  if(box&&img){img.src=src; box.classList.add('show');}
+}
+function recClearImg(slot){
+  recImgData[slot]=null;
+  const ids={foto:'rec-foto-prev', capa:'mus-capa-prev', dest:'rec-dest-prev'};
+  const imgIds={foto:'rec-foto-prev-img', capa:'mus-capa-prev-img', dest:'rec-dest-prev-img'};
+  const urlIds={foto:'rec-foto-url', capa:'mus-capa-url', dest:'rec-dest-img-url'};
+  const box=document.getElementById(ids[slot]);
+  const img=document.getElementById(imgIds[slot]);
+  const url=document.getElementById(urlIds[slot]);
+  if(box)box.classList.remove('show');
+  if(img)img.src='';
+  if(url)url.value='';
+}
+function recGetImg(slot){ return recImgData[slot]||null; }
+
+function prevRecDest(){ /* legacy — handled by recOnUrlInput */ }
+function prevRecFoto(){ /* legacy — handled by recOnUrlInput */ }
 function saveRecDest(){
   const d={
     titulo:document.getElementById('rec-dest-titulo').value.trim(),
     artista:document.getElementById('rec-dest-artista').value.trim(),
     musica:document.getElementById('rec-dest-musica').value.trim(),
     link:document.getElementById('rec-dest-link').value.trim(),
-    img:document.getElementById('rec-dest-img').value.trim(),
+    img:recGetImg('dest')||'',
     desc:document.getElementById('rec-dest-desc').value.trim()
   };
   localStorage.setItem(REC_DEST_KEY,JSON.stringify(d));
@@ -1194,7 +1259,7 @@ function loadRecDest(){
   if(d.artista)document.getElementById('rec-dest-artista').value=d.artista||'';
   if(d.musica)document.getElementById('rec-dest-musica').value=d.musica||'';
   if(d.link)document.getElementById('rec-dest-link').value=d.link||'';
-  if(d.img){document.getElementById('rec-dest-img').value=d.img||'';prevRecDest();}
+  if(d.img){recImgData.dest=d.img; recShowPreview('dest',d.img);}
   if(d.desc)document.getElementById('rec-dest-desc').value=d.desc||'';
 }
 function saveArtista(){
@@ -1207,7 +1272,7 @@ function saveArtista(){
     nome,
     genero:document.getElementById('rec-genero').value.trim(),
     bio:document.getElementById('rec-bio').value.trim(),
-    foto:document.getElementById('rec-foto').value.trim(),
+    foto:recGetImg('foto')||'',
     instagram:document.getElementById('rec-ig').value.trim(),
     spotify:document.getElementById('rec-spotify').value.trim(),
     youtube:document.getElementById('rec-yt').value.trim()
@@ -1223,12 +1288,12 @@ function saveArtista(){
   toast('✅ Artista salvo!');
 }
 function clearRecForm(){
-  ['rec-nome','rec-genero','rec-bio','rec-foto','rec-ig','rec-spotify','rec-yt'].forEach(id=>{
+  ['rec-nome','rec-genero','rec-bio','rec-ig','rec-spotify','rec-yt','rec-foto-url'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.value='';
   });
   document.getElementById('rec-edit-id').value='';
   document.getElementById('rec-form-title').textContent='➕ Cadastrar Artista';
-  document.getElementById('rec-foto-prev').style.display='none';
+  recClearImg('foto');
 }
 function editArtista(id){
   const a=getArtistas().find(x=>x.id===id);if(!a)return;
@@ -1236,7 +1301,7 @@ function editArtista(id){
   document.getElementById('rec-nome').value=a.nome||'';
   document.getElementById('rec-genero').value=a.genero||'';
   document.getElementById('rec-bio').value=a.bio||'';
-  document.getElementById('rec-foto').value=a.foto||'';prevRecFoto();
+  if(a.foto){recImgData.foto=a.foto; recShowPreview('foto',a.foto);}
   document.getElementById('rec-ig').value=a.instagram||'';
   document.getElementById('rec-spotify').value=a.spotify||'';
   document.getElementById('rec-yt').value=a.youtube||'';
@@ -1293,7 +1358,7 @@ function saveMusica(){
     tipo:document.getElementById('mus-tipo').value,
     ano:document.getElementById('mus-ano').value,
     link:document.getElementById('mus-link').value.trim(),
-    capa:document.getElementById('mus-capa').value.trim(),
+    capa:recGetImg('capa')||'',
     destaque:document.getElementById('mus-dest').checked
   });
   setMusicas(musicas);
@@ -1301,9 +1366,10 @@ function saveMusica(){
   toast('🎵 Música adicionada!');
 }
 function clearMusForm(){
-  ['mus-titulo','mus-link','mus-capa','mus-ano'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['mus-titulo','mus-link','mus-capa-url','mus-ano'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('mus-artista-sel').value='';
   document.getElementById('mus-dest').checked=false;
+  recClearImg('capa');
 }
 function deleteMusica(id){
   if(!confirm('Remover música?'))return;
