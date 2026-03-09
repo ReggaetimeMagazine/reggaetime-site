@@ -755,6 +755,8 @@ function applyCfg(){
   const qw=document.getElementById('quote-wrap');
   if(c.quote_text&&c.quote_author){qw.innerHTML=`<div class="quote-block"><blockquote>"${c.quote_text}"</blockquote><cite>— ${c.quote_author}</cite></div>`;}
   else{qw.innerHTML=`<div class="quote-block"><blockquote>"Gostaria que as pessoas soubessem que eu fui o verdadeiro inventor do ska e do reggae."</blockquote><cite>— Ernest Ranglin, guitarrista lendário jamaicano</cite></div>`;}
+  // Só mostra na página inicial (Todas)
+  qw.style.display=currentCat?'none':'block';
   const spUrl=c.spotify_playlist||'https://open.spotify.com/playlist/29XOYp9UQz2rbonRmoZvgK';
   const spPlayer=document.getElementById('sp-player');
   const spEmbed=document.getElementById('sp-embed');
@@ -823,6 +825,9 @@ function buildTags(news){
 function filterCat(e,cat){
   if(e)e.preventDefault();
   currentCat=cat;
+  // Frase só aparece em "Todas"
+  const qw=document.getElementById('quote-wrap');
+  if(qw)qw.style.display=cat?'none':'block';
   // Track categoria no insight
   if(cat){try{const IKEY='rt_insights';const ins=JSON.parse(localStorage.getItem(IKEY)||'{"artigos":{},"categorias":{},"sessoes":[],"pageviews":0}');ins.categorias[cat]=(ins.categorias[cat]||0)+1;localStorage.setItem(IKEY,JSON.stringify(ins));}catch(ex){}}
   document.getElementById('section-title').textContent=cat?cat.toUpperCase():'Últimas Notícias';
