@@ -379,6 +379,8 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
           <a href="#" data-cat="Collab" onclick="filterCat(event,'Collab');toggleNavMais()">Collab</a>
         </div>
       </div>
+      <a href="#records-section" onclick="scrollToRecords(event)" class="nav-records-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" style="vertical-align:middle;margin-right:5px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="1" fill="#FFD700" stroke="none"/></svg>Records</a>
     </nav>
   </div>
 </header>
@@ -496,6 +498,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
         <a href="#" onclick="filterCat(event,'Jamaica')">Jamaica</a>
         <a href="#" onclick="filterCat(event,'Entrevista')">Entrevistas</a>
         <a href="#" onclick="filterCat(event,'Shows e Eventos')">Shows e Eventos</a>
+        <a href="#records-section" onclick="scrollToRecords(event);return false;" style="color:var(--yellow);">⬤ Records</a>
       </div>
       <div class="footer-col">
         <h5>Serviços</h5>
