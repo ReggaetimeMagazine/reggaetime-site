@@ -59,11 +59,11 @@ nav a.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;h
 .hero-main{position:relative;overflow:hidden;border-radius:4px;cursor:pointer;min-height:380px;}
 .hero-main img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;position:absolute;top:0;left:0;transition:transform .5s,filter .4s;filter:brightness(.6);}
 .hero-main:hover img{transform:scale(1.03);filter:brightness(.78);}
-.hero-overlay{position:absolute;bottom:0;left:0;right:0;padding:56px 28px 28px;background:linear-gradient(to top,rgba(0,0,0,.95),rgba(0,0,0,.4) 60%,transparent);}
+.hero-overlay{position:absolute;bottom:0;left:0;right:0;padding:36px 24px 20px;background:linear-gradient(to top,rgba(0,0,0,.9),rgba(0,0,0,.3) 55%,transparent);}
 .tag-badge{display:inline-block;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;border-radius:2px;margin-bottom:10px;}
 .tag-red{background:var(--red);color:#fff;}.tag-green{background:var(--green);color:#fff;}.tag-yellow{background:var(--yellow);color:var(--black);}
-.hero-overlay h1{font-family:'Oswald',sans-serif;font-size:30px;font-weight:700;line-height:1.15;color:#fff;margin-bottom:8px;}
-.hero-overlay p{font-size:14px;color:rgba(255,255,255,.7);max-width:520px;line-height:1.5;}
+.hero-overlay h1{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;line-height:1.15;color:#fff;margin-bottom:6px;}
+.hero-overlay p{display:none;}
 .hero-meta{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow);margin-top:10px;}
 .hero-side{display:flex;flex-direction:column;gap:4px;}
 .hero-card{position:relative;overflow:hidden;border-radius:4px;cursor:pointer;flex:1;min-height:180px;}
@@ -126,13 +126,13 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .footer-col a:hover{color:var(--yellow);}
 .footer-bottom{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 .footer-bottom p{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#333;}
-.sp-player{position:fixed;bottom:24px;right:24px;z-index:500;display:none;flex-direction:column;align-items:flex-end;gap:8px;}
+.sp-player{position:fixed;bottom:24px;right:24px;z-index:500;display:none;flex-direction:column;align-items:flex-end;gap:8px;touch-action:none;}
 .sp-player.visible{display:flex;}
-.sp-btn{background:linear-gradient(135deg,#1DB954,#17a346);border:none;border-radius:50px;color:#fff;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 20px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(29,185,84,.4);transition:all .25s;}
+.sp-btn{background:linear-gradient(135deg,#1DB954,#17a346);border:none;border-radius:50px;color:#fff;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 20px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(29,185,84,.4);transition:all .25s;touch-action:manipulation;}
 .sp-btn:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(29,185,84,.55);}
 .sp-btn svg{flex-shrink:0;}
-.sp-frame{background:#0f0f0f;border:1px solid #1e1e1e;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.7);width:320px;transform:translateY(10px) scale(.97);opacity:0;pointer-events:none;transition:all .3s ease;}
-.sp-frame.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all;}
+.sp-frame{background:#0f0f0f;border:1px solid #1e1e1e;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.7);width:320px;transform:translateY(10px) scale(.97);opacity:0;pointer-events:none;transition:all .3s ease;max-height:0;visibility:hidden;}
+.sp-frame.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all;max-height:420px;visibility:visible;}
 .sp-frame iframe{display:block;border:none;width:100%;}
 @media(max-width:640px){
   .sp-player{bottom:80px;right:16px;}
@@ -885,13 +885,19 @@ function fmtd(s){if(!s)return '';const[y,m,d]=s.split('-');return `${d}/${m}/${y
 function sampleData(){return [{id:'s1',titulo:'Bem-vindo à Reggaetime Magazine!',resumo:'Publique sua primeira notícia pelo painel admin.',conteudo:'Acesse o painel admin para começar a publicar notícias.\n\nUse o link /admin/?token=reggaetime2026 para entrar no painel.',categoria:'Nacional',imagem:'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80',destaque:true,data:'2026-03-06',autor:'Reggaetime Staff'},{id:'s2',titulo:'Como publicar notícias no site',resumo:'Acesse o admin pelo link seguro e comece a publicar.',conteudo:'Use o painel admin para gerenciar suas publicações.',categoria:'Dancehall',imagem:'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80',destaque:true,data:'2026-03-05',autor:'Reggaetime Staff'},{id:'s3',titulo:'Personalize o ticker e redes sociais',resumo:'No admin você pode editar todos os textos do site.',conteudo:'Acesse Configurações no admin para personalizar tudo.',categoria:'Roots',imagem:'https://images.unsplash.com/photo-1471478331149-c72f17e33c73?w=800&q=80',destaque:false,data:'2026-03-04',autor:'Reggaetime Staff'}];}
 let spOpen=false,spLoaded=false;
 function togglePlayer(){
-  const frame=document.getElementById('sp-frame');const embed=document.getElementById('sp-embed');
-  spOpen=!spOpen;frame.classList.toggle('open',spOpen);
-  if(spOpen&&!spLoaded){
+  const frame=document.getElementById('sp-frame');
+  const embed=document.getElementById('sp-embed');
+  spOpen=!spOpen;
+  frame.classList.toggle('open',spOpen);
+  if(spOpen){
+    // Abre — carrega iframe
     const src=embed.dataset.src;if(!src)return;
-    spLoaded=true;
-    embed.innerHTML=`<div style="padding:24px;text-align:center;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.1em;color:#555;text-transform:uppercase;">Carregando Spotify...</div>`;
-    setTimeout(()=>{embed.innerHTML=`<iframe src="${src}" width="320" height="380" frameborder="0" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;},80);
+    embed.innerHTML=`<div style="padding:24px;text-align:center;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.1em;color:#555;text-transform:uppercase;">Carregando...</div>`;
+    setTimeout(()=>{embed.innerHTML=`<iframe src="${src}" width="100%" height="380" frameborder="0" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;},80);
+  } else {
+    // Fecha — DESTRÓI o iframe completamente para não travar scroll/touch
+    setTimeout(()=>{embed.innerHTML='';},320);
+    spLoaded=false;
   }
 }
 function extractSpotifyId(url){const m=url.match(/playlist\/([a-zA-Z0-9]+)/);return m?m[1]:null;}
