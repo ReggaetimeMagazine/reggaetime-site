@@ -61,11 +61,10 @@ nav a.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;h
 .ticker-label{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(135deg,#c0392b,#e63946);color:#fff;font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:0 20px;display:flex;align-items:center;gap:7px;z-index:2;white-space:nowrap;box-shadow:4px 0 18px rgba(230,57,70,.35);}
 .ticker-dot{width:7px;height:7px;background:#fff;border-radius:50%;animation:blink 1.2s ease-in-out infinite;flex-shrink:0;}
 @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
-.ticker-track{display:flex;animation:ticker 40s linear infinite;padding-left:130px;}
-.ticker-track:hover{animation-play-state:paused;}
-.ticker-track span{font-family:'Oswald',sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;padding:10px 36px;color:#bbb;border-right:1px solid #1e1e1e;transition:color .2s;}
+.ticker-wrap{overflow:hidden;position:relative;}
+.ticker-track{display:flex;will-change:transform;padding-left:130px;white-space:nowrap;}
+.ticker-track span{font-family:'Oswald',sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;padding:10px 36px;color:#bbb;border-right:1px solid #1e1e1e;}
 .ticker-track span::before{content:'◆';margin-right:12px;color:#e63946;font-size:7px;vertical-align:middle;}
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .hero{max-width:1280px;margin:28px auto;padding:0 24px;display:grid;grid-template-columns:1fr 360px;gap:4px;min-height:380px;}
 .hero-main{position:relative;overflow:hidden;border-radius:4px;cursor:pointer;min-height:380px;}
 .hero-main img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;position:absolute;top:0;left:0;transition:transform .5s,filter .4s;filter:brightness(.6);}
@@ -398,7 +397,9 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 
 <div class="ticker-bar">
   <div class="ticker-label"><div class="ticker-dot"></div>ONLINE</div>
-  <div class="ticker-track" id="ticker-track"><span>Carregando...</span></div>
+  <div class="ticker-wrap">
+    <div class="ticker-track" id="ticker-track"><span>Carregando...</span></div>
+  </div>
 </div>
 
 <div class="hero" id="hero-section"><div class="loading">Carregando...</div></div>
@@ -766,11 +767,37 @@ function applyCfg(){
   const spEmbed=document.getElementById('sp-embed');
   if(spPlayer){spPlayer.classList.add('visible');const embedId=extractSpotifyId(spUrl);if(embedId)spEmbed.dataset.src=`https://open.spotify.com/embed/playlist/${embedId}?utm_source=generator&theme=0`;}
 }
+let tickerRAF=null;
 function buildTicker(news){
   const c=getCfg();
   const msgs=c.ticker&&c.ticker.length?c.ticker:news.slice(0,8).map(n=>n.titulo);
-  const d=[...msgs,...msgs];
-  document.getElementById('ticker-track').innerHTML=d.map(t=>`<span>${t}</span>`).join('');
+  const track=document.getElementById('ticker-track');
+  // Renderiza uma cópia — vamos duplicar depois de medir
+  track.innerHTML=msgs.map(t=>`<span>${t}</span>`).join('');
+  // Aguarda render para medir largura real
+  requestAnimationFrame(()=>{
+    const singleW=track.scrollWidth;
+    // Duplica para criar loop contínuo
+    track.innerHTML=msgs.map(t=>`<span>${t}</span>`).join('')+msgs.map(t=>`<span>${t}</span>`).join('');
+    track.style.transform='translateX(0px)';
+    // Cancela animação anterior se existir
+    if(tickerRAF)cancelAnimationFrame(tickerRAF);
+    const speed=0.6; // px por frame (~36px/s em 60fps)
+    let pos=0;
+    let paused=false;
+    track.addEventListener('mouseenter',()=>paused=true,{passive:true});
+    track.addEventListener('mouseleave',()=>paused=false,{passive:true});
+    function animate(){
+      if(!paused){
+        pos-=speed;
+        // Quando rolou exatamente uma cópia, volta ao início — loop imperceptível
+        if(Math.abs(pos)>=singleW) pos=0;
+        track.style.transform=`translateX(${pos}px)`;
+      }
+      tickerRAF=requestAnimationFrame(animate);
+    }
+    animate();
+  });
 }
 function render(news){
   if(!news.length){
