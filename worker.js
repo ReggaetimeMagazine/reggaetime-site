@@ -59,7 +59,16 @@ export default {
     const url   = new URL(request.url);
     const artId = url.searchParams.get('a');
 
-    // Passa tudo que não for a raiz direto (imagens, json, admin, etc.)
+    // JSON nunca cacheia (notícias precisam ser sempre frescas)
+    if(url.pathname.endsWith('.json')){
+      const jsonRes = await fetch(request);
+      const newRes  = new Response(jsonRes.body, jsonRes);
+      newRes.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+      newRes.headers.set('Pragma', 'no-cache');
+      return newRes;
+    }
+
+    // Passa tudo que não for a raiz direto (imagens, admin, etc.)
     if(url.pathname !== '/') return fetch(request);
 
     // Busca o index.html
