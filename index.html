@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Reggaetime Magazine — News 'N' Reggae</title>
 
 <!-- SEO básico -->
@@ -252,7 +255,31 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .mk-submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,215,0,.3);}
 .loading{text-align:center;padding:60px;font-family:'Oswald',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
 .empty-msg{text-align:center;padding:48px;font-family:'Oswald',sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#333;font-size:13px;}
-@media(max-width:1024px){.hero{grid-template-columns:1fr;}.hero-main{min-height:420px;}.hero-side{flex-direction:row;}.content-area{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr 1fr;}.related-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:1024px){
+  .hero{grid-template-columns:1fr;}
+  .hero-main{min-height:420px;}
+  .hero-side{flex-direction:row;}
+  .content-area{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .related-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:768px){
+  .hero{padding:0 12px;margin:16px auto;}
+  .hero-main{min-height:56vw;max-height:380px;}
+  .hero-main img{object-position:center center!important;}
+  .hero-card{min-height:36vw;}
+  .hero-card img{object-position:center center!important;}
+  .hero-overlay h1{font-size:18px;}
+  .hero-side{gap:6px;}
+}
+@media(max-width:480px){
+  .hero-main{min-height:64vw;max-height:320px;}
+  .hero-overlay{padding:24px 14px 14px;}
+  .hero-overlay h1{font-size:15px;}
+  .hero-side{flex-direction:column;}
+  .hero-card{min-height:48vw;}
+  .topbar{display:none;}
+}
 /* ===== RECORDS SECTION ===== */
 .records-section{max-width:1280px;margin:0 auto;padding:0 24px 60px;}
 .records-header{display:flex;align-items:center;gap:12px;margin-bottom:30px;padding-top:10px;}
