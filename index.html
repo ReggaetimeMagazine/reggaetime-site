@@ -734,7 +734,7 @@ function algoShowBadge(){
 
 async function loadAll(){
   try{
-    const r=await fetch('data/noticias.json?v='+Date.now());
+    const r=await fetch('data/noticias.json?v=DATE_VER');
     if(r.ok){
       const raw=await r.json();
       // Formato novo: {noticias:[...], records:{...}} — formato legado: [...]
@@ -1023,7 +1023,7 @@ async function loadVisitorCount(){
   // Lê a base salva no noticias.json (nunca some)
   let base=0;
   try{
-    const raw=await fetch('data/noticias.json?v='+Date.now());
+    const raw=await fetch('data/noticias.json?v=DATE_VER');
     if(raw.ok){const j=await raw.json();if(j.meta&&j.meta.visits)base=parseInt(j.meta.visits)||0;}
   }catch(e){}
 
@@ -1108,7 +1108,7 @@ async function loadRecords(){
   let data=null;
   // Lê do noticias.json unificado
   try{
-    const r=await fetch('data/noticias.json?v='+Date.now(),{signal:AbortSignal.timeout(4000)});
+    const r=await fetch('data/noticias.json?v=DATE_VER',{signal:AbortSignal.timeout(4000)});
     if(r.ok){
       const raw=await r.json();
       // Formato novo: {noticias:[...], records:{...}}
