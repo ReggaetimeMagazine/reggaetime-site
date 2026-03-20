@@ -1020,6 +1020,23 @@ function exportJSON(){
   toast('📥 JSON baixado! Suba pelo GitHub CLI 🚀');
 }
 async function loadVisitorCount(){
+  // Lê a base salva no noticias.json (nunca some)
+  let base=0;
+  try{
+    const raw=await fetch('data/noticias.json?v='+Date.now());
+    if(raw.ok){const j=await raw.json();if(j.meta&&j.meta.visits)base=parseInt(j.meta.visits)||0;}
+  }catch(e){}
+
+  function showCount(n){
+    const fmt=Math.max(n,base).toLocaleString('pt-BR');
+    ['visit-count','mk-visits','ad-reach'].forEach(id=>{
+      const el=document.getElementById(id);if(el)el.textContent=fmt;
+    });
+  }
+
+  // Mostra o base imediatamente enquanto busca a API
+  showCount(base);
+
   try{
     // Só incrementa uma vez por sessão (F5 não conta de novo)
     const jaContou=sessionStorage.getItem('rt_counted');
@@ -1030,19 +1047,13 @@ async function loadVisitorCount(){
     if(r.ok){
       const d=await r.json();
       if(!jaContou)sessionStorage.setItem('rt_counted','1');
-      const n=d.count||0;
-      const fmt=n.toLocaleString('pt-BR');
-      const el=document.getElementById('visit-count');
-      const el2=document.getElementById('mk-visits');
-      const el3=document.getElementById('ad-reach');
-      if(el)el.textContent=fmt;
-      if(el2)el2.textContent=fmt;
-      if(el3)el3.textContent=fmt;
+      // Usa o maior entre API e base salva
+      const apiVal=parseInt(d.count)||0;
+      showCount(Math.max(apiVal,base));
     }
   }catch(e){
-    ['visit-count','mk-visits','ad-reach'].forEach(id=>{
-      const el=document.getElementById(id);if(el)el.textContent='—';
-    });
+    // API falhou — fica com o valor base do JSON (sem sumir)
+    showCount(base);
   }
 }
 function loadAds(){

@@ -304,6 +304,22 @@ tr:hover td{background:rgba(255,255,255,.02);}
         <div class="sc"><div class="sl">Inscritos</div><div class="sv" id="st-inscritos">0</div></div>
         <div class="sc"><div class="sl">Última Publicação</div><div class="sv" id="st-ultima" style="font-size:18px;padding-top:8px;">—</div></div>
       </div>
+      <!-- CONTADOR DE VISITANTES -->
+      <div class="fc" style="margin-bottom:20px;background:linear-gradient(135deg,#0d0d12,#111);border-color:rgba(255,215,0,.15);">
+        <h2 style="color:var(--yellow);">👁 Contador de Visitantes</h2>
+        <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--yellow);letter-spacing:.04em;" id="dash-visits">0</div>
+          <div style="flex:1;">
+            <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Corrigir manualmente (ex: restaurar os 800)</div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="number" id="visits-manual" placeholder="Ex: 800" min="0"
+                style="background:var(--deep);border:1px solid var(--border);border-radius:4px;padding:8px 12px;color:var(--white);font-family:'Oswald',sans-serif;font-size:14px;width:140px;outline:none;">
+              <button class="btn btn-p" style="padding:8px 18px;" onclick="salvarVisitasManual()">✅ Salvar</button>
+            </div>
+            <div style="font-size:10px;color:#555;margin-top:6px;letter-spacing:.05em;">Este valor será incluído no próximo Baixar JSON e aparecerá no site.</div>
+          </div>
+        </div>
+      </div>
       <div class="fc">
         <h2>⚡ Ações Rápidas</h2>
         <div class="br">
@@ -1004,6 +1020,12 @@ async function sincronizar(){
         if(raw.records.musicas)setMusicas(raw.records.musicas);
         if(raw.records.destaque)localStorage.setItem(REC_DEST_KEY,JSON.stringify(raw.records.destaque));
       }
+      // Sincroniza contador de visitantes do meta
+      if(!Array.isArray(raw)&&raw.meta&&raw.meta.visits){
+        const vAtual=parseInt(localStorage.getItem('rt_visits_count')||'0');
+        // Só atualiza se o valor do JSON for maior (nunca diminui)
+        if(raw.meta.visits>vAtual)localStorage.setItem('rt_visits_count',raw.meta.visits.toString());
+      }
       loadDash();
       toast(`✅ ${merged.length} notícias sincronizadas!`);
     }else{toast('Erro ao buscar noticias.json','error');}
@@ -1026,6 +1048,11 @@ function carregarBackup(input){
         if(raw.records.musicas)setMusicas(raw.records.musicas);
         if(raw.records.destaque)localStorage.setItem(REC_DEST_KEY,JSON.stringify(raw.records.destaque));
       }
+      // Restaura contador de visitantes do backup
+      if(!Array.isArray(raw)&&raw.meta&&raw.meta.visits){
+        const vAtual=parseInt(localStorage.getItem('rt_visits_count')||'0');
+        if(raw.meta.visits>vAtual)localStorage.setItem('rt_visits_count',raw.meta.visits.toString());
+      }
       loadDash();
       toast(`✅ ${data.length} notícias + records carregados do backup!`);
     }catch(err){
@@ -1044,6 +1071,15 @@ function updCnt(el,id,max){
   c.classList.toggle('warn',n>max);
 }
 
+function salvarVisitasManual(){
+  const val=parseInt(document.getElementById('visits-manual').value||'0');
+  if(isNaN(val)||val<0){toast('Número inválido!','error');return;}
+  localStorage.setItem('rt_visits_count',val.toString());
+  document.getElementById('dash-visits').textContent=val.toLocaleString('pt-BR');
+  document.getElementById('visits-manual').value='';
+  toast('✅ Contador salvo! Clique em Baixar JSON para incluir no site.');
+}
+
 // ── DASHBOARD ─────────────────────────────────────────────────
 function loadDash(){
   const news=getNewsWithImages();
@@ -1052,6 +1088,10 @@ function loadDash(){
   const ins=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');
   document.getElementById('st-inscritos').textContent=ins.length;
   document.getElementById('st-ultima').textContent=news.length?news[0].data||'—':'—';
+  // Mostra contador de visitantes
+  const visits=parseInt(localStorage.getItem('rt_visits_count')||'0');
+  const dashVisits=document.getElementById('dash-visits');
+  if(dashVisits)dashVisits.textContent=visits.toLocaleString('pt-BR');
   // Mini insights no dashboard
   try{
     const id=getInsights();
@@ -1207,17 +1247,23 @@ function loadTable(){
 }
 
 function exportJSON(){
+  // Preserva o contador de visitantes salvo localmente
+  const visitsSalvos=parseInt(localStorage.getItem('rt_visits_count')||'0');
   const payload={
     noticias: getNewsWithImages(),
     records: {
       artistas: getArtistas(),
       musicas:  getMusicas(),
       destaque: getRecDest()
+    },
+    meta: {
+      visits: visitsSalvos,
+      exported: new Date().toISOString()
     }
   };
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='noticias.json';a.click();
-  toast('📥 noticias.json baixado! Suba em data/ no git.');
+  toast('📥 noticias.json baixado! Visitantes salvos: '+visitsSalvos.toLocaleString('pt-BR'));
 }
 
 // ── TICKER ────────────────────────────────────────────────────
