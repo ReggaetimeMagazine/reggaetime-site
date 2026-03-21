@@ -329,7 +329,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
           <button class="btn btn-s" onclick="sincronizar()">🔄 Sincronizar</button>
           <button class="btn btn-s" onclick="document.getElementById('inp-backup').click()" style="border-color:rgba(139,92,246,.4);color:#a78bfa;">📂 Carregar Backup</button>
           <input type="file" id="inp-backup" accept=".json" style="display:none" onchange="carregarBackup(this)"/>
-          <button class="btn btn-s" onclick="limparStorage()" style="border-color:rgba(230,57,70,.4);color:#E63946;">🗑 Limpar Storage</button>
+          <button class="btn btn-s" onclick="limparDB()" style="border-color:rgba(230,57,70,.4);color:#E63946;">🗑 Limpar BD</button>
         </div>
       </div>
       <!-- MINI INSIGHTS NO DASHBOARD -->
@@ -963,46 +963,70 @@ tr:hover td{background:rgba(255,255,255,.02);}
 
 <script>
 // ── HELPERS ───────────────────────────────────────────────────
-const KEY='rt_noticias';
 const CFG_KEY='rt_config';
 const ADS_KEY='rt_ads';
 
 function getCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||'{}')}catch{return{}}}
 function getAds(){try{return JSON.parse(localStorage.getItem(ADS_KEY)||'{}')}catch{return{}}}
 
-function getNews(){
-  try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}
-}
+// ── IndexedDB — banco principal para noticias (sem limite de 5MB) ────
+const DB_NAME='reggaetime_db';
+const DB_VERSION=1;
+const STORE='noticias';
+let _db=null;
 
-function setNews(data){
-  // Guarda as imagens DIRETO no JSON — sem rt_img_* separado
-  // Isso evita o QuotaExceededError causado por chaves acumuladas
-  // Limpa chaves antigas de imagem separada (lixo de versões anteriores)
-  Object.keys(localStorage).forEach(k=>{
-    if(k.startsWith('rt_img_'))try{localStorage.removeItem(k);}catch(e){}
-  });
-  const json=JSON.stringify(data);
-  try{
-    localStorage.setItem(KEY,json);
-  }catch(e){
-    if(e.name==='QuotaExceededError'||e.code===22){
-      // Nao coube — avisa e orienta
-      toast('❌ Storage cheio! Clique em Baixar JSON, depois Limpar Storage e recarregue o backup.','error');
-    } else { throw e; }
-  }
-}
-
-function getNewsWithImages(){
-  // Imagens já estão no JSON direto — sem necessidade de buscar rt_img_*
-  return getNews().map(n=>{
-    if(n.imagem==='__local__'){
-      // Compatibilidade com versão antiga: tenta buscar da chave separada
-      const img=localStorage.getItem('rt_img_'+n.id)||'';
-      return {...n, imagem:img};
-    }
-    return n;
+function openDB(){
+  return new Promise((resolve,reject)=>{
+    if(_db){resolve(_db);return;}
+    const req=indexedDB.open(DB_NAME,DB_VERSION);
+    req.onupgradeneeded=e=>{
+      const db=e.target.result;
+      if(!db.objectStoreNames.contains(STORE)){
+        db.createObjectStore(STORE,{keyPath:'id'});
+      }
+    };
+    req.onsuccess=e=>{_db=e.target.result;resolve(_db);};
+    req.onerror=e=>{reject(e.target.error);};
   });
 }
+
+// Salva lista de noticias no IndexedDB (substitui tudo)
+async function setNews(data){
+  const db=await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(STORE,'readwrite');
+    const store=tx.objectStore(STORE);
+    store.clear();
+    data.forEach(n=>store.put(n));
+    tx.oncomplete=()=>resolve();
+    tx.onerror=e=>reject(e.target.error);
+  });
+}
+
+// Lê todas as noticias do IndexedDB
+async function getNews(){
+  const db=await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(STORE,'readonly');
+    const store=tx.objectStore(STORE);
+    const req=store.getAll();
+    req.onsuccess=()=>{
+      // Ordena por data decrescente (mais recente primeiro)
+      const list=(req.result||[]).sort((a,b)=>{
+        if(a.data&&b.data)return b.data.localeCompare(a.data);
+        return 0;
+      });
+      resolve(list);
+    };
+    req.onerror=e=>reject(e.target.error);
+  });
+}
+
+// getNewsWithImages é alias de getNews (imagens já ficam dentro do objeto)
+async function getNewsWithImages(){return await getNews();}
+
+// Compatibilidade: funções síncronas que retornavam array agora retornam Promise
+// Todas as chamadas foram atualizadas para await
 
 function toast(msg,type='ok'){
   const t=document.getElementById('toast');
@@ -1037,13 +1061,13 @@ async function sincronizar(){
       const raw=await r.json();
       // Suporta formato novo {noticias:[...], records:{...}} e formato legado [...]
       const data=Array.isArray(raw)?raw:(raw.noticias||[]);
-      const local=getNewsWithImages();
+      const local=await getNewsWithImages();
       const merged=data.map(n=>{
         const localN=local.find(l=>l.id===n.id);
         if(localN&&localN.imagem&&localN.imagem.startsWith('data:'))return{...n,imagem:localN.imagem};
         return n;
       });
-      setNews(merged);
+      await setNews(merged);
       // Sincroniza records se presentes no JSON
       if(!Array.isArray(raw)&&raw.records){
         if(raw.records.artistas)setArtistas(raw.records.artistas);
@@ -1066,16 +1090,13 @@ function carregarBackup(input){
   const file=input.files[0];
   if(!file)return;
   const reader=new FileReader();
-  reader.onload=function(e){
+  reader.onload=async function(e){
     try{
       const raw=JSON.parse(e.target.result);
       // Suporta formato novo {noticias:[...], records:{...}} e legado [...]
       const data=Array.isArray(raw)?raw:(raw.noticias||[]);
       if(!data.length&&Array.isArray(raw))throw new Error('Formato inválido');
-      // Limpa storage antes para garantir espaco para as imagens
-      try{localStorage.removeItem(KEY);}catch(e){}
-      Object.keys(localStorage).forEach(k=>{if(k.startsWith('rt_img_'))try{localStorage.removeItem(k);}catch(ex){}});
-      setNews(data);
+      await setNews(data);
       if(!Array.isArray(raw)&&raw.records){
         if(raw.records.artistas)setArtistas(raw.records.artistas);
         if(raw.records.musicas)setMusicas(raw.records.musicas);
@@ -1114,8 +1135,8 @@ function salvarVisitasManual(){
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────────
-function loadDash(){
-  const news=getNewsWithImages();
+async function loadDash(){
+  const news=await getNewsWithImages();
   document.getElementById('st-total').textContent=news.length;
   document.getElementById('st-dest').textContent=news.filter(n=>n.destaque).length;
   const ins=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');
@@ -1152,12 +1173,12 @@ function loadDash(){
 // ── NOVA NOTÍCIA ──────────────────────────────────────────────
 function gerarId(){return Date.now().toString(36).toUpperCase();}
 
-function salvar(){
+async function salvar(){
   const titulo=document.getElementById('f-titulo').value.trim();
   const cat=document.getElementById('f-cat').value;
   const resumo=document.getElementById('f-resumo').value.trim();
   if(!titulo||!cat||!resumo){toast('Preencha Título, Categoria e Resumo!','error');return;}
-  const news=getNews();
+  const news=await getNews();
   const id=document.getElementById('f-id').value||gerarId();
   const img=document.getElementById('f-img-url').value.trim();
   const xVal=document.getElementById('pos-x')?document.getElementById('pos-x').value:'50';
@@ -1175,7 +1196,7 @@ function salvar(){
   if(!obj.imgPosition)delete obj.imgPosition;
   const idx=news.findIndex(n=>n.id===id);
   if(idx>=0)news[idx]=obj;else news.unshift(obj);
-  setNews(news);
+  await setNews(news);
   toast(idx>=0?'✅ Notícia atualizada!':'✅ Notícia publicada!');
   limpar();
   goPage('lista',document.querySelectorAll('.mi')[2]);
@@ -1191,8 +1212,8 @@ function limpar(){
   clearImg();
 }
 
-function editarNot(id){
-  const news=getNewsWithImages();
+async function editarNot(id){
+  const news=await getNewsWithImages();
   const n=news.find(x=>x.id===id);
   if(!n)return;
   document.getElementById('f-id').value=n.id;
@@ -1216,9 +1237,10 @@ function editarNot(id){
   goPage('nova',document.querySelectorAll('.mi')[1]);
 }
 
-function deletarNot(id){
+async function deletarNot(id){
   if(!confirm('Excluir esta notícia?'))return;
-  setNews(getNews().filter(n=>n.id!==id));
+  const news=await getNews();
+  await setNews(news.filter(n=>n.id!==id));
   loadTable();toast('🗑 Notícia excluída.','warn');
 }
 
@@ -1309,8 +1331,8 @@ function initCropDrag(){
 }
 
 // ── GERENCIAR ─────────────────────────────────────────────────
-function loadTable(){
-  const news=getNewsWithImages();
+async function loadTable(){
+  const news=await getNewsWithImages();
   const p=document.getElementById('lista-cnt');
   if(p)p.textContent=news.length+' notícias publicadas';
   const tb=document.getElementById('tbl-body');
@@ -1329,11 +1351,11 @@ function loadTable(){
     </tr>`).join('');
 }
 
-function exportJSON(){
+async function exportJSON(){
   // Preserva o contador de visitantes salvo localmente
   const visitsSalvos=parseInt(localStorage.getItem('rt_visits_count')||'0');
   const payload={
-    noticias: getNewsWithImages(),
+    noticias: await getNewsWithImages(),
     records: {
       artistas: getArtistas(),
       musicas:  getMusicas(),
@@ -1864,12 +1886,13 @@ function resetInsights(){
   toast('🗑 Insights apagados.','warn');
 }
 
-// ── LIMPAR STORAGE ───────────────────────────────────────────
-function limparStorage(){
-  if(!confirm('Apaga notícias e imagens do storage local.\nO noticias.json no servidor NÃO é afetado.\nContinuar?'))return;
-  Object.keys(localStorage).filter(k=>k.startsWith('rt_')).forEach(k=>{try{localStorage.removeItem(k);}catch(e){}});
-  toast('Storage limpo! Carregue o backup ou clique em Sincronizar.','warn');
-  loadDash();
+// ── LIMPAR BD ────────────────────────────────────────────────
+async function limparDB(){
+  if(!confirm('Apaga todas as notícias do banco local.\nO servidor não é afetado.\nContinuar?'))return;
+  const db=await openDB();
+  const tx=db.transaction('noticias','readwrite');
+  tx.objectStore('noticias').clear();
+  tx.oncomplete=()=>{toast('Banco limpo! Carregue o backup ou sincronize.','warn');loadDash();};
 }
 
 // ── INIT ──────────────────────────────────────────────────────
@@ -1881,13 +1904,13 @@ document.addEventListener('DOMContentLoaded',async()=>{
       const raw=await r.json();
       const data=Array.isArray(raw)?raw:(raw.noticias||[]);
       if(data.length){
-        const local=getNewsWithImages();
+        const local=await getNewsWithImages();
         const merged=data.map(n=>{
           const localN=local.find(l=>l.id===n.id);
           if(localN&&localN.imagem&&localN.imagem.startsWith('data:'))return{...n,imagem:localN.imagem};
           return n;
         });
-        setNews(merged);
+        await setNews(merged);
       }
       // Carrega records do JSON se disponível (sem sobrescrever dados locais mais recentes)
       if(!Array.isArray(raw)&&raw.records){
