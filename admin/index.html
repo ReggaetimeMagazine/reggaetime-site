@@ -978,42 +978,39 @@ function setNews(data){
   const slim=data.map(n=>{
     if(n.imagem && n.imagem.startsWith('data:')){
       try{localStorage.setItem('rt_img_'+n.id, n.imagem);}catch(e){
-        // Se não couber a imagem, descarta e mantém sem imagem
-        console.warn('Imagem muito grande, descartando base64 da notícia '+n.id);
+        console.warn('Imagem muito grande, pulando base64 da notícia '+n.id);
       }
       return {...n, imagem:'__local__'};
     }
     return n;
   });
 
-  // Tenta salvar; se estourar quota, remove notícias antigas até caber
-  const json=JSON.stringify(slim);
-  let saved=false;
-  for(let attempt=0; attempt<3 && !saved; attempt++){
-    try{
-      localStorage.setItem(KEY, json);
-      saved=true;
-    }catch(e){
-      if(e.name==='QuotaExceededError'||e.code===22){
-        // Libera espaço: remove imagens antigas de notícias removidas
-        const ids=slim.map(n=>n.id);
-        Object.keys(localStorage).forEach(k=>{
-          if(k.startsWith('rt_img_')&&!ids.includes(k.replace('rt_img_',''))){
-            localStorage.removeItem(k);
-          }
-        });
-        // Se ainda não salvou na 2ª tentativa, trunca para as 30 mais recentes
-        if(attempt===1){
-          const truncado=slim.slice(0,30);
-          try{localStorage.setItem(KEY,JSON.stringify(truncado));saved=true;
-            toast('⚠️ Espaço cheio! Apenas as 30 notícias mais recentes foram mantidas.','warn');
-          }catch(e2){}
-        }
-        if(!saved && attempt===2){
-          toast('❌ Erro: armazenamento local cheio. Exporte e limpe as notícias antigas.','error');
-        }
-      } else { throw e; }
+  // Limpa imagens órfãs de notícias que não existem mais
+  const ids=slim.map(n=>n.id);
+  Object.keys(localStorage).forEach(k=>{
+    if(k.startsWith('rt_img_')&&!ids.includes(k.replace('rt_img_',''))){
+      try{localStorage.removeItem(k);}catch(e){}
     }
+  });
+
+  // Tenta salvar; se estourar quota, tenta com menos imagens
+  const json=JSON.stringify(slim);
+  try{
+    localStorage.setItem(KEY, json);
+  }catch(e){
+    if(e.name==='QuotaExceededError'||e.code===22){
+      // Remove todas as imagens base64 do storage (mantém só URLs externas)
+      ids.forEach(id=>{try{localStorage.removeItem('rt_img_'+id);}catch(ex){}});
+      // Substitui __local__ por string vazia nos dados
+      const semImg=slim.map(n=>n.imagem==='__local__'?{...n,imagem:''}:n);
+      try{
+        localStorage.setItem(KEY, JSON.stringify(semImg));
+        toast('⚠️ Espaço cheio: imagens base64 removidas. Use URLs externas para imagens.','warn');
+      }catch(e2){
+        toast('❌ Storage cheio. Clique em "Baixar JSON", limpe o storage do navegador e recarregue.','error');
+        console.error('QuotaExceededError: não foi possível salvar nem sem imagens.',e2);
+      }
+    } else { throw e; }
   }
 }
 

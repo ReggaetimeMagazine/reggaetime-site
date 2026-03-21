@@ -768,15 +768,14 @@ async function loadAll(){
       const raw=await r.json();
       // Formato novo: {noticias:[...], records:{...}} — formato legado: [...]
       allNews=Array.isArray(raw)?raw:(raw.noticias||[]);
-      // Sempre sobrescreve o localStorage com o dado fresco do servidor
-      localStorage.setItem('reggaetime_noticias',JSON.stringify(allNews));
+      // NÃO salva no localStorage dos visitantes — eles sempre leem do servidor
     } else {
-      // Servidor respondeu erro HTTP — tenta localStorage
-      try{const s=localStorage.getItem('reggaetime_noticias');if(s){const p=JSON.parse(s);if(Array.isArray(p)&&p.length)allNews=p;}}catch(e2){}
+      // Servidor respondeu erro HTTP — mostra sample data
+      allNews=[];
     }
   }catch(e){
-    // Falha de rede — tenta localStorage como fallback
-    try{const s=localStorage.getItem('reggaetime_noticias');if(s){const p=JSON.parse(s);if(Array.isArray(p)&&p.length)allNews=p;}}catch(e2){}
+    // Falha de rede — mostra sample data
+    allNews=[];
   }
   if(!allNews.length)allNews=sampleData();
   // ── INSIGHT: pageview + sessão ────────────────────────────────
@@ -1076,9 +1075,12 @@ async function loadVisitorCount(){
     if(r.ok){
       const d=await r.json();
       if(!jaContou)sessionStorage.setItem('rt_counted','1');
-      // Usa o maior entre API e base salva
+      // Usa o maior entre API e base salva — nunca deixa mostrar menos que o JSON
       const apiVal=parseInt(d.count)||0;
       showCount(Math.max(apiVal,base));
+    } else {
+      // API falhou — fica com o valor base do JSON
+      showCount(base);
     }
   }catch(e){
     // API falhou — fica com o valor base do JSON (sem sumir)
