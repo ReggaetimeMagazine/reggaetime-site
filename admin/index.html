@@ -329,6 +329,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
           <button class="btn btn-s" onclick="sincronizar()">🔄 Sincronizar</button>
           <button class="btn btn-s" onclick="document.getElementById('inp-backup').click()" style="border-color:rgba(139,92,246,.4);color:#a78bfa;">📂 Carregar Backup</button>
           <input type="file" id="inp-backup" accept=".json" style="display:none" onchange="carregarBackup(this)"/>
+          <button class="btn btn-s" onclick="limparStorage()" style="border-color:rgba(230,57,70,.4);color:#E63946;">🗑 Limpar Storage</button>
         </div>
       </div>
       <!-- MINI INSIGHTS NO DASHBOARD -->
@@ -365,7 +366,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
             <label>Categoria *</label>
             <select id="f-cat">
               <option value="">Selecione...</option>
-              <option>Nacional</option><option>Internacional</option><option>Roots</option><option>Dancehall</option>
+              <option>Nacional</option><option>Roots</option><option>Dancehall</option>
               <option>Jamaica</option><option>Entrevista</option><option>Hall da Fama</option>
               <option>Lançamento</option><option>Cultura</option><option>Records</option><option>Collab</option>
               <option>Shows e Eventos</option>
@@ -974,41 +975,37 @@ function getNews(){
 }
 
 function setNews(data){
-  // Separa imagens base64 em chaves individuais pra não estourar quota
+  // Limpa TODAS as imagens antigas antes de salvar (evita quota cheia acumulada)
+  Object.keys(localStorage).forEach(k=>{
+    if(k.startsWith('rt_img_'))localStorage.removeItem(k);
+  });
+
+  // Separa imagens base64 em chaves individuais pra nao estourar quota
   const slim=data.map(n=>{
     if(n.imagem && n.imagem.startsWith('data:')){
-      try{localStorage.setItem('rt_img_'+n.id, n.imagem);}catch(e){
-        console.warn('Imagem muito grande, pulando base64 da notícia '+n.id);
+      try{
+        localStorage.setItem('rt_img_'+n.id, n.imagem);
+      }catch(e){
+        console.warn('rt_img_'+n.id+': nao coube no storage, mantendo inline');
+        return n;
       }
       return {...n, imagem:'__local__'};
     }
     return n;
   });
 
-  // Limpa imagens órfãs de notícias que não existem mais
-  const ids=slim.map(n=>n.id);
-  Object.keys(localStorage).forEach(k=>{
-    if(k.startsWith('rt_img_')&&!ids.includes(k.replace('rt_img_',''))){
-      try{localStorage.removeItem(k);}catch(e){}
-    }
-  });
-
-  // Tenta salvar; se estourar quota, tenta com menos imagens
-  const json=JSON.stringify(slim);
+  // Tenta salvar lista; se estourar quota, remove imagens e tenta de novo
   try{
-    localStorage.setItem(KEY, json);
+    localStorage.setItem(KEY, JSON.stringify(slim));
   }catch(e){
     if(e.name==='QuotaExceededError'||e.code===22){
-      // Remove todas as imagens base64 do storage (mantém só URLs externas)
-      ids.forEach(id=>{try{localStorage.removeItem('rt_img_'+id);}catch(ex){}});
-      // Substitui __local__ por string vazia nos dados
+      Object.keys(localStorage).forEach(k=>{if(k.startsWith('rt_img_'))localStorage.removeItem(k);});
       const semImg=slim.map(n=>n.imagem==='__local__'?{...n,imagem:''}:n);
       try{
-        localStorage.setItem(KEY, JSON.stringify(semImg));
-        toast('⚠️ Espaço cheio: imagens base64 removidas. Use URLs externas para imagens.','warn');
+        localStorage.setItem(KEY,JSON.stringify(semImg));
+        toast('Aviso: Storage cheio - fotos removidas. Use URLs externas.','warn');
       }catch(e2){
-        toast('❌ Storage cheio. Clique em "Baixar JSON", limpe o storage do navegador e recarregue.','error');
-        console.error('QuotaExceededError: não foi possível salvar nem sem imagens.',e2);
+        toast('Erro: Storage completamente cheio. Limpe o cache do navegador.','error');
       }
     } else { throw e; }
   }
@@ -1879,6 +1876,16 @@ function resetInsights(){
   localStorage.removeItem(IKEY);
   loadInsights();
   toast('🗑 Insights apagados.','warn');
+}
+
+// ── LIMPAR STORAGE ───────────────────────────────────────────
+function limparStorage(){
+  if(!confirm('Isso vai apagar todas as notícias e imagens do storage local.\nO noticias.json no servidor NÃO será afetado.\nContinuar?'))return;
+  // Remove tudo relacionado ao site
+  const keysToRemove=Object.keys(localStorage).filter(k=>k.startsWith('rt_'));
+  keysToRemove.forEach(k=>localStorage.removeItem(k));
+  toast('Storage limpo! Agora carregue o backup ou sincronize.','warn');
+  loadDash();
 }
 
 // ── INIT ──────────────────────────────────────────────────────
