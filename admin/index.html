@@ -975,35 +975,28 @@ function getNews(){
 }
 
 function setNews(data){
-  // Limpa imagens antigas antes de salvar (evita quota acumulada)
+  // Guarda as imagens DIRETO no JSON — sem rt_img_* separado
+  // Isso evita o QuotaExceededError causado por chaves acumuladas
+  // Limpa chaves antigas de imagem separada (lixo de versões anteriores)
   Object.keys(localStorage).forEach(k=>{
-    if(k.startsWith('rt_img_'))localStorage.removeItem(k);
+    if(k.startsWith('rt_img_'))try{localStorage.removeItem(k);}catch(e){}
   });
-  // Separa imagens base64 em chaves individuais
-  const slim=data.map(n=>{
-    if(n.imagem&&n.imagem.startsWith('data:')){
-      try{localStorage.setItem('rt_img_'+n.id,n.imagem);}catch(e){
-        return n; // nao coube — mantém inline
-      }
-      return {...n,imagem:'__local__'};
-    }
-    return n;
-  });
+  const json=JSON.stringify(data);
   try{
-    localStorage.setItem(KEY,JSON.stringify(slim));
+    localStorage.setItem(KEY,json);
   }catch(e){
     if(e.name==='QuotaExceededError'||e.code===22){
-      Object.keys(localStorage).forEach(k=>{if(k.startsWith('rt_img_'))localStorage.removeItem(k);});
-      const semImg=slim.map(n=>n.imagem==='__local__'?{...n,imagem:''}:n);
-      try{localStorage.setItem(KEY,JSON.stringify(semImg));toast('Aviso: storage cheio, fotos removidas. Use URLs.','warn');}
-      catch(e2){toast('Erro: storage cheio. Clique em Limpar Storage.','error');}
+      // Nao coube — avisa e orienta
+      toast('❌ Storage cheio! Clique em Baixar JSON, depois Limpar Storage e recarregue o backup.','error');
     } else { throw e; }
   }
 }
 
 function getNewsWithImages(){
+  // Imagens já estão no JSON direto — sem necessidade de buscar rt_img_*
   return getNews().map(n=>{
     if(n.imagem==='__local__'){
+      // Compatibilidade com versão antiga: tenta buscar da chave separada
       const img=localStorage.getItem('rt_img_'+n.id)||'';
       return {...n, imagem:img};
     }
@@ -1079,8 +1072,9 @@ function carregarBackup(input){
       // Suporta formato novo {noticias:[...], records:{...}} e legado [...]
       const data=Array.isArray(raw)?raw:(raw.noticias||[]);
       if(!data.length&&Array.isArray(raw))throw new Error('Formato inválido');
-      // Limpa storage antes de carregar para evitar QuotaExceededError
-      Object.keys(localStorage).forEach(k=>{if(k.startsWith('rt_img_')||k===KEY)localStorage.removeItem(k);});
+      // Limpa storage antes para garantir espaco para as imagens
+      try{localStorage.removeItem(KEY);}catch(e){}
+      Object.keys(localStorage).forEach(k=>{if(k.startsWith('rt_img_'))try{localStorage.removeItem(k);}catch(ex){}});
       setNews(data);
       if(!Array.isArray(raw)&&raw.records){
         if(raw.records.artistas)setArtistas(raw.records.artistas);
@@ -1872,9 +1866,9 @@ function resetInsights(){
 
 // ── LIMPAR STORAGE ───────────────────────────────────────────
 function limparStorage(){
-  if(!confirm('Apaga todas as notícias e imagens do storage local.\nO noticias.json no servidor NÃO é afetado.\nContinuar?'))return;
-  Object.keys(localStorage).filter(k=>k.startsWith('rt_')).forEach(k=>localStorage.removeItem(k));
-  toast('Storage limpo! Agora carregue o backup ou sincronize.','warn');
+  if(!confirm('Apaga notícias e imagens do storage local.\nO noticias.json no servidor NÃO é afetado.\nContinuar?'))return;
+  Object.keys(localStorage).filter(k=>k.startsWith('rt_')).forEach(k=>{try{localStorage.removeItem(k);}catch(e){}});
+  toast('Storage limpo! Carregue o backup ou clique em Sincronizar.','warn');
   loadDash();
 }
 
