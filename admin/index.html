@@ -529,6 +529,13 @@ tr:hover td{background:rgba(255,255,255,.02);}
     <!-- INSCRITOS -->
     <div id="pg-inscritos" class="page">
       <div class="ph"><h1>Inscritos</h1><p>Emails cadastrados pelo formulário da home</p></div>
+      <div style="background:#1a1200;border:1px solid rgba(255,215,0,.25);border-radius:8px;padding:16px 20px;margin-bottom:20px;display:flex;gap:14px;align-items:flex-start;">
+        <span style="font-size:22px;line-height:1;">⚠️</span>
+        <div>
+          <div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow);margin-bottom:6px;">Como funciona o armazenamento de inscritos</div>
+          <p style="font-size:12px;color:#bbb;line-height:1.6;letter-spacing:.02em;">Os inscritos são salvos no <strong style="color:var(--white);">localStorage do navegador</strong> — ou seja, ficam armazenados <strong style="color:var(--yellow);">no mesmo navegador e computador</strong> onde a pessoa se inscreveu na home. Para que os inscritos apareçam aqui no admin, o arquivo <code style="background:#222;padding:1px 6px;border-radius:3px;font-size:11px;">home.html</code> e <code style="background:#222;padding:1px 6px;border-radius:3px;font-size:11px;">admin.html</code> precisam estar <strong style="color:var(--white);">abertos no mesmo navegador</strong>. Se quiser receber inscritos de qualquer lugar, será necessário integrar um backend (ex: Google Sheets via Apps Script, EmailJS, ou Supabase). Enquanto isso, use o botão <strong style="color:var(--green);">Exportar CSV</strong> para guardar a lista.</p>
+        </div>
+      </div>
       <div class="stats" style="grid-template-columns:repeat(3,1fr);">
         <div class="sc"><div class="sl">Total</div><div class="sv" id="ins-total">0</div></div>
         <div class="sc"><div class="sl">Este Mês</div><div class="sv" id="ins-mes">0</div></div>
@@ -538,6 +545,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
         <div style="padding:16px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
           <h2 style="margin:0;border:none;padding:0;">Lista de Emails</h2>
           <div style="display:flex;gap:8px;">
+            <button class="btn btn-g" style="padding:7px 14px;" onclick="exportarCSV()">⬇️ Exportar CSV</button>
             <button class="btn btn-g" style="padding:7px 14px;" onclick="copiarEmails()">📋 Copiar todos</button>
             <button class="btn btn-d" style="padding:7px 14px;" onclick="limparInscritos()">🗑 Limpar</button>
           </div>
@@ -563,6 +571,13 @@ tr:hover td{background:rgba(255,255,255,.02);}
         <div class="fr">
           <div class="fg"><label>Spotify (URL do perfil)</label><input id="cfg-sp" type="url" placeholder="https://open.spotify.com/..."/></div>
           <div class="fg"><label>Email de publicidade</label><input id="cfg-email" type="email" placeholder="reggaetimebr@gmail.com"/></div>
+        </div>
+        <div class="fr full" style="margin-top:0;">
+          <div class="fg">
+            <label>🎵 Playlist do Spotify (embed na home)</label>
+            <input id="cfg-sp-playlist" type="url" placeholder="https://open.spotify.com/playlist/..."/>
+            <span style="font-size:10px;color:var(--muted);letter-spacing:.05em;margin-top:4px;">Cole a URL completa da playlist. Ex: https://open.spotify.com/playlist/0XC2pEXZKaKdTTnfbYDAOp</span>
+          </div>
         </div>
       </div>
       <div class="fc">
@@ -966,7 +981,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
 const CFG_KEY='rt_config';
 const ADS_KEY='rt_ads';
 
-function getCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||'{}')}catch{return{}}}
+function getCfg(){try{const d=JSON.parse(localStorage.getItem(CFG_KEY)||'{}');if(!d.spotify_playlist)d.spotify_playlist='https://open.spotify.com/playlist/0XC2pEXZKaKdTTnfbYDAOp';return d;}catch{return{spotify_playlist:'https://open.spotify.com/playlist/0XC2pEXZKaKdTTnfbYDAOp'};}}
 function getAds(){try{return JSON.parse(localStorage.getItem(ADS_KEY)||'{}')}catch{return{}}}
 
 // ── IndexedDB — banco principal para noticias (sem limite de 5MB) ────
@@ -1427,6 +1442,15 @@ function delIns(email){
   const ins=JSON.parse(localStorage.getItem('rt_inscritos')||'[]').filter(i=>i.email!==email);
   localStorage.setItem('rt_inscritos',JSON.stringify(ins));loadInscritos();
 }
+function exportarCSV(){
+  const ins=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');
+  if(!ins.length){toast('Nenhum inscrito para exportar.','warn');return;}
+  const rows=['Email,Data',...ins.map(i=>i.email+','+(i.data||i.date||''))];
+  const blob=new Blob([rows.join('\n')],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='inscritos_reggaetime.csv';a.click();
+  toast('⬇️ CSV exportado!');
+}
 function copiarEmails(){
   const ins=JSON.parse(localStorage.getItem('rt_inscritos')||'[]');
   navigator.clipboard.writeText(ins.map(i=>i.email).join('\n'));
@@ -1446,6 +1470,7 @@ function loadConfig(){
   document.getElementById('cfg-email').value=c.email||'';
   document.getElementById('cfg-qt').value=c.quote||'';
   document.getElementById('cfg-qa').value=c.quote_autor||'';
+  document.getElementById('cfg-sp-playlist').value=c.spotify_playlist||'';
   // Records counters
   const artCount=JSON.parse(localStorage.getItem('rt_records_artistas')||'[]').length;
   const musCount=JSON.parse(localStorage.getItem('rt_records_musicas')||'[]').length;
