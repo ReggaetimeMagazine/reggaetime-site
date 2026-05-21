@@ -12,20 +12,6 @@ for /f %%i in ('powershell -NoProfile -Command "Get-Date -Format yyyyMMddHHmm"')
 echo Versao: %VER%
 echo.
 
-REM Cria pasta img\ se nao existir
-if not exist "img\" (
-  echo Criando pasta img\...
-  mkdir img
-)
-
-REM Copia o logo para img\ (caso ainda nao esteja la)
-if exist "%USERPROFILE%\Downloads\logo.png" (
-  echo Copiando logo dos Downloads para img\...
-  copy /Y "%USERPROFILE%\Downloads\logo.png" "img\logo.png"
-) else (
-  echo AVISO: logo.png nao encontrado em Downloads. Certifique-se de que img\logo.png existe!
-)
-
 REM Injeta a versao no index.html — forca GitHub Pages a servir JSON novo
 echo Atualizando versao no index.html...
 powershell -NoProfile -Command "$c=[IO.File]::ReadAllText('index.html'); $c=$c -replace 'v=\d{12}','v=%VER%'; [IO.File]::WriteAllText('index.html',$c)"
