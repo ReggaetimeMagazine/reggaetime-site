@@ -825,7 +825,7 @@ function applyCfg(){
   else{qw.innerHTML=`<div class="quote-block"><blockquote>"Gostaria que as pessoas soubessem que eu fui o verdadeiro inventor do ska e do reggae."</blockquote><cite>— Ernest Ranglin, guitarrista lendário jamaicano</cite></div>`;}
   // Só mostra na página inicial (Todas)
   qw.style.display=currentCat?'none':'block';
-  const spUrl=c.spotify_playlist||'https://open.spotify.com/playlist/29XOYp9UQz2rbonRmoZvgK';
+  const spUrl=c.spotify_playlist||'https://open.spotify.com/playlist/0XC2pEXZKaKdTTnfbYDAOp?si=8gNlaeakSoa0VJJyPD_0ww&pi=6eukSBA9QIGKB';
   const spPlayer=document.getElementById('sp-player');
   const spEmbed=document.getElementById('sp-embed');
   if(spPlayer){spPlayer.classList.add('visible');const embedId=extractSpotifyId(spUrl);if(embedId)spEmbed.dataset.src=`https://open.spotify.com/embed/playlist/${embedId}?utm_source=generator&theme=0`;}
