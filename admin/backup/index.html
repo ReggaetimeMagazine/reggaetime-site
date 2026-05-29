@@ -716,14 +716,10 @@ tr:hover td{background:rgba(255,255,255,.02);}
             <input id="rec-dest-musica" type="text" placeholder="Ela Tá Com Fogo"/>
           </div>
         </div>
-        <div class="fr">
+        <div class="fr full">
           <div class="fg">
-            <label>🎵 Link do Spotify</label>
+            <label>Link Spotify / YouTube / Streaming</label>
             <input id="rec-dest-link" type="url" placeholder="https://open.spotify.com/track/..."/>
-          </div>
-          <div class="fg">
-            <label>▶️ Link do YouTube</label>
-            <input id="rec-dest-yt-link" type="url" placeholder="https://youtube.com/watch?v=..."/>
           </div>
         </div>
         <div class="fr full">
@@ -844,14 +840,10 @@ tr:hover td{background:rgba(255,255,255,.02);}
             <input id="mus-ano" type="number" placeholder="2024" min="2000" max="2099"/>
           </div>
         </div>
-        <div class="fr">
+        <div class="fr full">
           <div class="fg">
-            <label>🎵 Link do Spotify</label>
+            <label>Link de Streaming (Spotify / YouTube)</label>
             <input id="mus-link" type="url" placeholder="https://open.spotify.com/track/..."/>
-          </div>
-          <div class="fg">
-            <label>▶️ Link do YouTube</label>
-            <input id="mus-yt-link" type="url" placeholder="https://youtube.com/watch?v=..."/>
           </div>
         </div>
         <div class="fr full">
@@ -1601,7 +1593,6 @@ function saveRecDest(){
     artista:document.getElementById('rec-dest-artista').value.trim(),
     musica:document.getElementById('rec-dest-musica').value.trim(),
     link:document.getElementById('rec-dest-link').value.trim(),
-    ytlink:document.getElementById('rec-dest-yt-link').value.trim(),
     img:recGetImg('dest')||'',
     desc:document.getElementById('rec-dest-desc').value.trim()
   };
@@ -1614,7 +1605,6 @@ function loadRecDest(){
   if(d.artista)document.getElementById('rec-dest-artista').value=d.artista||'';
   if(d.musica)document.getElementById('rec-dest-musica').value=d.musica||'';
   if(d.link)document.getElementById('rec-dest-link').value=d.link||'';
-  if(d.ytlink)document.getElementById('rec-dest-yt-link').value=d.ytlink||'';
   if(d.img){recImgData.dest=d.img; recShowPreview('dest',d.img);}
   if(d.desc)document.getElementById('rec-dest-desc').value=d.desc||'';
 }
@@ -1714,7 +1704,6 @@ function saveMusica(){
     tipo:document.getElementById('mus-tipo').value,
     ano:document.getElementById('mus-ano').value,
     link:document.getElementById('mus-link').value.trim(),
-    ytlink:document.getElementById('mus-yt-link').value.trim(),
     capa:recGetImg('capa')||'',
     destaque:document.getElementById('mus-dest').checked
   });
@@ -1723,7 +1712,7 @@ function saveMusica(){
   toast('🎵 Música adicionada!');
 }
 function clearMusForm(){
-  ['mus-titulo','mus-link','mus-yt-link','mus-capa-url','mus-ano'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['mus-titulo','mus-link','mus-capa-url','mus-ano'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('mus-artista-sel').value='';
   document.getElementById('mus-dest').checked=false;
   recClearImg('capa');
