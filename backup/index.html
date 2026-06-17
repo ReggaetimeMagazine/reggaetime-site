@@ -306,6 +306,8 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .records-dest-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:28px;max-width:380px;}
 .records-dest-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#1DB954,#17a346);color:#fff;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:12px 24px;border-radius:4px;text-decoration:none;width:fit-content;transition:all .25s;border:none;cursor:pointer;}
 .records-dest-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(29,185,84,.4);}
+.records-dest-btn-yt{background:linear-gradient(135deg,#FF0000,#cc0000)!important;}
+.records-dest-btn-yt:hover{box-shadow:0 8px 24px rgba(255,0,0,.4)!important;}
 .records-dest-btn svg{flex-shrink:0;}
 .records-dest-placeholder{width:100%;height:100%;background:linear-gradient(135deg,#1a1200,#0a0a0a);display:flex;align-items:center;justify-content:center;font-size:80px;}
 
@@ -1196,10 +1198,16 @@ async function loadRecords(){
         <div class="records-dest-artista">${dest.artista||''}</div>
         <div class="records-dest-musica">${dest.musica||''}</div>
         <div class="records-dest-desc">${dest.desc||'Novo lançamento Reggaetime Records.'}</div>
-        ${dest.link?`<a href="${dest.link}" target="_blank" rel="noopener" class="records-dest-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 11-.277-1.215c3.809-.87 7.076-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.72a.779.779 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.779.779 0 01-.973-.516.78.78 0 01.516-.974c3.632-1.102 8.147-.568 11.237 1.327a.78.78 0 01.257 1.072zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.935.935 0 11-.543-1.79c3.532-1.072 9.404-.865 13.115 1.338a.935.935 0 01-.955 1.611z"/></svg>
-          Ouvir Agora
-        </a>`:''}
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          ${dest.link?`<a href="${dest.link}" target="_blank" rel="noopener" class="records-dest-btn records-dest-btn-sp">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 11-.277-1.215c3.809-.87 7.076-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.72a.779.779 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.779.779 0 01-.973-.516.78.78 0 01.516-.974c3.632-1.102 8.147-.568 11.237 1.327a.78.78 0 01.257 1.072zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.935.935 0 11-.543-1.79c3.532-1.072 9.404-.865 13.115 1.338a.935.935 0 01-.955 1.611z"/></svg>
+            Ouvir no Spotify
+          </a>`:''}
+          ${dest.ytlink?`<a href="${dest.ytlink}" target="_blank" rel="noopener" class="records-dest-btn records-dest-btn-yt">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            Ver no YouTube
+          </a>`:''}
+        </div>
       </div>
     </div>`;
   }
