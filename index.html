@@ -980,6 +980,13 @@ function openArt(id){
   function parseConteudo(texto){
     return texto.split('\n').map(linha=>{
       if(!linha.trim())return '';
+      if(linha.trim().startsWith('[yt:')){
+        const ytUrl=linha.trim().slice(4,-1);
+        const m=ytUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/)?)([a-zA-Z0-9_-]{11})/);
+        const videoId=m?m[1]:'';
+        if(videoId)return`<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:20px 0;"><iframe src="https://www.youtube.com/embed/${videoId}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe></div>`;
+        return`<a href="${ytUrl}" target="_blank" style="color:#FF0000;">${ytUrl}</a>`;
+      }
       if(linha.trim().startsWith('[img:')){
         const src=linha.trim().slice(5,-1);
         return`<img src="${src}" style="max-width:100%;border-radius:6px;margin:20px 0;display:block;" alt=""/>`;
