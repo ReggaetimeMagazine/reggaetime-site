@@ -405,6 +405,10 @@ tr:hover td{background:rgba(255,255,255,.02);}
                 📷 Inserir foto
               </button>
               <input type="file" id="editor-img-input" accept="image/*" style="display:none" onchange="editorInsertImg(this)"/>
+              <button type="button" class="editor-tool-btn" onclick="editorInsertYT()" title="Inserir vídeo do YouTube" style="color:#FF0000;border-color:rgba(255,0,0,.3);">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                YouTube
+              </button>
             </div>
             <textarea id="f-conteudo" placeholder="Texto completo. Use Enter para separar parágrafos.&#10;&#10;Use os botões acima para inserir fotos, negrito, subtítulos..." style="min-height:240px;font-size:13px;line-height:1.7;" oninput="editorPreviewUpdate()"></textarea>
             <!-- PREVIEW INLINE -->
@@ -1831,10 +1835,33 @@ function editorInsertImg(input){
   input.value='';
 }
 
+function editorInsertYT(){
+  const url=prompt('Cole o link do YouTube:','');
+  if(!url||!url.trim())return;
+  const ta=document.getElementById('f-conteudo');
+  const pos=ta.selectionStart;
+  const ins=`\n[yt:${url.trim()}]\n`;
+  ta.setRangeText(ins, pos, pos, 'end');
+  ta.focus();
+  editorPreviewUpdate();
+  toast('▶️ Vídeo do YouTube inserido!');
+}
+
 function parseConteudo(texto){
   if(!texto)return '';
   return texto.split('\n').map(linha=>{
     if(!linha.trim())return '';
+    // Vídeo YouTube inline
+    if(linha.trim().startsWith('[yt:')){
+      const ytUrl=linha.trim().slice(4,-1);
+      let videoId='';
+      const m=ytUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/)?)([a-zA-Z0-9_-]{11})/);
+      if(m)videoId=m[1];
+      if(videoId){
+        return `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:20px 0;"><iframe src="https://www.youtube.com/embed/${videoId}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe></div>`;
+      }
+      return `<a href="${ytUrl}" target="_blank" style="color:#FF0000;">${ytUrl}</a>`;
+    }
     // Imagem inline
     if(linha.trim().startsWith('[img:')){
       const src=linha.trim().slice(5,-1);
