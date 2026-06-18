@@ -357,8 +357,15 @@ tr:hover td{background:rgba(255,255,255,.02);}
         <div class="fr full">
           <div class="fg">
             <label>Título *</label>
-            <input id="f-titulo" type="text" placeholder="Título da notícia..." oninput="updCnt(this,'cnt-t',80)" maxlength="150"/>
+            <input id="f-titulo" type="text" placeholder="Título da notícia..." oninput="updCnt(this,'cnt-t',80);autoSlug(this.value)" maxlength="150"/>
             <div class="cnt" id="cnt-t">0/80</div>
+          </div>
+        </div>
+        <div class="fr full">
+          <div class="fg">
+            <label>Slug / ID do link <span style="color:var(--muted);font-size:10px;letter-spacing:.05em;text-transform:none;font-weight:400;">— aparece na URL da notícia. Ex: bob-marley-ultimas-palavras</span></label>
+            <input id="f-slug" type="text" placeholder="gerado automaticamente pelo título..." style="font-family:monospace;font-size:12px;color:var(--yellow);" oninput="this._manual=true;const pv=document.getElementById('slug-preview');if(pv)pv.textContent=this.value||'...'"/>
+            <div style="font-size:10px;color:#444;margin-top:4px;letter-spacing:.04em;">🔗 reggaetimemagazine.com/?a=<span id="slug-preview" style="color:var(--yellow);">...</span></div>
           </div>
         </div>
         <div class="fr">
@@ -398,6 +405,10 @@ tr:hover td{background:rgba(255,255,255,.02);}
                 📷 Inserir foto
               </button>
               <input type="file" id="editor-img-input" accept="image/*" style="display:none" onchange="editorInsertImg(this)"/>
+              <button type="button" class="editor-tool-btn" onclick="editorInsertYT()" title="Inserir vídeo do YouTube" style="color:#FF0000;border-color:rgba(255,0,0,.3);">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                YouTube
+              </button>
             </div>
             <textarea id="f-conteudo" placeholder="Texto completo. Use Enter para separar parágrafos.&#10;&#10;Use os botões acima para inserir fotos, negrito, subtítulos..." style="min-height:240px;font-size:13px;line-height:1.7;" oninput="editorPreviewUpdate()"></textarea>
             <!-- PREVIEW INLINE -->
@@ -1196,13 +1207,36 @@ async function loadDash(){
 // ── NOVA NOTÍCIA ──────────────────────────────────────────────
 function gerarId(){return Date.now().toString(36).toUpperCase();}
 
+function makeSlug(titulo){
+  return titulo.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9\s-]/g,'')
+    .trim()
+    .replace(/\s+/g,'-')
+    .replace(/-+/g,'-')
+    .slice(0,80);
+}
+
+function autoSlug(titulo){
+  const slugEl=document.getElementById('f-slug');
+  const preview=document.getElementById('slug-preview');
+  // Só preenche automaticamente se o campo estiver vazio ou igual ao slug anterior
+  if(!slugEl._manual){
+    const slug=makeSlug(titulo);
+    slugEl.value=slug;
+    if(preview)preview.textContent=slug||'...';
+  }
+}
+
 async function salvar(){
   const titulo=document.getElementById('f-titulo').value.trim();
   const cat=document.getElementById('f-cat').value;
   const resumo=document.getElementById('f-resumo').value.trim();
   if(!titulo||!cat||!resumo){toast('Preencha Título, Categoria e Resumo!','error');return;}
   const news=await getNews();
-  const id=document.getElementById('f-id').value||gerarId();
+  // Usa slug se preenchido, senão usa f-id existente, senão gera automático
+  const slugVal=document.getElementById('f-slug').value.trim();
+  const id=document.getElementById('f-id').value||(slugVal?makeSlug(slugVal):gerarId());
   const img=document.getElementById('f-img-url').value.trim();
   const xVal=document.getElementById('pos-x')?document.getElementById('pos-x').value:'50';
   const yVal=document.getElementById('pos-y')?document.getElementById('pos-y').value:'50';
@@ -1226,7 +1260,8 @@ async function salvar(){
 }
 
 function limpar(){
-  ['f-id','f-titulo','f-resumo','f-conteudo','f-img-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['f-id','f-titulo','f-resumo','f-conteudo','f-img-url','f-slug'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';el._manual=false;}});
+  const pv=document.getElementById('slug-preview');if(pv)pv.textContent='...';;
   document.getElementById('f-cat').value='';
   document.getElementById('f-autor').value='Reggaetime Staff';
   document.getElementById('f-dest').checked=false;
@@ -1240,6 +1275,8 @@ async function editarNot(id){
   const n=news.find(x=>x.id===id);
   if(!n)return;
   document.getElementById('f-id').value=n.id;
+  const slugEl2=document.getElementById('f-slug');
+  if(slugEl2){slugEl2.value=n.id;slugEl2._manual=true;const pv=document.getElementById('slug-preview');if(pv)pv.textContent=n.id;}
   document.getElementById('f-titulo').value=n.titulo;
   document.getElementById('f-cat').value=n.categoria;
   document.getElementById('f-resumo').value=n.resumo;
@@ -1798,10 +1835,33 @@ function editorInsertImg(input){
   input.value='';
 }
 
+function editorInsertYT(){
+  const url=prompt('Cole o link do YouTube:','');
+  if(!url||!url.trim())return;
+  const ta=document.getElementById('f-conteudo');
+  const pos=ta.selectionStart;
+  const ins=`\n[yt:${url.trim()}]\n`;
+  ta.setRangeText(ins, pos, pos, 'end');
+  ta.focus();
+  editorPreviewUpdate();
+  toast('▶️ Vídeo do YouTube inserido!');
+}
+
 function parseConteudo(texto){
   if(!texto)return '';
   return texto.split('\n').map(linha=>{
     if(!linha.trim())return '';
+    // Vídeo YouTube inline
+    if(linha.trim().startsWith('[yt:')){
+      const ytUrl=linha.trim().slice(4,-1);
+      let videoId='';
+      const m=ytUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/)?)([a-zA-Z0-9_-]{11})/);
+      if(m)videoId=m[1];
+      if(videoId){
+        return `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin:20px 0;"><iframe src="https://www.youtube.com/embed/${videoId}" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe></div>`;
+      }
+      return `<a href="${ytUrl}" target="_blank" style="color:#FF0000;">${ytUrl}</a>`;
+    }
     // Imagem inline
     if(linha.trim().startsWith('[img:')){
       const src=linha.trim().slice(5,-1);

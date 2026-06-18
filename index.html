@@ -972,6 +972,10 @@ function openArt(id){
   const mimg=document.getElementById('m-img');
   mimg.src=art.imagem;mimg.style.objectPosition=art.imgPosition||'center top';
   mimg.onerror=function(){this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80';};
+  // Crédito da imagem
+  let creditEl=document.getElementById('m-img-credito');
+  if(!creditEl){creditEl=document.createElement('div');creditEl.id='m-img-credito';creditEl.style.cssText='font-family:Oswald,sans-serif;font-size:10px;letter-spacing:.08em;color:#444;text-align:right;margin-top:-18px;margin-bottom:18px;padding-right:4px;';mimg.insertAdjacentElement('afterend',creditEl);}
+  creditEl.textContent=art.imgCredito?'📷 '+art.imgCredito:'';
   document.getElementById('m-cat').textContent=art.categoria;
   document.getElementById('m-title').textContent=art.titulo;
   document.getElementById('m-meta').textContent=`Por ${art.autor} · ${fmtd(art.data)}`;
