@@ -1003,29 +1003,8 @@ function openArt(id){
   document.getElementById('m-related').innerHTML=rel.length?`<p class="modal-related-title">Leia também</p><div class="related-grid">${rel.map(n=>`<div class="rel-card" onclick="openArt('${n.id}')"><img src="${n.imagem}" alt="" style="object-position:${n.imgPosition||'center'};" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=70'"/><h5>${n.titulo}</h5></div>`).join('')}</div>`:'';
   const m=document.getElementById('art-modal');
   m.classList.add('open');m.scrollTop=0;document.body.style.overflow='hidden';
-  // SEO: atualiza URL e meta tags para a notícia aberta
-  history.pushState({artId:id}, art.titulo, '?a='+id);
-  document.title = art.titulo + ' — Reggaetime Magazine';
-  document.querySelector('meta[name="description"]').setAttribute('content', art.resumo||art.titulo);
-  document.querySelector('meta[property="og:title"]').setAttribute('content', art.titulo);
-  document.querySelector('meta[property="og:description"]').setAttribute('content', art.resumo||art.titulo);
-  document.querySelector('meta[property="og:image"]').setAttribute('content', art.imagem||'https://reggaetimemagazine.com/img/logo.png');
-  document.querySelector('meta[property="og:url"]').setAttribute('content', location.href);
-  document.querySelector('link[rel="canonical"]').setAttribute('href', location.href);
 }
-function closeModal(){
-  document.getElementById('art-modal').classList.remove('open');
-  document.body.style.overflow='';
-  currentId=null;
-  // Restaura URL e meta tags originais
-  history.pushState({}, 'Reggaetime Magazine', location.pathname);
-  document.title = "Reggaetime Magazine — News 'N' Reggae";
-  document.querySelector('meta[name="description"]').setAttribute('content', 'Portal de reggae e dancehall com notícias, artistas e lançamentos da cultura jamaicana.');
-  document.querySelector('meta[property="og:title"]').setAttribute('content', "Reggaetime Magazine — News 'N' Reggae");
-  document.querySelector('meta[property="og:description"]').setAttribute('content', 'As melhores notícias de Reggae e Dancehall do Brasil e do mundo.');
-  document.querySelector('meta[property="og:url"]').setAttribute('content', 'https://reggaetimemagazine.com/');
-  document.querySelector('link[rel="canonical"]').setAttribute('href', 'https://reggaetimemagazine.com/');
-}
+function closeModal(){document.getElementById('art-modal').classList.remove('open');document.body.style.overflow='';currentId=null;}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 function artUrl(art){
   return `${location.origin}${location.pathname}?a=${art.id}`;
@@ -1054,11 +1033,26 @@ function shareCopy(){
 function subscribeNL(){
   const el=document.getElementById('nl-email');const email=el.value.trim();
   if(!email.includes('@')||!email.includes('.')){toast('Digite um email válido.','error');return;}
-  let list=[];try{list=JSON.parse(localStorage.getItem('rt_inscritos'))||[];}catch(e){}
-  if(list.find(i=>i.email===email)){toast('Este email já está inscrito! 😎');return;}
-  list.unshift({email,data:new Date().toISOString().split('T')[0]});
-  localStorage.setItem('rt_inscritos',JSON.stringify(list));localStorage.setItem('reggaetime_updated',Date.now().toString());
-  el.value='';toast('🎉 Inscrito! Bem-vindo à família Reggaetime 🌿');
+  el.disabled=true;
+  fetch('https://formspree.io/f/xvznnylw',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify({email:email,_subject:'Nova inscrição — Reggaetime Newsletter'})
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    if(data.ok||data.next){
+      el.value='';
+      toast('🎉 Inscrito! Bem-vindo à família Reggaetime 🌿');
+    } else {
+      toast('Erro ao inscrever. Tente novamente.','error');
+    }
+    el.disabled=false;
+  })
+  .catch(()=>{
+    toast('Erro de conexão. Tente novamente.','error');
+    el.disabled=false;
+  });
 }
 function toast(msg,type=''){
   const t=document.getElementById('toast');t.textContent=msg;
