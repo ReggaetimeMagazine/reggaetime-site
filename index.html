@@ -248,6 +248,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .visitor-count strong{color:var(--yellow);font-size:15px;font-family:'Bebas Neue',sans-serif;letter-spacing:.05em;}
 
 
+.anuncie-btn{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:linear-gradient(135deg,var(--yellow),var(--gold));color:var(--black);border:none;border-radius:3px;padding:6px 16px;cursor:pointer;transition:all .2s;}
 .anuncie-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,215,0,.3);}
 .mk-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:20px;}
 .mk-overlay.open{opacity:1;pointer-events:all;}
@@ -431,6 +432,9 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
   </div>
 </div>
 
+<div style="background:#0a0a0a;border-top:1px solid #141414;padding:6px 24px;display:flex;justify-content:flex-end;">
+  <button class="anuncie-btn" onclick="openMK()">⚡ Anuncie aqui</button>
+</div>
 <header>
   <div class="header-inner">
     <div class="logo" onclick="filterCat(null,'')">
