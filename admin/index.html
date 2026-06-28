@@ -231,90 +231,11 @@ tr:hover td{background:rgba(255,255,255,.02);}
 <body>
 
 <!-- TOKEN GATE -->
-<div id="gate" style="position:fixed;inset:0;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;">
-  <div style="font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:.08em;background:linear-gradient(135deg,#FFD700,#C9A84C,#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Reggaetime</div>
-  <div style="font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#444;margin-bottom:40px;">Acesso Restrito</div>
-  <div style="background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:36px 44px;text-align:center;max-width:360px;width:92%;">
-    <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#666;margin-bottom:20px;">Token de Acesso</div>
-    <input id="tok-inp" type="password" placeholder="Digite o token..."
-      style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:4px;padding:13px 16px;color:#F5F0E8;font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.08em;outline:none;margin-bottom:10px;transition:border-color .2s;"
-      onfocus="this.style.borderColor='#FFD700'" onblur="this.style.borderColor='#2a2a2a'"
-      onkeydown="if(event.key==='Enter')chkTok()"/>
-    <div id="tok-err" style="color:#E63946;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;min-height:14px;"></div>
-    <button onclick="chkTok()" style="width:100%;background:#FFD700;color:#0a0a0a;border:none;border-radius:4px;padding:13px;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">Entrar</button>
-  </div>
-  <div style="margin-top:20px;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#222;">Acesso via URL: /admin/?token=seu_token</div>
-</div>
 
-<script>
-(function(){
-  const TOKEN='reggaetime2026';
-  const SK='rt_admin_auth';
-  const gate=document.getElementById('gate');
-  function unlock(){gate.style.transition='opacity .4s';gate.style.opacity='0';setTimeout(()=>gate.remove(),400);}
-  if(sessionStorage.getItem(SK)===TOKEN){unlock();return;}
-  const p=new URLSearchParams(location.search);
-  const ut=p.get('token');
-  if(ut===TOKEN){sessionStorage.setItem(SK,TOKEN);history.replaceState(null,'',location.pathname);unlock();return;}
-  window.chkTok=function(){
-    const v=document.getElementById('tok-inp').value.trim();
-    if(v===TOKEN){sessionStorage.setItem(SK,TOKEN);unlock();}
-    else{
-      const e=document.getElementById('tok-err');
-      e.textContent='Token incorreto.';
-      document.getElementById('tok-inp').value='';
-      document.getElementById('tok-inp').style.borderColor='#E63946';
-      setTimeout(()=>{e.textContent='';document.getElementById('tok-inp').style.borderColor='#2a2a2a';},2500);
-    }
-  };
-})();
-</script>
-
-<div class="admin-wrap">
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="logo-wrap">
-      <span class="logo-main">Reggaetime</span>
-      <span class="logo-sub">Painel Admin</span>
-    </div>
-    <div class="rasta-bar"></div>
-    <nav class="sidebar-menu">
-      <div class="mi active" onclick="goPage('dash',this)"><span class="mi-ico">📊</span>Dashboard</div>
-      <div class="mi" onclick="goPage('nova',this)"><span class="mi-ico">⚡</span>Nova Notícia</div>
-      <div class="mi" onclick="goPage('lista',this)"><span class="mi-ico">📰</span>Gerenciar</div>
-      <div class="mi" onclick="goPage('ticker',this)"><span class="mi-ico">📡</span>Ticker</div>
-      <div class="mi" onclick="goPage('inscritos',this)"><span class="mi-ico">👥</span>Inscritos</div>
-      <div class="mi" onclick="goPage('insights',this)" style="color:var(--green);"><span class="mi-ico">📈</span>Insights</div>
-      <div class="mi" onclick="goPage('config',this)"><span class="mi-ico">⚙️</span>Configurações</div>
-      <div class="mi" onclick="goPage('publi',this)"><span class="mi-ico">📢</span>Publicidade</div>
-      <div class="mi" onclick="goPage('records',this)" style="border-top:1px solid var(--border);margin-top:8px;padding-top:14px;"><span class="mi-ico">🎵</span>Records — Artistas</div>
-    </nav>
-    <div class="sidebar-foot"><a href="../index.html" target="_blank">← Ver Site</a></div>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="admin-main">
-
-    <!-- DASHBOARD -->
-    <div id="pg-dash" class="page active">
-      <div class="ph"><h1>Dashboard</h1><p>Resumo da Reggaetime Magazine</p></div>
-      <div class="stats">
-        <div class="sc"><div class="sl">Notícias</div><div class="sv" id="st-total">0</div></div>
-        <div class="sc"><div class="sl">Em Destaque</div><div class="sv" id="st-dest">0</div></div>
-        <div class="sc"><div class="sl">Inscritos</div><div class="sv" id="st-inscritos">0</div></div>
-        <div class="sc"><div class="sl">Última Publicação</div><div class="sv" id="st-ultima" style="font-size:18px;padding-top:8px;">—</div></div>
-      </div>
-      <!-- CONTADOR DE VISITANTES -->
-      <div class="fc" style="margin-bottom:20px;background:linear-gradient(135deg,#0d0d12,#111);border-color:rgba(255,215,0,.15);">
-        <h2 style="color:var(--yellow);">👁 Contador de Visitantes</h2>
-        <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--yellow);letter-spacing:.04em;" id="dash-visits">0</div>
           <div style="flex:1;">
             <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Corrigir manualmente (ex: restaurar os 800)</div>
             <div style="display:flex;gap:8px;align-items:center;">
-              <input type="number" id="visits-manual" placeholder="Ex: 800" min="0"
-                style="background:var(--deep);border:1px solid var(--border);border-radius:4px;padding:8px 12px;color:var(--white);font-family:'Oswald',sans-serif;font-size:14px;width:140px;outline:none;">
-              <button class="btn btn-p" style="padding:8px 18px;" onclick="salvarVisitasManual()">✅ Salvar</button>
+              
             </div>
             <div style="font-size:10px;color:#555;margin-top:6px;letter-spacing:.05em;">Este valor será incluído no próximo Baixar JSON e aparecerá no site.</div>
           </div>
@@ -1109,12 +1030,7 @@ async function sincronizar(){
         if(raw.records.musicas)setMusicas(raw.records.musicas);
         if(raw.records.destaque)localStorage.setItem(REC_DEST_KEY,JSON.stringify(raw.records.destaque));
       }
-      // Sincroniza contador de visitantes do meta
-      if(!Array.isArray(raw)&&raw.meta&&raw.meta.visits){
-        const vAtual=parseInt(localStorage.getItem('rt_visits_count')||'0');
-        // Só atualiza se o valor do JSON for maior (nunca diminui)
-        if(raw.meta.visits>vAtual)localStorage.setItem('rt_visits_count',raw.meta.visits.toString());
-      }
+      
       loadDash();
       toast(`✅ ${merged.length} notícias sincronizadas!`);
     }else{toast('Erro ao buscar noticias.json','error');}
@@ -1415,12 +1331,7 @@ async function loadTable(){
 }
 
 async function exportJSON(){
-  // Busca visitantes reais da CounterAPI
-  let visitsReais=parseInt(localStorage.getItem('rt_visits_count')||'0');
-  try{
-    const r=await fetch('https://api.counterapi.dev/v1/reggaetimemagazine/visits/get',{signal:AbortSignal.timeout(4000)});
-    if(r.ok){const d=await r.json();if(d.count&&parseInt(d.count)>0)visitsReais=parseInt(d.count);}
-  }catch(e){}
+  // Visitantes gerenciados pelo Google Analytics
   const payload={
     noticias: await getNewsWithImages(),
     records: {
@@ -1429,7 +1340,6 @@ async function exportJSON(){
       destaque: getRecDest()
     },
     meta: {
-      visits: visitsReais,
       exported: new Date().toISOString()
     }
   };

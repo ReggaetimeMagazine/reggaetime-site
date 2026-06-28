@@ -242,12 +242,12 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .ad-article{margin:24px 0;}
 .ad-article .ad-slot{height:100px;border-radius:6px;}
 .ad-empty{display:none!important;}
-.visitor-bar{background:#0a0a0a;border-top:1px solid #141414;padding:8px 24px;}
+
 .visitor-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-.visitor-count{display:flex;align-items:center;gap:10px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#444;}
+
 .visitor-count strong{color:var(--yellow);font-size:15px;font-family:'Bebas Neue',sans-serif;letter-spacing:.05em;}
-.visitor-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 2s ease-in-out infinite;}
-.anuncie-btn{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:linear-gradient(135deg,var(--yellow),var(--gold));color:var(--black);border:none;border-radius:3px;padding:6px 16px;cursor:pointer;transition:all .2s;}
+
+
 .anuncie-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(255,215,0,.3);}
 .mk-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:20px;}
 .mk-overlay.open{opacity:1;pointer-events:all;}
@@ -416,12 +416,6 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
   </div>
 </div>
 <div class="rasta-bar"></div>
-
-<div class="visitor-bar">
-  <div class="visitor-inner">
-    <div class="visitor-count">
-      <div class="visitor-dot"></div>
-      <span><strong id="visit-count">—</strong> visitantes</span>
     </div>
     <button class="anuncie-btn" onclick="openMK()">⚡ Anuncie aqui</button>
   </div>
@@ -647,7 +641,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;">
         <div class="mk-stat"><span class="mk-stat-val" id="sobre-noticias">37</span><span class="mk-stat-lbl">Notícias publicadas</span></div>
         <div class="mk-stat"><span class="mk-stat-val">8</span><span class="mk-stat-lbl">Editorias</span></div>
-        <div class="mk-stat"><span class="mk-stat-val" id="sobre-visits">22.195</span><span class="mk-stat-lbl">Visitantes</span></div>
+        <div class="mk-stat"></div>
       </div>
 
       <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">Quem somos</h3>
@@ -741,7 +735,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
     </div>
     <div class="mk-body">
       <div class="mk-stat-grid">
-        <div class="mk-stat"><span class="mk-stat-val" id="mk-visits">—</span><span class="mk-stat-lbl">Visitantes</span></div>
+        <div class="mk-stat"></div>
         <div class="mk-stat"><span class="mk-stat-val" id="mk-news">—</span><span class="mk-stat-lbl">Notícias</span></div>
         <div class="mk-stat"><span class="mk-stat-val">BR+JM</span><span class="mk-stat-lbl">Audiência</span></div>
       </div>
@@ -1143,46 +1137,6 @@ function exportJSON(){
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='noticias.json';a.click();
   toast('📥 JSON baixado! Suba pelo GitHub CLI 🚀');
 }
-async function loadVisitorCount(){
-  // Lê a base salva no noticias.json (nunca some)
-  let base=0;
-  try{
-    const raw=await fetch('data/noticias.json?v=DATE_VER');
-    if(raw.ok){const j=await raw.json();if(j.meta&&j.meta.visits)base=parseInt(j.meta.visits)||0;}
-  }catch(e){}
-
-  function showCount(n){
-    const fmt=Math.max(n,base).toLocaleString('pt-BR');
-    ['visit-count','mk-visits','ad-reach'].forEach(id=>{
-      const el=document.getElementById(id);if(el)el.textContent=fmt;
-    });
-  }
-
-  // Mostra o base imediatamente enquanto busca a API
-  showCount(base);
-
-  try{
-    // Só incrementa uma vez por sessão (F5 não conta de novo)
-    const jaContou=sessionStorage.getItem('rt_counted');
-    const endpoint=jaContou
-      ?'https://api.counterapi.dev/v1/reggaetimemagazine/visits/get'
-      :'https://api.counterapi.dev/v1/reggaetimemagazine/visits/up';
-    const r=await fetch(endpoint,{signal:AbortSignal.timeout(5000)});
-    if(r.ok){
-      const d=await r.json();
-      if(!jaContou)sessionStorage.setItem('rt_counted','1');
-      // Usa o maior entre API e base salva — nunca deixa mostrar menos que o JSON
-      const apiVal=parseInt(d.count)||0;
-      showCount(Math.max(apiVal,base));
-    } else {
-      // API falhou — fica com o valor base do JSON
-      showCount(base);
-    }
-  }catch(e){
-    // API falhou — fica com o valor base do JSON (sem sumir)
-    showCount(base);
-  }
-}
 function loadAds(){
   try{
     const ads=JSON.parse(localStorage.getItem('rt_ads')||'{}');
@@ -1209,7 +1163,6 @@ function enviarMK(){
 function openSobre(){document.getElementById('sobre-modal').classList.add('open');document.body.style.overflow='hidden';
   // Atualiza contadores dinâmicos
   const sn=document.getElementById('sobre-noticias');if(sn&&allNews.length)sn.textContent=allNews.length;
-  const sv=document.getElementById('sobre-visits');const vc=document.getElementById('visit-count');if(sv&&vc&&vc.textContent!=='—')sv.textContent=vc.textContent;
 }
 function closeSobre(){document.getElementById('sobre-modal').classList.remove('open');document.body.style.overflow='';}
 function openPrivacy(){document.getElementById('privacy-modal').classList.add('open');document.body.style.overflow='hidden';}
@@ -1352,7 +1305,6 @@ async function loadRecords(){
 }
 
 window.addEventListener('load', loadAll);
-window.addEventListener('load', loadVisitorCount);
 window.addEventListener('load', loadAds);
 window.addEventListener('load', loadRecords);
 if(new URLSearchParams(window.location.search).has('export')){document.getElementById('gh-helper').style.display='block';}
