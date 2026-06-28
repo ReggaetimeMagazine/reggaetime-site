@@ -591,6 +591,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
         <h5>Serviços</h5>
         <a id="footer-email" href="/cdn-cgi/l/email-protection#f5879092929490819c98909787b59298949c99db969a98">Publicidade</a>
         <a href="#" onclick="document.getElementById('nl-email').scrollIntoView({behavior:'smooth'});document.getElementById('nl-email').focus();return false;">Newsletter</a>
+        <a href="#" onclick="openSobre();return false;">Sobre nós</a>
         <a href="#">Contato</a>
       </div>
       <div class="footer-col">
@@ -631,6 +632,52 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
     </div>
   </div>
 </div>
+
+
+<!-- MODAL SOBRE NÓS -->
+<div id="sobre-modal" class="mk-overlay" onclick="if(event.target===this)closeSobre()">
+  <div class="mk-box" style="max-width:760px;">
+    <div class="mk-header">
+      <button class="mk-close" onclick="closeSobre()">✕</button>
+      <h2>Sobre a Reggaetime</h2>
+      <p>Magazine · News 'N' Reggae</p>
+    </div>
+    <div class="mk-body" style="font-size:14px;line-height:1.85;color:#c8c0b4;">
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;">
+        <div class="mk-stat"><span class="mk-stat-val" id="sobre-noticias">37</span><span class="mk-stat-lbl">Notícias publicadas</span></div>
+        <div class="mk-stat"><span class="mk-stat-val">8</span><span class="mk-stat-lbl">Editorias</span></div>
+        <div class="mk-stat"><span class="mk-stat-val" id="sobre-visits">22.195</span><span class="mk-stat-lbl">Visitantes</span></div>
+      </div>
+
+      <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">Quem somos</h3>
+      <p style="margin-bottom:16px;">A <strong style="color:#FFD700;">Reggaetime Magazine</strong> é um portal brasileiro dedicado ao universo do Reggae e do Dancehall. Nascemos da paixão pela música jamaicana e pela cultura rastafári, com o objetivo de levar ao público brasileiro e lusófono as melhores notícias, entrevistas, lançamentos e histórias do mundo do reggae — do Brasil à Jamaica.</p>
+
+      <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">Nossa missão</h3>
+      <p style="margin-bottom:16px;">Ser a principal referência em conteúdo jornalístico sobre Reggae, Roots, Dancehall, Ska e culturas afro-jamaicanas para o público de língua portuguesa. Valorizamos o jornalismo independente, a cultura original e os artistas que constroem esse movimento dia a dia.</p>
+
+      <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">O que cobrimos</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+        <span style="font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(255,215,0,.3);border-radius:2px;padding:5px 12px;color:var(--yellow);">Internacional</span>
+        <span style="font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(255,215,0,.3);border-radius:2px;padding:5px 12px;color:var(--yellow);">Roots</span>
+        <span style="font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(255,215,0,.3);border-radius:2px;padding:5px 12px;color:var(--yellow);">Dancehall</span>
+        <span style="font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(255,215,0,.3);border-radius:2px;padding:5px 12px;color:var(--yellow);">Nacional</span>
+        <span style="font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(255,215,0,.3);border-radius:2px;padding:5px 12px;color:var(--yellow);">Cultura</span>
+        <span style="font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(255,215,0,.3);border-radius:2px;padding:5px 12px;color:var(--yellow);">Shows e Eventos</span>
+        <span style="font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(255,215,0,.3);border-radius:2px;padding:5px 12px;color:var(--yellow);">Hall da Fama</span>
+        <span style="font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(255,215,0,.3);border-radius:2px;padding:5px 12px;color:var(--yellow);">Entrevistas</span>
+      </div>
+
+      <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">Reggaetime Records</h3>
+      <p style="margin-bottom:16px;">Além do portal de notícias, a Reggaetime conta com o <strong style="color:#FFD700;">Reggaetime Records</strong>, um selo independente focado em Reggae, Roots, Dancehall e Trap Reggae do Brasil, apoiando artistas nacionais e conectando a cena brasileira ao mercado jamaicano.</p>
+
+      <h3 style="font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:#fff;margin:0 0 10px;">Fale conosco</h3>
+      <p style="margin-bottom:0;">Para parcerias, sugestões de pauta, entrevistas ou publicidade, entre em contato pelo email <strong style="color:#FFD700;"><a href="mailto:reggaetimebr@gmail.com" style="color:#FFD700;">reggaetimebr@gmail.com</a></strong> ou pelas nossas redes sociais.</p>
+
+    </div>
+  </div>
+</div>
+<!-- FIM MODAL SOBRE NÓS -->
 
 <!-- MODAL ARTIGO -->
 <div id="art-modal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
@@ -1159,6 +1206,12 @@ function enviarMK(){
   window.open(`mailto:${dest}?subject=${subject}&body=${body}`);
   toast('📧 Abrindo seu email... Obrigado pelo interesse!');closeMK();
 }
+function openSobre(){document.getElementById('sobre-modal').classList.add('open');document.body.style.overflow='hidden';
+  // Atualiza contadores dinâmicos
+  const sn=document.getElementById('sobre-noticias');if(sn&&allNews.length)sn.textContent=allNews.length;
+  const sv=document.getElementById('sobre-visits');const vc=document.getElementById('visit-count');if(sv&&vc&&vc.textContent!=='—')sv.textContent=vc.textContent;
+}
+function closeSobre(){document.getElementById('sobre-modal').classList.remove('open');document.body.style.overflow='';}
 function openPrivacy(){document.getElementById('privacy-modal').classList.add('open');document.body.style.overflow='hidden';}
 function closePrivacy(){document.getElementById('privacy-modal').classList.remove('open');document.body.style.overflow='';}
 // ── RECORDS ──────────────────────────────────────────────────
