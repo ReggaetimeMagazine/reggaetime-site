@@ -1415,8 +1415,12 @@ async function loadTable(){
 }
 
 async function exportJSON(){
-  // Preserva o contador de visitantes salvo localmente
-  const visitsSalvos=parseInt(localStorage.getItem('rt_visits_count')||'0');
+  // Busca visitantes reais da CounterAPI
+  let visitsReais=parseInt(localStorage.getItem('rt_visits_count')||'0');
+  try{
+    const r=await fetch('https://api.counterapi.dev/v1/reggaetimemagazine/visits/get',{signal:AbortSignal.timeout(4000)});
+    if(r.ok){const d=await r.json();if(d.count&&parseInt(d.count)>0)visitsReais=parseInt(d.count);}
+  }catch(e){}
   const payload={
     noticias: await getNewsWithImages(),
     records: {
@@ -1425,7 +1429,7 @@ async function exportJSON(){
       destaque: getRecDest()
     },
     meta: {
-      visits: visitsSalvos,
+      visits: visitsReais,
       exported: new Date().toISOString()
     }
   };
