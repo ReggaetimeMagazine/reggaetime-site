@@ -204,7 +204,9 @@ tr:hover td{background:rgba(255,255,255,.02);}
         <div class="br">
           <button class="btn btn-p" onclick="goPage('nova',document.querySelectorAll('.mi')[1])">✏️ Nova Notícia</button>
           <button class="btn btn-s" onclick="exportJSON()">📥 Baixar JSON</button>
+          <button class="btn btn-s" onclick="importJSON()">📤 Carregar JSON</button>
           <button class="btn btn-g" onclick="goPage('inscritos',document.querySelectorAll('.mi')[4])">👥 Ver Inscritos</button>
+          <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(this)"/>
         </div>
       </div>
       <div class="fc">
@@ -310,6 +312,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
         <div style="padding:16px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
           <h2 style="margin:0;border:none;padding:0;">Todas as Notícias</h2>
           <button class="btn btn-s" style="padding:7px 16px;" onclick="exportJSON()">📥 Baixar JSON</button>
+          <button class="btn btn-s" style="padding:7px 16px;" onclick="importJSON()">📤 Carregar JSON</button>
         </div>
         <div class="tbl-wrap">
           <table>
@@ -662,6 +665,24 @@ function saveConfig(){
 }
 
 // ── EXPORT ────────────────────────────────────────────────────
+function importJSON(){
+  document.getElementById('import-file').click();
+}
+function handleImport(input){
+  const file=input.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!Array.isArray(data)){toast('Arquivo inválido — precisa ser um array JSON.','e');return;}
+      saveNews(data);
+      toast('✅ '+data.length+' notícias carregadas com sucesso!');
+      loadDash();
+    }catch(err){toast('Erro ao ler o arquivo JSON.','e');}
+    input.value='';
+  };
+  r.readAsText(file);
+}
 function exportJSON(){
   const news=getNews();
   if(!news.length){toast('Nenhuma notícia para exportar.','e');return;}
