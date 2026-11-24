@@ -28,10 +28,11 @@ function ogDefault(){
 }
 
 function ogArt(art){
-  const title = esc(art.titulo + ' — ' + SITE_NAME);
+  const title = esc(String(art.titulo||'') + ' — ' + SITE_NAME);
   const desc  = esc(art.resumo || SITE_DESC);
-  const img   = art.imagem || OG_IMG;
-  const url   = SITE_URL + '/?a=' + art.id;
+  // Imagem em base64 (data:) NÃO funciona em og:image — WhatsApp/Facebook ignoram. Usa a padrão.
+  const img   = esc(/^https?:\/\//i.test(art.imagem || '') ? art.imagem : OG_IMG);
+  const url   = esc(SITE_URL + '/?a=' + encodeURIComponent(art.id));
   return `<meta property="og:type" content="article">
 <meta property="og:site_name" content="${SITE_NAME}">
 <meta property="og:url" content="${url}">
@@ -50,50 +51,56 @@ function ogArt(art){
 class HeadInjector {
   constructor(tags){ this.tags=tags; this.done=false; }
   element(el){
-    if(!this.done){ this.done=true; el.prepend(this.tags,{html:true}); }
+    if(!this.done){ this.done=true; el.append(this.tags,{html:true}); }
   }
 }
 
+// Remove <title> e og:/twitter: do HTML original para não duplicar com as injetadas
+class StripOld {
+  element(el){ el.remove(); }
+}
+
 export default {
-  async fetch(request){
+  async fetch(request, env){
+    // Busca o arquivo estático. Com Workers+Assets o certo é env.ASSETS;
+    // fetch(request) direto pode entrar em loop e derrubar o site inteiro (site "vazio").
+    const origin = (req) => (env && env.ASSETS) ? env.ASSETS.fetch(req) : fetch(req);
+
     const url   = new URL(request.url);
     const artId = url.searchParams.get('a');
 
-    // JSON nunca cacheia (notícias precisam ser sempre frescas)
+    // JSON: sempre revalida (ETag → 304), mas não baixa 9MB de novo se não mudou
     if(url.pathname.endsWith('.json')){
-      const jsonRes = await fetch(request);
+      const jsonRes = await origin(request);
       const newRes  = new Response(jsonRes.body, jsonRes);
-      newRes.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
-      newRes.headers.set('Pragma', 'no-cache');
+      newRes.headers.set('Cache-Control', 'no-cache');
+      newRes.headers.delete('Pragma');
       return newRes;
     }
 
     // Passa tudo que não for a raiz direto (imagens, admin, etc.)
-    if(url.pathname !== '/') return fetch(request);
+    if(url.pathname !== '/') return origin(request);
 
-    // Busca o index.html
-    const res = await fetch(request);
+    const res = await origin(request);
     if(!res.ok) return res;
 
-    // Sem artigo → metatags padrão
-    if(!artId){
-      return new HTMLRewriter()
-        .on('head', new HeadInjector(ogDefault()))
-        .transform(res);
+    let tags = ogDefault();
+    if(artId){
+      try{
+        const jsonRes = await origin(new Request(new URL('/data/noticias.json', request.url).toString()));
+        if(jsonRes.ok){
+          const raw  = await jsonRes.json();
+          const news = Array.isArray(raw) ? raw : (raw.noticias || []);
+          const art  = news.find(n => String(n.id) === artId);
+          if(art) tags = ogArt(art);
+        }
+      }catch(e){}
     }
 
-    // Com artigo → busca o JSON e injeta metatags da matéria
-    let tags = ogDefault();
-    try{
-      const jsonRes = await fetch(new URL('/data/noticias.json', request.url).toString());
-      if(jsonRes.ok){
-        const news = await jsonRes.json();
-        const art  = news.find(n => n.id === artId);
-        if(art) tags = ogArt(art);
-      }
-    }catch(e){}
-
     return new HTMLRewriter()
+      .on('title', new StripOld())
+      .on('meta[property^="og:"]', new StripOld())
+      .on('meta[name^="twitter:"]', new StripOld())
       .on('head', new HeadInjector(tags))
       .transform(res);
   }
