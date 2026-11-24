@@ -304,22 +304,6 @@ tr:hover td{background:rgba(255,255,255,.02);}
         <div class="sc"><div class="sl">Inscritos</div><div class="sv" id="st-inscritos">0</div></div>
         <div class="sc"><div class="sl">Última Publicação</div><div class="sv" id="st-ultima" style="font-size:18px;padding-top:8px;">—</div></div>
       </div>
-      <!-- CONTADOR DE VISITANTES -->
-      <div class="fc" style="margin-bottom:20px;background:linear-gradient(135deg,#0d0d12,#111);border-color:rgba(255,215,0,.15);">
-        <h2 style="color:var(--yellow);">👁 Contador de Visitantes</h2>
-        <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--yellow);letter-spacing:.04em;" id="dash-visits">0</div>
-          <div style="flex:1;">
-            <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Corrigir manualmente (ex: restaurar os 800)</div>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <input type="number" id="visits-manual" placeholder="Ex: 800" min="0"
-                style="background:var(--deep);border:1px solid var(--border);border-radius:4px;padding:8px 12px;color:var(--white);font-family:'Oswald',sans-serif;font-size:14px;width:140px;outline:none;">
-              <button class="btn btn-p" style="padding:8px 18px;" onclick="salvarVisitasManual()">✅ Salvar</button>
-            </div>
-            <div style="font-size:10px;color:#555;margin-top:6px;letter-spacing:.05em;">Este valor será incluído no próximo Baixar JSON e aparecerá no site.</div>
-          </div>
-        </div>
-      </div>
       <div class="fc">
         <h2>⚡ Ações Rápidas</h2>
         <div class="br">
@@ -1186,14 +1170,6 @@ function updCnt(el,id,max){
   c.classList.toggle('warn',n>max);
 }
 
-function salvarVisitasManual(){
-  const val=parseInt(document.getElementById('visits-manual').value||'0');
-  if(isNaN(val)||val<0){toast('Número inválido!','error');return;}
-  localStorage.setItem('rt_visits_count',val.toString());
-  document.getElementById('dash-visits').textContent=val.toLocaleString('pt-BR');
-  document.getElementById('visits-manual').value='';
-  toast('✅ Contador salvo! Clique em Baixar JSON para incluir no site.');
-}
 
 // ── DASHBOARD ─────────────────────────────────────────────────
 async function loadDash(){
@@ -1443,7 +1419,6 @@ async function loadTable(){
 
 async function exportJSON(){
   // Preserva o contador de visitantes salvo localmente
-  const visitsSalvos=parseInt(localStorage.getItem('rt_visits_count')||'0');
   const payload={
     noticias: await getNewsWithImages(),
     records: {
@@ -1452,13 +1427,12 @@ async function exportJSON(){
       destaque: getRecDest()
     },
     meta: {
-      visits: visitsSalvos,
       exported: new Date().toISOString()
     }
   };
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='noticias.json';a.click();
-  toast('📥 noticias.json baixado! Visitantes salvos: '+visitsSalvos.toLocaleString('pt-BR'));
+  toast('📥 noticias.json baixado!');
 }
 
 // ── TICKER ────────────────────────────────────────────────────
