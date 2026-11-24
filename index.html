@@ -1050,14 +1050,36 @@ function shareCopy(){
   const art=allNews.find(n=>n.id===currentId);if(!art)return;
   navigator.clipboard.writeText(artUrl(art)).then(()=>toast('🔗 Link copiado!')).catch(()=>toast('Copie o link do navegador.'));
 }
-function subscribeNL(){
+// ── NEWSLETTER → Formspree ───────────────────────────────────
+// Cole aqui o endereço do seu formulário no Formspree (formspree.io/forms → seu form → "Integration").
+// Exemplo: 'https://formspree.io/f/xyzabcde'
+const FORMSPREE_URL='https://formspree.io/f/COLE_SEU_ID_AQUI';
+let _nlBusy=false;
+async function subscribeNL(){
+  if(_nlBusy)return;
   const el=document.getElementById('nl-email');const email=el.value.trim();
-  if(!email.includes('@')||!email.includes('.')){toast('Digite um email válido.','error');return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){toast('Digite um email válido.','error');return;}
+  if(FORMSPREE_URL.includes('COLE_SEU_ID_AQUI')){toast('Newsletter em configuração. Tente mais tarde.','error');return;}
   let list=[];try{list=JSON.parse(localStorage.getItem('rt_inscritos'))||[];}catch(e){}
   if(list.find(i=>i.email===email)){toast('Este email já está inscrito! 😎');return;}
-  list.unshift({email,data:new Date().toISOString().split('T')[0]});
-  localStorage.setItem('rt_inscritos',JSON.stringify(list));localStorage.setItem('reggaetime_updated',Date.now().toString());
-  el.value='';toast('🎉 Inscrito! Bem-vindo à família Reggaetime 🌿');
+  _nlBusy=true;
+  const btn=document.querySelector('.newsletter button');if(btn)btn.disabled=true;
+  try{
+    const r=await fetch(FORMSPREE_URL,{
+      method:'POST',
+      headers:{'Accept':'application/json','Content-Type':'application/json'},
+      body:JSON.stringify({email,_subject:'Nova inscrição na newsletter Reggaetime',origem:location.href})
+    });
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    // cópia local só para o aviso "já inscrito" neste aparelho
+    list.unshift({email,data:new Date().toISOString().split('T')[0]});
+    try{localStorage.setItem('rt_inscritos',JSON.stringify(list));}catch(e){}
+    el.value='';toast('🎉 Inscrito! Bem-vindo à família Reggaetime 🌿');
+  }catch(e){
+    toast('Não foi possível inscrever agora. Tente de novo em instantes.','error');
+  }finally{
+    _nlBusy=false;if(btn)btn.disabled=false;
+  }
 }
 function toast(msg,type=''){
   const t=document.getElementById('toast');t.textContent=msg;
