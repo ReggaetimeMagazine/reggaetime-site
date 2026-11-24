@@ -56,10 +56,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Serif+4:wght@300;400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-:root{--black:#ffffff;--deep:#ffffff;--card:#f6f6f4;--border:#e3e3e0;--green:#1DB954;--yellow:#FFD700;--accent:#9a7400;--red:#E63946;--gold:#9a7400;--white:#161616;--muted:#5f5f5f;--rasta:linear-gradient(90deg,#E63946 33.3%,#FFD700 33.3% 66.6%,#1DB954 66.6%);}
+:root{--black:#ffffff;--deep:#ffffff;--card:#f6f6f4;--border:#e3e3e0;--green:#1DB954;--yellow:#FFD700;--accent:#9a7400;--red:#E63946;--gold:#9a7400;--white:#0d0d0d;--muted:#3d3d3d;--rasta:linear-gradient(90deg,#E63946 33.3%,#FFD700 33.3% 66.6%,#1DB954 66.6%);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--black);color:var(--white);font-family:'Source Serif 4',Georgia,serif;font-weight:300;line-height:1.6;overflow-x:hidden;}
+body{background:var(--black);color:var(--white);font-family:'Source Serif 4',Georgia,serif;font-weight:400;line-height:1.6;overflow-x:hidden;}
 .topbar{background:var(--deep);border-bottom:1px solid var(--border);padding:6px 0;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
 .topbar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
 .topbar a{color:var(--muted);text-decoration:none;transition:color .2s;}.topbar a:hover{color:var(--accent);}
@@ -145,8 +145,8 @@ nav a.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;h
 .cat-label{font-family:'Oswald',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border-left:2px solid var(--yellow);padding-left:7px;margin-bottom:7px;display:block;}
 .news-card h3{font-family:'Oswald',sans-serif;font-size:18px;font-weight:600;line-height:1.25;color:var(--white);margin-bottom:7px;transition:color .2s;}
 .news-card:hover h3{color:var(--accent);}
-.news-card p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:7px;}
-.news-card .meta{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6b6b6b;}
+.news-card p{font-size:14px;color:#2b2b2b;line-height:1.6;margin-bottom:7px;}
+.news-card .meta{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#4a4a4a;}
 .list-articles{display:flex;flex-direction:column;}
 .list-art{display:grid;grid-template-columns:100px 1fr;gap:14px;padding:16px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:padding .2s;}
 .list-art:first-child{border-top:1px solid var(--border);}
@@ -155,7 +155,7 @@ nav a.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;h
 .list-art:hover img{filter:brightness(1);}
 .list-art h4{font-family:'Oswald',sans-serif;font-size:14px;font-weight:500;line-height:1.3;color:var(--white);transition:color .2s;margin-top:2px;}
 .list-art:hover h4{color:var(--accent);}
-.list-art .meta{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#6b6b6b;margin-top:4px;}
+.list-art .meta{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:#4a4a4a;margin-top:4px;}
 .sidebar-sec{margin-bottom:34px;}
 .newsletter{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:24px 20px;text-align:center;position:relative;overflow:hidden;}
 .newsletter::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--rasta);}
@@ -163,15 +163,15 @@ nav a.active::after{content:'';position:absolute;bottom:0;left:12px;right:12px;h
 .newsletter p{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:16px;}
 .newsletter input{width:100%;background:var(--deep);border:1px solid var(--border);border-radius:3px;padding:10px 12px;color:var(--white);font-family:'Source Serif 4',serif;font-size:13px;margin-bottom:8px;outline:none;transition:border-color .2s;}
 .newsletter input:focus{border-color:var(--accent);}
-.newsletter input::placeholder{color:#6b6b6b;}
+.newsletter input::placeholder{color:#4a4a4a;}
 .newsletter button{width:100%;background:var(--yellow);color:#0a0a0a;border:none;border-radius:3px;padding:10px;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:background .2s;}
 .newsletter button:hover{background:#e6c200;}
 .trending-list{display:flex;flex-direction:column;}
 .trend-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;}
 .trend-item:first-child{border-top:1px solid var(--border);}
-.trend-num{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;color:var(--border);flex-shrink:0;width:24px;text-align:center;transition:color .2s;}
+.trend-num{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;color:#b08a00;flex-shrink:0;width:24px;text-align:center;transition:color .2s;}
 .trend-item:hover .trend-num{color:var(--accent);}
-.trend-item h5{font-family:'Oswald',sans-serif;font-size:13px;font-weight:400;line-height:1.35;color:#999;padding-top:4px;transition:color .2s;}
+.trend-item h5{font-family:'Oswald',sans-serif;font-size:13px;font-weight:500;line-height:1.35;color:#2b2b2b;padding-top:4px;transition:color .2s;}
 .trend-item:hover h5{color:var(--white);}
 .tag-cloud{display:flex;flex-wrap:wrap;gap:7px;}
 .tag-pill{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);border-radius:2px;padding:5px 11px;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block;}
@@ -184,7 +184,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .footer-col a{display:block;font-family:'Oswald',sans-serif;font-size:12px;color:var(--muted);text-decoration:none;margin-bottom:9px;transition:color .2s;}
 .footer-col a:hover{color:var(--accent);}
 .footer-bottom{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-.footer-bottom p{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#777;}
+.footer-bottom p{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#4a4a4a;}
 .sp-player{position:fixed;bottom:24px;right:24px;z-index:500;display:none;flex-direction:column;align-items:flex-end;gap:8px;touch-action:none;}
 .sp-player.visible{display:flex;}
 .sp-btn{background:linear-gradient(135deg,#1DB954,#17a346);border:none;border-radius:50px;color:#fff;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 20px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(29,185,84,.4);transition:all .25s;touch-action:manipulation;}
@@ -218,7 +218,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .modal-cat-badge{font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;display:block;}
 .modal-title{font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;line-height:1.15;color:var(--white);margin-bottom:14px;}
 .modal-meta-bar{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--border);}
-.modal-body{font-size:17px;line-height:1.88;color:#2b2b2b;}
+.modal-body{font-size:17px;line-height:1.88;color:#141414;font-weight:400;}
 .modal-body p{margin-bottom:22px;}
 .modal-related{margin-top:44px;padding-top:26px;border-top:1px solid var(--border);}
 .modal-related-title{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
@@ -226,16 +226,16 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .rel-card{cursor:pointer;}
 .rel-card img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:3px;filter:brightness(.78);margin-bottom:8px;transition:filter .2s;}
 .rel-card:hover img{filter:brightness(1);}
-.rel-card h5{font-family:'Oswald',sans-serif;font-size:13px;font-weight:500;line-height:1.3;color:#444;transition:color .2s;}
+.rel-card h5{font-family:'Oswald',sans-serif;font-size:13px;font-weight:500;line-height:1.3;color:#2b2b2b;transition:color .2s;}
 .rel-card:hover h5{color:var(--accent);}
 .ad-banner{width:100%;max-width:1280px;margin:0 auto 4px;padding:0 24px;}
 .ad-slot{background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(255,215,0,.03));border:1px dashed #d4d0c0;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
 .ad-slot:hover{border-color:rgba(255,215,0,.5);background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(255,215,0,.06));}
 .ad-slot-inner{text-align:center;padding:18px;}
 .ad-slot-label{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:#8a8a8a;display:block;margin-bottom:5px;}
-.ad-slot-cta{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6b6b6b;}
+.ad-slot-cta{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#4a4a4a;}
 .ad-slot-cta span{color:var(--accent);}
-.ad-slot-size{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.1em;color:#777;margin-top:3px;}
+.ad-slot-size{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.1em;color:#4a4a4a;margin-top:3px;}
 .ad-banner-top .ad-slot{height:90px;}
 .ad-banner-mid .ad-slot{height:120px;}
 .ad-banner-foot .ad-slot{height:90px;}
@@ -246,7 +246,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .ad-empty{display:none!important;}
 .visitor-bar{background:#f3f3f0;border-top:1px solid #e3e3e0;border-bottom:1px solid #e3e3e0;padding:8px 24px;}
 .visitor-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-.visitor-count{display:flex;align-items:center;gap:10px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#6b6b6b;}
+.visitor-count{display:flex;align-items:center;gap:10px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#4a4a4a;}
 .visitor-count strong{color:var(--accent);font-size:15px;font-family:'Bebas Neue',sans-serif;letter-spacing:.05em;}
 .visitor-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 2s ease-in-out infinite;}
 .anuncie-btn{font-family:'Oswald',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:linear-gradient(135deg,var(--yellow),var(--gold));color:#0a0a0a;border:none;border-radius:3px;padding:6px 16px;cursor:pointer;transition:all .2s;}
@@ -277,7 +277,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .mk-submit{width:100%;background:linear-gradient(135deg,var(--yellow),var(--gold));color:#0a0a0a;border:none;border-radius:4px;padding:13px;font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:4px;}
 .mk-submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,215,0,.3);}
 .loading{text-align:center;padding:60px;font-family:'Oswald',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
-.empty-msg{text-align:center;padding:48px;font-family:'Oswald',sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#777;font-size:13px;}
+.empty-msg{text-align:center;padding:48px;font-family:'Oswald',sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#4a4a4a;font-size:13px;}
 @media(max-width:1024px){
   .hero{grid-template-columns:1fr;}
   .hero-main{min-height:420px;}
@@ -318,7 +318,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .records-dest-label{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
 .records-dest-label::before{content:'';display:inline-block;width:24px;height:2px;background:var(--yellow);}
 .records-dest-artista{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:.05em;line-height:1;color:var(--white);margin-bottom:4px;}
-.records-dest-musica{font-family:'Oswald',sans-serif;font-size:20px;font-weight:400;color:#555;margin-bottom:18px;letter-spacing:.03em;}
+.records-dest-musica{font-family:'Oswald',sans-serif;font-size:20px;font-weight:400;color:#333;margin-bottom:18px;letter-spacing:.03em;}
 .records-dest-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:28px;max-width:380px;}
 .records-dest-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#1DB954,#17a346);color:#fff;font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:12px 24px;border-radius:4px;text-decoration:none;width:fit-content;transition:all .25s;border:none;cursor:pointer;}
 .records-dest-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(29,185,84,.4);}
@@ -349,7 +349,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .artista-card-nome{font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:var(--white);margin-bottom:3px;transition:color .2s;}
 .artista-card:hover .artista-card-nome{color:var(--accent);}
 .artista-card-genero{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
-.artista-card-musicas{font-family:'Oswald',sans-serif;font-size:10px;color:#6b6b6b;margin-top:5px;letter-spacing:.05em;}
+.artista-card-musicas{font-family:'Oswald',sans-serif;font-size:10px;color:#4a4a4a;margin-top:5px;letter-spacing:.05em;}
 
 /* CATÁLOGO */
 .catalogo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
@@ -368,7 +368,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .musica-card-titulo{font-family:'Oswald',sans-serif;font-size:13px;font-weight:500;color:var(--white);margin-bottom:2px;line-height:1.25;transition:color .2s;}
 .musica-card:hover .musica-card-titulo{color:var(--accent);}
 .musica-card-artista{font-family:'Oswald',sans-serif;font-size:10px;color:var(--muted);letter-spacing:.05em;}
-.musica-card-tipo{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#6b6b6b;margin-top:3px;}
+.musica-card-tipo{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#4a4a4a;margin-top:3px;}
 .records-empty{text-align:center;padding:40px;color:var(--muted);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.15em;text-transform:uppercase;grid-column:1/-1;}
 
 @media(max-width:1024px){
@@ -613,7 +613,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
     <div class="rasta-bar" style="border-radius:2px;margin-bottom:20px;"></div>
     <div class="footer-bottom">
       <p>© 2026 Reggaetime Magazine · Todos os direitos reservados</p>
-      <p><a href="#" onclick="openPrivacy();return false;" style="color:#6b6b6b;text-decoration:none;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;" onmouseover="this.style.color='#FFD700'" onmouseout="this.style.color='#444'">Política de Privacidade</a></p>
+      <p><a href="#" onclick="openPrivacy();return false;" style="color:#4a4a4a;text-decoration:none;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;" onmouseover="this.style.color='#FFD700'" onmouseout="this.style.color='#444'">Política de Privacidade</a></p>
     </div>
   </div>
 </footer>
@@ -680,10 +680,10 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 <div id="gh-helper" style="position:fixed;bottom:24px;left:24px;z-index:998;display:none;">
   <div style="background:#111;border:1px solid #2a2a2a;border-left:4px solid #FFD700;border-radius:6px;padding:14px 18px;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.08em;color:#F5F0E8;min-width:260px;">
     <div style="color:#FFD700;font-size:13px;font-weight:700;letter-spacing:.12em;margin-bottom:10px;">📤 PUBLICAR NO SITE</div>
-    <div style="color:#888;font-size:11px;margin-bottom:12px;line-height:1.5;">Baixe o JSON e suba via GitHub CLI:</div>
+    <div style="color:#4a4a4a;font-size:11px;margin-bottom:12px;line-height:1.5;">Baixe o JSON e suba via GitHub CLI:</div>
     <button onclick="exportJSON()" style="width:100%;background:#FFD700;color:#0a0a0a;border:none;border-radius:3px;padding:9px;font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;margin-bottom:8px;">⬇ Baixar noticias.json</button>
     <div style="background:#0a0a0a;border-radius:3px;padding:10px;font-family:monospace;font-size:10px;color:#1DB954;line-height:1.8;user-select:all;">cp ~/Downloads/noticias.json data/<br>git add data/noticias.json<br>git commit -m "update noticias"<br>git push</div>
-    <button onclick="document.getElementById('gh-helper').style.display='none'" style="width:100%;background:none;border:1px solid #2a2a2a;border-radius:3px;padding:7px;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;color:#6b6b6b;cursor:pointer;margin-top:8px;text-transform:uppercase;">Fechar</button>
+    <button onclick="document.getElementById('gh-helper').style.display='none'" style="width:100%;background:none;border:1px solid #2a2a2a;border-radius:3px;padding:7px;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;color:#4a4a4a;cursor:pointer;margin-top:8px;text-transform:uppercase;">Fechar</button>
   </div>
 </div>
 
@@ -735,7 +735,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 </div><div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:999;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:6px;padding:14px 22px;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.04em;color:var(--white);transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;min-width:230px;max-width:340px;"></div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><!-- ALGORITHM FEED BADGE -->
-<div id="algo-badge" style="display:none;position:fixed;bottom:80px;left:24px;z-index:400;background:rgba(17,17,17,.95);border:1px solid #2a2a2a;border-left:3px solid var(--yellow);border-radius:6px;padding:8px 14px;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#888;backdrop-filter:blur(8px);transition:opacity .4s;pointer-events:none;">
+<div id="algo-badge" style="display:none;position:fixed;bottom:80px;left:24px;z-index:400;background:rgba(17,17,17,.95);border:1px solid #2a2a2a;border-left:3px solid var(--yellow);border-radius:6px;padding:8px 14px;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#4a4a4a;backdrop-filter:blur(8px);transition:opacity .4s;pointer-events:none;">
   <span style="color:var(--accent);margin-right:6px;">◆</span><span id="algo-badge-txt">Feed personalizado</span>
 </div>
 
@@ -995,7 +995,8 @@ function openArt(id){
   document.getElementById('m-cat').textContent=art.categoria;
   document.getElementById('m-title').textContent=art.titulo;
   document.getElementById('m-meta').textContent=`Por ${art.autor} · ${fmtd(art.data)}`;
-  const rawTexto=art.conteudo||art.resumo||'';
+  // remove carimbos colados do WhatsApp, ex.: "[21:43, 04/08/2026] Leonardo vitor: "
+  const rawTexto=(art.conteudo||art.resumo||'').replace(/^\s*\[\d{1,2}:\d{2}, \d{1,2}\/\d{1,2}\/\d{4}\][^:\n]{0,40}:\s*/gm,'');
   // ── parseConteudo: suporta [img:...], ## H2, > quote, **bold**, _italic_
   function parseConteudo(texto){
     return texto.split('\n').map(linha=>{
