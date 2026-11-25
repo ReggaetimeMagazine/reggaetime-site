@@ -261,7 +261,10 @@ export default {
         const art  = news.find(n => String(n.id) === id);
         if(art) return new Response(paginaMateria(art, news), { headers:{ 'Content-Type':'text/html; charset=utf-8', 'Cache-Control':'public, max-age=300' }});
         return new Response('<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex"><title>Matéria não encontrada</title><p style="font-family:sans-serif;padding:40px">Matéria não encontrada. <a href="/">Voltar ao site</a></p>', { status:404, headers:{'Content-Type':'text/html; charset=utf-8'} });
-      }catch(e){ return Response.redirect(CANON + '/', 302); }
+      }catch(e){
+        // se não der para montar a página, entrega a home no mesmo endereço: o site abre a matéria sozinho (nunca volta pra home)
+        return origin(new Request(url.origin + '/', request));
+      }
     }
 
     // 1e) links antigos /?a=<id> → endereço novo (o Google junta tudo em um só)
