@@ -204,7 +204,7 @@ ${rel.length ? `  <section class="rel"><h2>Leia também</h2>
 ${rel.map(n=>`    <a href="/materia/${encodeURIComponent(n.id)}">${esc(n.titulo)}</a>`).join('\n')}
   </section>` : ''}
 </main>
-<footer>© ${new Date().getFullYear()} ${SITE_NAME} · <a href="/" style="color:inherit">reggaetimemagazine.com</a></footer>
+<footer><a href="/sobre" style="color:inherit">Sobre</a> · <a href="/contato" style="color:inherit">Contato</a> · <a href="/privacidade" style="color:inherit">Política de Privacidade</a><div style="margin-top:10px">© ${new Date().getFullYear()} ${SITE_NAME} · <a href="/" style="color:inherit">reggaetimemagazine.com</a></div></footer>
 </body>
 </html>`;
 }
@@ -213,6 +213,7 @@ function sitemapXml(news){
   const datas = news.map(n=>(n.data||'').slice(0,10)).filter(Boolean).sort();
   const last = datas[datas.length-1];
   const urls = [`<url><loc>${CANON}/</loc>${last?`<lastmod>${last}</lastmod>`:''}<changefreq>daily</changefreq><priority>1.0</priority></url>`]
+    .concat(['sobre','contato','privacidade'].map(s=>`<url><loc>${CANON}/${s}</loc><priority>0.5</priority></url>`))
     .concat(news.map(n=>{
       const d=(n.data||'').slice(0,10);
       return `<url><loc>${esc(CANON+'/materia/'+encodeURIComponent(n.id))}</loc>${d?`<lastmod>${d}</lastmod>`:''}<priority>0.8</priority></url>`;
