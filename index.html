@@ -856,6 +856,12 @@ async function loadAll(){
     const found=allNews.find(n=>n.id===artParam);
     if(found)setTimeout(()=>openArt(artParam),300);
   }
+  // abre direto se a página foi carregada em /materia/ID (F5 ou link compartilhado)
+  const pm=location.pathname.match(/^\/materia\/([^\/?#]+)/);
+  if(pm){
+    const pid=decodeURIComponent(pm[1]);
+    if(allNews.some(n=>n.id===pid))setTimeout(()=>openArt(pid,true),100);
+  }
 }
 function applyCfg(){
   const c=getCfg();
@@ -980,7 +986,8 @@ function filterCat(e,cat){
   render(cat ? allNews.filter(n=>n.categoria===cat) : algoSort(allNews));
   window.scrollTo({top:0,behavior:'smooth'});
 }
-function openArt(id){
+var _pushedArt=false,_siteTitle=document.title;
+function openArt(id,noPush){
   const art=allNews.find(n=>n.id===id);if(!art)return;
   // Track interaction for algorithm
   algoTrack(art.categoria);
@@ -1033,9 +1040,32 @@ function openArt(id){
   const rel=allNews.filter(n=>n.id!==id&&n.categoria===art.categoria).slice(0,3);
   document.getElementById('m-related').innerHTML=rel.length?`<p class="modal-related-title">Leia também</p><div class="related-grid">${rel.map(n=>`<div class="rel-card" onclick="openArt('${n.id}')"><img src="${n.imagem}" alt="${ea(n.titulo)}" style="object-position:${n.imgPosition||'center'};" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=70'"/><h5>${n.titulo}</h5></div>`).join('')}</div>`:'';
   const m=document.getElementById('art-modal');
+  const wasOpen=m.classList.contains('open');
   m.classList.add('open');m.scrollTop=0;document.body.style.overflow='hidden';
+  // mantém a matéria na URL (F5 e botão voltar funcionam)
+  try{
+    const path='/materia/'+encodeURIComponent(id);
+    if(!noPush&&location.pathname!==path){
+      if(wasOpen||_pushedArt){history.replaceState({art:id},'',path);}
+      else{history.pushState({art:id},'',path);_pushedArt=true;}
+    }
+    document.title=art.titulo+' — Reggaetime Magazine';
+  }catch(e){}
 }
-function closeModal(){document.getElementById('art-modal').classList.remove('open');document.body.style.overflow='';currentId=null;}
+function hideModal(){document.getElementById('art-modal').classList.remove('open');document.body.style.overflow='';currentId=null;document.title=_siteTitle;}
+function closeModal(){
+  const wasArt=location.pathname.indexOf('/materia/')===0;
+  hideModal();
+  try{
+    if(_pushedArt){_pushedArt=false;history.back();}
+    else if(wasArt){history.replaceState(null,'','/');}
+  }catch(e){}
+}
+window.addEventListener('popstate',function(e){
+  const m=location.pathname.match(/^\/materia\/([^\/?#]+)/);
+  if(m){const id=decodeURIComponent(m[1]);if(allNews.some(n=>n.id===id))openArt(id,true);}
+  else{_pushedArt=false;hideModal();}
+});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 function artUrl(art){
   return `${location.origin}/materia/${encodeURIComponent(art.id)}`;
