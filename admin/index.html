@@ -359,7 +359,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
               <option value="">Selecione...</option>
               <option>Nacional</option><option>Internacional</option><option>Roots</option><option>Dancehall</option>
               <option>Jamaica</option><option>Entrevista</option><option>Hall da Fama</option>
-              <option>Lançamento</option><option>Cultura</option><option>Records</option><option>Collab</option>
+              <option>Lançamento</option><option>Cultura</option><option>Collab</option>
               <option>Shows e Eventos</option>
             </select>
           </div>
@@ -1049,7 +1049,8 @@ const DEL_KEY='rt_deleted_ids';
 function getDeleted(){try{return JSON.parse(localStorage.getItem(DEL_KEY)||'[]');}catch{return[];}}
 function setDeleted(a){localStorage.setItem(DEL_KEY,JSON.stringify([...new Set(a.map(String))]));}
 function normBool(v){return v===true||v===1||(typeof v==='string'&&['true','1','sim'].includes(v.trim().toLowerCase()));}
-function normNews(n){return{...n,id:String(n.id),destaque:normBool(n.destaque)};}
+function normCat(c){const k=String(c||'').trim().toLowerCase();return ({'records':'Lançamento','lançamentos':'Lançamento','lancamentos':'Lançamento','lancamento':'Lançamento'})[k]||String(c||'').trim();}
+function normNews(n){return{...n,id:String(n.id),categoria:normCat(n.categoria),destaque:normBool(n.destaque)};}
 // serverWins=false → o que está no admin prevalece (abertura da página)
 // serverWins=true  → o servidor prevalece nos ids em comum (botão Sincronizar); itens só-locais são mantidos
 function mergeNews(local,server,serverWins){

@@ -20,7 +20,7 @@
 <title>Reggaetime Magazine — News 'N' Reggae</title>
 
 <!-- SEO básico -->
-<meta name="description" content="Portal de reggae e dancehall com notícias, artistas e lançamentos da cultura jamaicana.">
+<meta name="description" content="Reggaetime Magazine: notícias de reggae e dancehall em português — artistas, lançamentos, shows e a cultura jamaicana, do Brasil à Jamaica.">
 <meta name="keywords" content="reggae, dancehall, reggae news, música jamaicana, dancehall 2026, reggae brasil, reggaetime">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://reggaetimemagazine.com/">
@@ -49,6 +49,8 @@
 <meta name="twitter:title" content="Reggaetime Magazine — News 'N' Reggae">
 <meta name="twitter:description" content="As melhores notícias de Reggae e Dancehall do Brasil e do mundo.">
 <meta name="twitter:image" content="https://reggaetimemagazine.com/og-image.jpg">
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://reggaetimemagazine.com/#site","url":"https://reggaetimemagazine.com/","name":"Reggaetime Magazine","alternateName":"Reggaetime","inLanguage":"pt-BR"},{"@type":"NewsMediaOrganization","@id":"https://reggaetimemagazine.com/#org","name":"Reggaetime Magazine","url":"https://reggaetimemagazine.com/","logo":{"@type":"ImageObject","url":"https://reggaetimemagazine.com/img/icon-512.png"},"sameAs":["https://www.instagram.com/reggaetimemagazine/"]}]}</script>
 
 <!-- Google AdSense -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5304581261023931"
@@ -401,6 +403,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
   nav a,.nav-mais-btn{padding:6px 8px;font-size:11px;letter-spacing:.06em;}
   nav a.active::after{left:8px;right:8px;}
 }
+a.alink{color:inherit;text-decoration:none;}
 </style>
 </head>
 <body>
@@ -599,7 +602,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
         <h5>Serviços</h5>
         <a id="footer-email" href="/cdn-cgi/l/email-protection#f5879092929490819c98909787b59298949c99db969a98">Publicidade</a>
         <a href="#" onclick="document.getElementById('nl-email').scrollIntoView({behavior:'smooth'});document.getElementById('nl-email').focus();return false;">Newsletter</a>
-        <a href="#">Contato</a>
+        <a href="https://wa.me/5511913370057" target="_blank" rel="noopener">Contato</a>
       </div>
       <div class="footer-col">
         <h5>Redes Sociais</h5>
@@ -811,7 +814,9 @@ function getSiteData(){
 }
 // O JSON às vezes traz "True"/"False" como texto — "False" é truthy no JS e marcava tudo como destaque
 function normBool(v){return v===true||v===1||(typeof v==='string'&&['true','1','sim'].includes(v.trim().toLowerCase()));}
-function normNews(arr){return (Array.isArray(arr)?arr:[]).filter(n=>n&&n.id&&n.titulo).map(n=>({...n,id:String(n.id),destaque:normBool(n.destaque)}));}
+const CAT_FIX={'records':'Lançamento','lançamentos':'Lançamento','lancamentos':'Lançamento','lançamento':'Lançamento','lancamento':'Lançamento'};
+function normCat(c){const k=String(c||'').trim().toLowerCase();return CAT_FIX[k]||String(c||'').trim();}
+function normNews(arr){return (Array.isArray(arr)?arr:[]).filter(n=>n&&n.id&&n.titulo).map(n=>({...n,id:String(n.id),categoria:normCat(n.categoria),destaque:normBool(n.destaque)}));}
 
 async function loadAll(){
   const raw=await getSiteData();
@@ -909,39 +914,42 @@ function render(news){
   const pos=(n)=>n.imgPosition||'center';
   document.getElementById('hero-section').innerHTML=`
     <div class="hero-main" onclick="openArt('${hp.id}')" style="min-height:380px;">
-      <img src="${hp.imagem}" alt="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:${pos(hp)};" onerror="this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80'"/>
+      <img src="${hp.imagem}" alt="${ea(hp.titulo)}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:${pos(hp)};" onerror="this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80'"/>
       <div class="hero-overlay">
         <div class="tag-badge tag-red">● ${hp.categoria}</div>
-        <h1>${hp.titulo}</h1><p>${hp.resumo}</p>
+        <h1>${lk(hp,hp.titulo)}</h1><p>${hp.resumo}</p>
         <div class="hero-meta">Por ${hp.autor} · ${fmtd(hp.data)}</div>
       </div>
     </div>
     <div class="hero-side">
       ${hs.map((n,i)=>`
         <div class="hero-card" onclick="openArt('${n.id}')">
-          <img src="${n.imagem}" alt="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:${pos(n)};" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80'"/>
+          <img src="${n.imagem}" alt="${ea(n.titulo)}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:${pos(n)};" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80'"/>
           <div class="hero-card-overlay">
             <div class="tag-badge ${tc[i+1]||'tag-green'}">● ${n.categoria}</div>
-            <h3>${n.titulo}</h3>
+            <h3>${lk(n,n.titulo)}</h3>
           </div>
         </div>`).join('')}
     </div>`;
   document.getElementById('news-grid').innerHTML=news.slice(0,4).map(n=>`
     <div class="news-card" onclick="openArt('${n.id}')">
-      <img src="${n.imagem}" alt="" style="object-position:${pos(n)};" onerror="this.src='https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=600&q=80'"/>
+      <img src="${n.imagem}" alt="${ea(n.titulo)}" style="object-position:${pos(n)};" onerror="this.src='https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=600&q=80'"/>
       <span class="cat-label">${n.categoria}</span>
-      <h3>${n.titulo}</h3><p>${n.resumo}</p>
+      <h3>${lk(n,n.titulo)}</h3><p>${n.resumo}</p>
       <div class="meta">${fmtd(n.data)}</div>
     </div>`).join('');
   document.getElementById('list-articles').innerHTML=news.slice(4).map(n=>`
     <div class="list-art" onclick="openArt('${n.id}')">
-      <img src="${n.imagem}" alt="" style="object-position:${pos(n)};" onerror="this.src='https://images.unsplash.com/photo-1559386484-97dfc0e15539?w=200&q=80'"/>
-      <div><span class="cat-label">${n.categoria}</span><h4>${n.titulo}</h4><div class="meta">${fmtd(n.data)} · ${n.autor}</div></div>
+      <img src="${n.imagem}" alt="${ea(n.titulo)}" style="object-position:${pos(n)};" onerror="this.src='https://images.unsplash.com/photo-1559386484-97dfc0e15539?w=200&q=80'"/>
+      <div><span class="cat-label">${n.categoria}</span><h4>${lk(n,n.titulo)}</h4><div class="meta">${fmtd(n.data)} · ${n.autor}</div></div>
     </div>`).join('');
 }
+function ea(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function openLink(e,id){if(e.ctrlKey||e.metaKey||e.shiftKey||e.button)return true;e.preventDefault();e.stopPropagation();openArt(id);return false;}
+function lk(n,t){return `<a class="alink" href="/materia/${encodeURIComponent(n.id)}" onclick="return openLink(event,'${n.id}')">${t}</a>`;}
 function buildTrending(news){
   document.getElementById('trending-list').innerHTML=news.slice(0,5).map((n,i)=>`
-    <div class="trend-item" onclick="openArt('${n.id}')"><div class="trend-num">${i+1}</div><h5>${n.titulo}</h5></div>`).join('');
+    <div class="trend-item" onclick="openArt('${n.id}')"><div class="trend-num">${i+1}</div><h5>${lk(n,n.titulo)}</h5></div>`).join('');
 }
 function buildTags(news){
   const cats=[...new Set(news.map(n=>n.categoria))];
@@ -1018,14 +1026,14 @@ function openArt(id){
   }catch(e){}
   document.getElementById('m-body').innerHTML=paras.join('</p>');
   const rel=allNews.filter(n=>n.id!==id&&n.categoria===art.categoria).slice(0,3);
-  document.getElementById('m-related').innerHTML=rel.length?`<p class="modal-related-title">Leia também</p><div class="related-grid">${rel.map(n=>`<div class="rel-card" onclick="openArt('${n.id}')"><img src="${n.imagem}" alt="" style="object-position:${n.imgPosition||'center'};" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=70'"/><h5>${n.titulo}</h5></div>`).join('')}</div>`:'';
+  document.getElementById('m-related').innerHTML=rel.length?`<p class="modal-related-title">Leia também</p><div class="related-grid">${rel.map(n=>`<div class="rel-card" onclick="openArt('${n.id}')"><img src="${n.imagem}" alt="${ea(n.titulo)}" style="object-position:${n.imgPosition||'center'};" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=70'"/><h5>${n.titulo}</h5></div>`).join('')}</div>`:'';
   const m=document.getElementById('art-modal');
   m.classList.add('open');m.scrollTop=0;document.body.style.overflow='hidden';
 }
 function closeModal(){document.getElementById('art-modal').classList.remove('open');document.body.style.overflow='';currentId=null;}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 function artUrl(art){
-  return `${location.origin}${location.pathname}?a=${art.id}`;
+  return `${location.origin}/materia/${encodeURIComponent(art.id)}`;
 }
 function shareWA(){
   const art=allNews.find(n=>n.id===currentId);if(!art)return;

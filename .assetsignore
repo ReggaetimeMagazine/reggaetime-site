@@ -1,0 +1,8 @@
+worker.js
+wrangler.jsonc
+.assetsignore
+subir.bat
+subir_novo.bat
+backup
+*.zip
+node_modules

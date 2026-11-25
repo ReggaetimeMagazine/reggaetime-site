@@ -1,0 +1,12 @@
+{
+  // Reggaetime Magazine — Cloudflare Worker + arquivos do site
+  "name": "reggaetime-site",
+  "main": "worker.js",
+  "compatibility_date": "2025-06-01",
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    // O worker só roda nestes endereços; o resto do site é entregue direto, sem custo de CPU
+    "run_worker_first": ["/", "/materia/*", "/og/*", "/sitemap.xml", "/robots.txt", "/ads.txt"]
+  }
+}
