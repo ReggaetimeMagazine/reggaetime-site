@@ -1166,15 +1166,35 @@ function loadAds(){
 }
 function openMK(){document.getElementById('mk-modal').classList.add('open');document.body.style.overflow='hidden';const el=document.getElementById('mk-news');if(el)el.textContent=allNews.length||'—';}
 function closeMK(){document.getElementById('mk-modal').classList.remove('open');document.body.style.overflow='';}
-function enviarMK(){
+var _mkBusy=false;
+async function enviarMK(){
+  if(_mkBusy)return;
   const nome=document.getElementById('mk-nome').value.trim();const email=document.getElementById('mk-email').value.trim();
   const formato=document.getElementById('mk-formato').value;const msg=document.getElementById('mk-msg').value.trim();
   if(!nome||!email){toast('Preencha nome e email!','error');return;}
-  const cfg=getCfg();const dest=cfg.email||'reggaetimebr@gmail.com';
-  const subject=encodeURIComponent(`[Anúncio] ${nome} — ${formato||'Consulta'}`);
-  const body=encodeURIComponent(`Nome/Empresa: ${nome}\nEmail: ${email}\nFormato: ${formato}\n\n${msg}`);
-  window.open(`mailto:${dest}?subject=${subject}&body=${body}`);
-  toast('📧 Abrindo seu email... Obrigado pelo interesse!');closeMK();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){toast('Digite um email válido.','error');return;}
+  _mkBusy=true;
+  const btn=document.querySelector('.mk-submit');const old=btn?btn.textContent:'';
+  if(btn){btn.disabled=true;btn.textContent='Enviando...';}
+  try{
+    const r=await fetch(FORMSPREE_URL,{
+      method:'POST',
+      headers:{'Accept':'application/json','Content-Type':'application/json'},
+      body:JSON.stringify({_subject:'[ANÚNCIO] '+nome+' — '+(formato||'Consulta'),email:email,tipo:'Proposta de anúncio',nome_empresa:nome,formato:formato||'Não informado',mensagem:msg,origem:location.href})
+    });
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    ['mk-nome','mk-email','mk-msg'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+    toast('✅ Proposta enviada! Entraremos em contato em breve.');closeMK();
+  }catch(e){
+    // plano B: abre o email do usuário com a proposta pronta
+    const dest=(getCfg().email)||'reggaetimebr@gmail.com';
+    const subject=encodeURIComponent('[Anúncio] '+nome+' — '+(formato||'Consulta'));
+    const body=encodeURIComponent('Nome/Empresa: '+nome+'\nEmail: '+email+'\nFormato: '+formato+'\n\n'+msg);
+    window.open('mailto:'+dest+'?subject='+subject+'&body='+body);
+    toast('Não conseguimos enviar agora. Abrimos seu email para você enviar direto.','error');
+  }finally{
+    _mkBusy=false;if(btn){btn.disabled=false;btn.textContent=old;}
+  }
 }
 function openPrivacy(){document.getElementById('privacy-modal').classList.add('open');document.body.style.overflow='hidden';}
 function closePrivacy(){document.getElementById('privacy-modal').classList.remove('open');document.body.style.overflow='';}
