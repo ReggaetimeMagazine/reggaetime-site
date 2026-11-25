@@ -522,7 +522,7 @@ a.alink{color:inherit;text-decoration:none;}
       </div>
     </div>
     <div class="sidebar-sec">
-      <div class="sec-head" style="margin-bottom:12px;"><div class="sec-accent"></div><h2>Trending</h2><div class="sec-line"></div></div>
+      <div class="sec-head" style="margin-bottom:12px;"><div class="sec-accent"></div><h2>Últimas notícias</h2><div class="sec-line"></div></div>
       <div class="trending-list" id="trending-list"></div>
     </div>
     <div class="sidebar-sec">
@@ -959,7 +959,8 @@ function ea(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;')
 function openLink(e,id){if(e.ctrlKey||e.metaKey||e.shiftKey||e.button)return true;e.preventDefault();e.stopPropagation();openArt(id);return false;}
 function lk(n,t){return `<a class="alink" href="/materia/${encodeURIComponent(n.id)}" onclick="return openLink(event,'${n.id}')">${t}</a>`;}
 function buildTrending(news){
-  document.getElementById('trending-list').innerHTML=news.slice(0,5).map((n,i)=>`
+  const recentes=[...news].sort((x,y)=>String(y.data||'').localeCompare(String(x.data||''))).slice(0,5);
+  document.getElementById('trending-list').innerHTML=recentes.map((n,i)=>`
     <div class="trend-item" onclick="openArt('${n.id}')"><div class="trend-num">${i+1}</div><h5>${lk(n,n.titulo)}</h5></div>`).join('');
 }
 function buildTags(news){
