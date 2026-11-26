@@ -167,6 +167,7 @@ main{max-width:800px;margin:0 auto;padding:32px 20px 60px}
 .cat{font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#8a6a00}
 h1{font-family:'Oswald',sans-serif;font-size:36px;font-weight:700;line-height:1.15;margin:10px 0 14px}
 .meta{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#4a4a4a;padding-bottom:18px;border-bottom:1px solid #e3e3e0;margin-bottom:24px}
+.imgcred{margin:-16px 0 20px;font-size:12px;color:#3d3d3d;font-style:italic}
 .hero{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px;margin-bottom:26px;background:#f3f3f0}
 .body p{font-size:18px;line-height:1.85;margin-bottom:22px;color:#141414}
 .share{margin:30px 0;display:flex;gap:10px;flex-wrap:wrap}
@@ -192,6 +193,7 @@ footer{border-top:1px solid #e3e3e0;padding:24px;text-align:center;font-family:'
     <h1>${esc(title)}</h1>
     <div class="meta">Por ${esc(art.autor||'Reggaetime Staff')} · <time datetime="${esc((art.data||'').slice(0,10))}">${esc(dataBR(art.data))}</time></div>
     <img class="hero" src="${esc(img)}" alt="${esc(title)}" style="object-position:${esc(pos)}" width="800" height="450">
+    ${art.imgCredito ? `<div class="imgcred">📷 ${esc(art.imgCredito)}</div>` : ''}
     <div class="body">
 ${paras}
     </div>

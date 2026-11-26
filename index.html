@@ -222,6 +222,7 @@ footer{background:var(--deep);border-top:1px solid var(--border);padding:52px 24
 .btn-share.twx:hover{border-color:#e7e7e7;color:#e7e7e7;}
 .btn-share.inst:hover{border-color:#E1306C;color:#E1306C;}
 .modal-inner{padding:32px 36px 0;}
+.img-cred{margin:-16px 0 20px;font-size:12px;color:#3d3d3d;font-style:italic;}
 .modal-img{width:100%;aspect-ratio:16/7;object-fit:cover;border-radius:5px;margin-bottom:24px;filter:brightness(.88);}
 .modal-cat-badge{font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;display:block;}
 .modal-title{font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;line-height:1.15;color:var(--white);margin-bottom:14px;}
@@ -675,6 +676,7 @@ a.alink{color:inherit;text-decoration:none;}
     </div>
     <div class="modal-inner">
       <img id="m-img" class="modal-img" src="" alt="">
+      <div id="m-cred" class="img-cred" style="display:none"></div>
       <span id="m-cat" class="modal-cat-badge"></span>
       <h1 id="m-title" class="modal-title"></h1>
       <div id="m-meta" class="modal-meta-bar"></div>
@@ -1010,6 +1012,7 @@ function openArt(id,noPush){
   const mimg=document.getElementById('m-img');
   mimg.src=art.imagem;mimg.style.objectPosition=art.imgPosition||'center top';
   mimg.onerror=function(){this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=900&q=80';};
+  const mcred=document.getElementById('m-cred');if(mcred){const c=(art.imgCredito||'').trim();mcred.textContent=c?'📷 '+c:'';mcred.style.display=c?'block':'none';}
   document.getElementById('m-cat').textContent=art.categoria;
   document.getElementById('m-title').textContent=art.titulo;
   document.getElementById('m-meta').textContent=`Por ${art.autor} · ${fmtd(art.data)}`;
