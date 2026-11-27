@@ -1319,7 +1319,7 @@ function handleFile(file){
   reader.onload=function(e){
     const tmpImg=new Image();
     tmpImg.onload=function(){
-      const maxW=900,maxH=900;
+      const maxW=1280,maxH=1280;
       let w=tmpImg.width,h=tmpImg.height;
       if(w>maxW||h>maxH){
         if(w/h>maxW/maxH){h=Math.round(h*maxW/w);w=maxW;}
@@ -1327,8 +1327,8 @@ function handleFile(file){
       }
       const canvas=document.createElement('canvas');
       canvas.width=w;canvas.height=h;
-      canvas.getContext('2d').drawImage(tmpImg,0,0,w,h);
-      const base64=canvas.toDataURL('image/jpeg',0.80);
+      const _cx=canvas.getContext('2d');_cx.imageSmoothingQuality='high';_cx.drawImage(tmpImg,0,0,w,h);
+      const base64=canvas.toDataURL('image/jpeg',0.84);
       const urlInput=document.getElementById('f-img-url');
       if(urlInput)urlInput.value=base64;
       showPrev(base64);
